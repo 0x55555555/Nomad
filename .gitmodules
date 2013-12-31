@@ -1,0 +1,6 @@
+[submodule "Eks"]
+	path = Eks
+	url = https://code.google.com/p/vexxeks
+[submodule "Shift"]
+	path = Shift
+	url = https://code.google.com/p/vexxshift
