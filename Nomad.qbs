@@ -4,7 +4,7 @@ Eks.SubModule {
   name: "Nomad"
   toRoot: "./"
 
-  qbsSearchPaths: base.concat( [ "C:/Users/Jorj/SpaceGamez/Nomad" ] )
+  qbsSearchPaths: base.concat( [ "." ] )
 
   references: [
     "Eks/EksAll.qbs",
