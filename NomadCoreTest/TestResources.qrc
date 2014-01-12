@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/data">
+        <file>testData.json</file>
+    </qresource>
+    <qresource prefix="/resources">
+        <file>{ccaa494e-a258-49f3-98b9-909310c52928}.json</file>
+        <file>{d2cd09cf-1e0b-4b1c-b991-fbcd8276b0f5}.json</file>
+    </qresource>
+</RCC>

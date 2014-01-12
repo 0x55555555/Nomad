@@ -1,0 +1,18 @@
+{
+	"version": "2",
+	"types": {
+		"FullUuid": {
+			"dynamicCount": "0"
+		},
+		"TestReloadableAsset": {
+			"dynamicCount": "1"
+		}
+	},
+	"noroot": "0",
+	"data": {
+		"type": "TestReloadableAsset",
+		"contents": {
+			"uuid": "{d2cd09cf-1e0b-4b1c-b991-fbcd8276b0f5}"
+		}
+	}
+}
