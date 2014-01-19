@@ -1,0 +1,18 @@
+{
+	"version": "2",
+	"types": {
+		"FullStringProperty": {
+			"dynamicCount": "0"
+		},
+		"Project": {
+			"dynamicCount": "1"
+		}
+	},
+	"noroot": "0",
+	"data": {
+		"type": "Project",
+		"contents": {
+			"assets": ""
+		}
+	}
+}

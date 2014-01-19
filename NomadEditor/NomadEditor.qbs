@@ -4,8 +4,11 @@ Eks.Application {
   name: "NomadEditor"
   toRoot: "../"
 
-  files: [ "**/*.h", "**/*.cpp" ]
+  cpp.includePaths: base.concat([ "." ])
 
+  files: [ "**/*.h", "**/*.cpp", "UI/MainWindow.ui" ]
+
+  Depends { name: "Qt.gui"}
   Depends { name: "Qt.widgets" }
 
   Depends { name: "Eks3D" }
