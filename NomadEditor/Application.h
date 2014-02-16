@@ -33,6 +33,7 @@ public:
     }
 
   Shift::Pointer project;
+  Shift::Array scratch;
   };
 
 

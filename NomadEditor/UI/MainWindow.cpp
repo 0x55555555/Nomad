@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "QFileDialog"
 #include "QSettings"
+#include "AssetBrowser.h"
 
 namespace Nomad
 {
@@ -17,6 +18,9 @@ MainWindow::MainWindow(Nomad::Editor::ApplicationDatabase *db, QWidget *parent) 
   _db(db)
   {
   _ui->setupUi(this);
+
+  addDockWidget(Qt::LeftDockWidgetArea, new AssetBrowser(this));
+
   connect(_ui->actionNew_Project, SIGNAL(triggered()), this, SLOT(newProject()));
   connect(_ui->actionOpen_Project, SIGNAL(triggered()), this, SLOT(openProject()));
   connect(_ui->actionClose_Project, SIGNAL(triggered()), this, SLOT(closeProject()));
@@ -64,6 +68,21 @@ void MainWindow::closeProject()
     }
   }
 
+Shift::Array *MainWindow::getScratchParent()
+  {
+  return &_db->scratch;
+  }
+
+Nomad::Project *MainWindow::getCurrentProject()
+  {
+  return _db->project.pointed<Nomad::Project>();
+  }
+
+void MainWindow::addProjectChanged(QObject *obj, const char *slot)
+  {
+  connect(this, SIGNAL(projectChanged()), obj, slot);
+  }
+
 void MainWindow::newProject()
   {
   closeProject();
@@ -78,11 +97,17 @@ void MainWindow::newProject()
   newPro->setPath(path);
 
   _db->project.setPointed(newPro);
+  emit projectChanged();
 
   if(!Application::save(newPro))
     {
     qWarning() << "failed to save new project";
     }
+  }
+
+void MainWindow::openProject()
+  {
+  openProject(QSting());
   }
 
 void MainWindow::openProject(const QString &path)
@@ -99,6 +124,7 @@ void MainWindow::openProject(const QString &path)
 
   auto file = Application::load(toLoad, _db);
   _db->project.setPointed(file);
+  emit projectChanged();
   }
 
 void MainWindow::openRecentProject()
@@ -115,7 +141,7 @@ void MainWindow::openRecentProject()
 
 void MainWindow::saveProject()
   {
-  auto pro = _db->project.pointed<Nomad::Project>();
+  auto pro = getCurrentProject();
   if(!pro)
     {
     qWarning() << "no project to save";

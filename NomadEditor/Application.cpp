@@ -29,6 +29,8 @@ void ApplicationDatabase::createTypeInformation(
     auto block = info->createChildrenBlock(data);
 
     block.add(&ApplicationDatabase::project, "project");
+
+    block.add(&ApplicationDatabase::scratch, "scratch");
     }
   }
 

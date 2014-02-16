@@ -1,6 +1,6 @@
 [submodule "Eks"]
 	path = Eks
-	url = https://code.google.com/p/vexxeks
+	url = https://github.com/jorj1988/Eks.git
 [submodule "Shift"]
 	path = Shift
-	url = https://code.google.com/p/vexxshift
+	url = https://github.com/jorj1988/Shift.git
