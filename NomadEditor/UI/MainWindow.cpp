@@ -107,7 +107,7 @@ void MainWindow::newProject()
 
 void MainWindow::openProject()
   {
-  openProject(QSting());
+  openProject(QString());
   }
 
 void MainWindow::openProject(const QString &path)

@@ -2,12 +2,28 @@
 #include "ui_AssetBrowser.h"
 #include "shift/TypeInformation/spropertyinformationhelpers.h"
 #include "Application.h"
+#include "shift/Properties/sdata.inl"
 
 namespace Nomad
 {
 
 namespace Editor
 {
+
+S_IMPLEMENT_PROPERTY(AssetLocation, NomadEditor)
+
+void AssetLocation::createTypeInformation(
+    Shift::PropertyInformationTyped<AssetLocation> *info,
+    const Shift::PropertyInformationCreateData &data)
+  {
+  if (data.registerAttributes)
+    {
+    auto block = info->createChildrenBlock(data);
+
+    block.add(&AssetLocation::path, "path");
+    }
+  }
+
 
 S_IMPLEMENT_PROPERTY(AssetBrowserData, NomadEditor)
 
@@ -49,7 +65,7 @@ void AssetBrowser::setupProject()
 
   auto location = _browser->addChild<AssetLocation>();
 
-  location->setPath(currentProject->assets());
+  location->path = currentProject->assets();
 
   rebuildUI();
   }

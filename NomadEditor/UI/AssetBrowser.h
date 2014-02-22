@@ -5,6 +5,7 @@
 #include "UI/UIGlobal.h"
 #include "Utilities/XProperty.h"
 #include "shift/Utilities/sentityweakpointer.h"
+#include "shift/Properties/sdata.h"
 
 namespace Ui {
 class AssetBrowser;
@@ -20,7 +21,15 @@ class AssetBrowserData : public Shift::Entity
   S_ENTITY(AssetBrowserData, Entity);
 
 public:
+  };
 
+class AssetLocation : public Shift::Entity
+  {
+  S_ENTITY(AssetLocation, Entity);
+
+public:
+
+  Shift::Data<Eks::String> path;
   };
 
 class AssetBrowser : public QDockWidget
