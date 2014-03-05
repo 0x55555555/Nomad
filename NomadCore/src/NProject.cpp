@@ -28,7 +28,6 @@ void Project::createTypeInformation(
     auto childBlock = info->createChildrenBlock(data);
 
     childBlock.add(&Project::libraries, "libraries");
-    childBlock.add(&Project::assets, "assets");
     }
   }
 

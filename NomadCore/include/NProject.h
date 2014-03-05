@@ -21,8 +21,6 @@ class NOMAD_EXPORT Project : public File
 
 public:
   Shift::Array libraries;
-
-  Shift::StringProperty assets;
   };
 
 }

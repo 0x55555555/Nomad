@@ -66,6 +66,8 @@ void MainWindow::closeProject()
     {
     _db->children.remove(current);
     }
+
+  emit projectChanged();
   }
 
 Shift::Array *MainWindow::getScratchParent()

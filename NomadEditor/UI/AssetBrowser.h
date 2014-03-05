@@ -11,6 +11,8 @@ namespace Ui {
 class AssetBrowser;
 }
 
+class QFileSystemModel;
+
 namespace Nomad
 {
 namespace Editor
@@ -21,15 +23,6 @@ class AssetBrowserData : public Shift::Entity
   S_ENTITY(AssetBrowserData, Entity);
 
 public:
-  };
-
-class AssetLocation : public Shift::Entity
-  {
-  S_ENTITY(AssetLocation, Entity);
-
-public:
-
-  Shift::Data<Eks::String> path;
   };
 
 class AssetBrowser : public QDockWidget
@@ -49,8 +42,10 @@ private slots:
 private:
   void rebuildUI();
 
-  Ui::AssetBrowser *ui;
-  AssetBrowserData *_browser;
+  Ui::AssetBrowser *_ui;
+  Shift::EntityWeakPointer<AssetBrowserData> _browser;
+
+  QFileSystemModel *_model;
   };
 
 }
