@@ -26,12 +26,14 @@ Nomad::Asset *AssetInterface::load(const char *name, Shift::Array *parent)
     return nullptr;
     }
 
+  Eks::String toLoadStr = toLoad.readAll().data();
+
   Shift::LoadBuilder builder;
   Eks::TemporaryAllocator alloc(parent->temporaryAllocator());
   auto loading = builder.beginLoading(parent, &alloc);
 
   Shift::JSONLoader loader;
-  loader.load(&toLoad, &builder);
+  loader.load(&toLoadStr, &builder);
 
   xAssert(loading->loadedData().size() == 1);
   if (loading->loadedData().size() != 1)

@@ -52,6 +52,12 @@ MainWindow::MainWindow(Nomad::Editor::ApplicationDatabase *db, QWidget *parent) 
       action->setData(r);
       }
     });
+
+  auto recents = getRecents();
+  if(recents.size())
+    {
+    openProject(recents[0]);
+    }
   }
 
 MainWindow::~MainWindow()

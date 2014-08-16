@@ -24,17 +24,17 @@ Canvas::~Canvas()
   {
   }
 
-void Canvas::initialise3D(Eks::Renderer *r)
+void Canvas::initialise3D(Eks::Renderer *)
   {
   xAssertFail();
   }
 
-void Canvas::paint3D(Eks::Renderer *r, Eks::FrameBuffer *buffer)
+void Canvas::paint3D(Eks::Renderer *, Eks::FrameBuffer *)
   {
   xAssertFail();
   }
 
-void Canvas::resize3D(Eks::Renderer *r, xuint32 w, xuint32 h)
+void Canvas::resize3D(Eks::Renderer *, xuint32, xuint32)
   {
   xAssertFail();
   }

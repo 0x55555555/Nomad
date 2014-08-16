@@ -3,6 +3,7 @@
 #include "shift/TypeInformation/spropertyinformationhelpers.h"
 #include "shift/Serialisation/sjsonio.h"
 #include "QFile"
+#include "QDebug"
 
 S_IMPLEMENT_MODULE(NomadEditor)
 
@@ -24,14 +25,11 @@ void ApplicationDatabase::createTypeInformation(
       Shift::PropertyInformationTyped<ApplicationDatabase> *info,
       const Shift::PropertyInformationCreateData &data)
   {
-  if(data.registerAttributes)
-    {
-    auto block = info->createChildrenBlock(data);
+  auto block = info->createChildrenBlock(data);
 
-    block.add(&ApplicationDatabase::project, "project");
+  block.add(&ApplicationDatabase::project, "project");
 
-    block.add(&ApplicationDatabase::scratch, "scratch");
-    }
+  block.add(&ApplicationDatabase::scratch, "scratch");
   }
 
 Application::Application(int argc, char **argv)
@@ -54,19 +52,21 @@ Application::~Application()
 
 File *Application::load(const Eks::String &path, Shift::Entity *parent)
   {
-  QFile toLoad(path.toQString());
+  QFile toLoad(path.data());
   if(toLoad.open(QFile::ReadOnly) == false)
     {
-    qWarning() << "failed to open project" << path;
+    qWarning() << "failed to open project" << path.data();
     return nullptr;
     }
+
+  Eks::String toLoadStr = toLoad.readAll().data();
 
   Shift::LoadBuilder builder;
   Eks::TemporaryAllocator alloc(parent->children.temporaryAllocator());
   auto loading = builder.beginLoading(&parent->children, &alloc);
 
   Shift::JSONLoader loader;
-  loader.load(&toLoad, &builder);
+  loader.load(&toLoadStr, &builder);
 
   if(loading->loadedData().size() != 1)
     {
@@ -85,7 +85,7 @@ File *Application::load(const Eks::String &path, Shift::Entity *parent)
 
 bool Application::save(File *file)
   {
-  QString path = file->path().toQString();
+  QString path(file->path().data());
   QFile toSave(path);
   if(toSave.open(QFile::WriteOnly) == false)
     {
@@ -98,9 +98,14 @@ bool Application::save(File *file)
   Shift::JSONSaver writer;
   writer.setAutoWhitespace(true);
 
-  auto block = writer.beginWriting(&toSave);
+  Eks::String toSaveStr;
+    {
+    auto block = writer.beginWriting(&toSaveStr);
 
-  builder.save(file, true, &writer);
+    builder.save(file, true, &writer);
+    }
+
+  toSave.write(toSaveStr.data());
   return true;
   }
 

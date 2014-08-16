@@ -40,10 +40,7 @@ void TestReloadableAsset::createTypeInformation(
     Shift::PropertyInformationTyped<TestReloadableAsset> *info,
     const Shift::PropertyInformationCreateData &data)
   {
-  if(data.registerAttributes)
-    {
-    auto childBlock = info->createChildrenBlock(data);
-    }
+  auto childBlock = info->createChildrenBlock(data);
   }
 
 S_IMPLEMENT_PROPERTY(TestAsset, Test)
@@ -52,10 +49,7 @@ void TestAsset::createTypeInformation(
     Shift::PropertyInformationTyped<TestAsset> *info,
     const Shift::PropertyInformationCreateData &data)
   {
-  if(data.registerAttributes)
-    {
-    auto childBlock = info->createChildrenBlock(data);
-    }
+  auto childBlock = info->createChildrenBlock(data);
   }
 
 S_IMPLEMENT_PROPERTY(TestData, Test)
@@ -64,13 +58,10 @@ void TestData::createTypeInformation(
     Shift::PropertyInformationTyped<TestData> *info,
     const Shift::PropertyInformationCreateData &data)
   {
-  if(data.registerAttributes)
-    {
-    auto childBlock = info->createChildrenBlock(data);
+  auto childBlock = info->createChildrenBlock(data);
 
-    Nomad::detail::addAssetPointer(childBlock, &TestData::asset, "asset");
-    Nomad::detail::addAssetPointer(childBlock, &TestData::reloadableAsset, "reloadableAsset");
-    }
+  Nomad::detail::addAssetPointer(childBlock, &TestData::asset, "asset");
+  Nomad::detail::addAssetPointer(childBlock, &TestData::reloadableAsset, "reloadableAsset");
   }
 
 template <typename T> void save(T *data, const char *name)
@@ -82,9 +73,14 @@ template <typename T> void save(T *data, const char *name)
   Shift::JSONSaver writer;
   writer.setAutoWhitespace(true);
 
-  auto block = writer.beginWriting(&file);
+  Eks::String fileStr;
+    {
+    auto block = writer.beginWriting(&fileStr);
 
-  builder.save(data, true, &writer);
+    builder.save(data, true, &writer);
+    }
+
+  file.write(fileStr.data());
   }
 
 void generateData(Shift::Entity *dataRoot, Nomad::AssetManager *manager)
@@ -128,16 +124,18 @@ public:
     QFile toLoad(name);
     if(!toLoad.open(QFile::ReadOnly))
       {
-      xAssertFail();
+      xAssertFail(name);
       return nullptr;
       }
+
+    Eks::String toLoadStr = toLoad.readAll().data();
 
     Shift::LoadBuilder builder;
     Eks::TemporaryAllocator alloc(parent->temporaryAllocator());
     auto loading = builder.beginLoading(parent, &alloc);
 
     Shift::JSONLoader loader;
-    loader.load(&toLoad, &builder);
+    loader.load(&toLoadStr, &builder);
 
     xAssert(loading->loadedData().size() == 1);
     if (loading->loadedData().size() != 1)
@@ -193,7 +191,7 @@ void NomadCoreTest::basicResource()
 
   TestDatabase db;
   auto manager = db.addChild<Nomad::AssetManager>();
-  manager->setInterface(&testInterface);
+  manager->reset(&testInterface);
 
 #define GENERATE_DATAx
 #ifdef GENERATE_DATA
@@ -225,7 +223,7 @@ void NomadCoreTest::reloadResource()
 
   TestDatabase db;
   auto manager = db.addChild<Nomad::AssetManager>();
-  manager->setInterface(&testInterface);
+  manager->reset(&testInterface);
 
   auto data = testInterface.loadPrimaryAsset<TestData>(":/data/testData.json");
 

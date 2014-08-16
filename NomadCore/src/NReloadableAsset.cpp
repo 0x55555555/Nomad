@@ -10,10 +10,7 @@ void ReloadableAsset::createTypeInformation(
     Shift::PropertyInformationTyped<ReloadableAsset> *info,
     const Shift::PropertyInformationCreateData &data)
   {
-  if(data.registerAttributes)
-    {
-    auto childBlock = info->createChildrenBlock(data);
-    }
+  auto childBlock = info->createChildrenBlock(data);
   }
 
 bool ReloadableAsset::preReload()

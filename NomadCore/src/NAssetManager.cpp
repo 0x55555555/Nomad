@@ -8,18 +8,23 @@
 namespace Nomad
 {
 
+AssetManagerInterface::~AssetManagerInterface()
+  {
+  if (_manager)
+    {
+    _manager->reset(nullptr);
+    }
+  }
+
 S_IMPLEMENT_PROPERTY(AssetManager, Nomad)
 
 void AssetManager::createTypeInformation(
     Shift::PropertyInformationTyped<AssetManager> *info,
     const Shift::PropertyInformationCreateData &data)
   {
-  if(data.registerAttributes)
-    {
-    auto childBlock = info->createChildrenBlock(data);
+  auto childBlock = info->createChildrenBlock(data);
 
-    childBlock.add(&AssetManager::assets, "assets");
-    }
+  childBlock.add(&AssetManager::assets, "assets");
   }
 
 AssetManagerInterface::AssetManagerInterface()
@@ -31,6 +36,29 @@ AssetManager::AssetManager()
     : _assetInterface(nullptr),
       _assets(Shift::TypeRegistry::generalPurposeAllocator())
   {
+  }
+
+AssetManager::~AssetManager()
+  {
+  reset(nullptr);
+  }
+
+void AssetManager::reset(Interface *ifc)
+  {
+  assets.clear();
+  _assets.clear();
+
+  if (_assetInterface)
+    {
+    _assetInterface->_manager = nullptr;
+    }
+
+  _assetInterface = ifc;
+	
+  if (ifc)
+    {
+    ifc->_manager = this;
+    }
   }
 
 void AssetManager::reloadRequiredAssets()
@@ -73,12 +101,6 @@ void AssetManager::reloadRequiredAssets()
     }
   }
 
-void AssetManager::setInterface(Interface *ifc)
-  {
-  ifc->_manager = this;
-  _assetInterface = ifc;
-  }
-
 Shift::Array *AssetManager::assetContainer()
   {
   return &assets;
@@ -91,7 +113,7 @@ Asset *AssetManager::resolveAsset(const QUuid &id, Shift::ExternalPointerInstanc
   auto as = _assets.find(id);
   if (as != _assets.end())
     {
-    return as.value();
+    return as->second;
     }
 
   auto asset = _assetInterface->load(id, &assets);
@@ -111,11 +133,18 @@ Asset *AssetManager::resolveAsset(const QUuid &id, Shift::ExternalPointerInstanc
   return asset;
   }
 
+Asset *AssetManager::createAsset(const Shift::PropertyInformation *info)
+  {
+  Asset *t = assets.add(info)->uncheckedCastTo<Asset>();
+  registerAsset(t);
+  return t;
+  }
+
 void AssetManager::registerAsset(Asset *asset)
   {
+  xAssert(asset->parent() == &assets);
   asset->_manager = this;
   _assets[asset->uuid()] = asset;
   }
-
 
 }

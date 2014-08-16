@@ -1,0 +1,196 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		08926168199F971D00764E29 /* Application.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../Application.cpp; sourceTree = "<group>"; };
+		08926169199F971D00764E29 /* Application.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Application.h; path = ../Application.h; sourceTree = "<group>"; };
+		0892616A199F971D00764E29 /* AssetInterface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AssetInterface.cpp; path = ../AssetInterface.cpp; sourceTree = "<group>"; };
+		0892616B199F971D00764E29 /* AssetInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AssetInterface.h; path = ../AssetInterface.h; sourceTree = "<group>"; };
+		0892616C199F971D00764E29 /* Canvas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Canvas.cpp; path = ../Canvas.cpp; sourceTree = "<group>"; };
+		0892616D199F971D00764E29 /* Canvas.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Canvas.h; path = ../Canvas.h; sourceTree = "<group>"; };
+		0892616F199F971D00764E29 /* NomadEditor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = NomadEditor.xcodeproj; sourceTree = "<group>"; };
+		08926172199F971D00764E29 /* NomadEditor.qbs */ = {isa = PBXFileReference; lastKnownFileType = text; name = NomadEditor.qbs; path = ../NomadEditor.qbs; sourceTree = "<group>"; };
+		08926174199F971D00764E29 /* AssetBrowser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssetBrowser.cpp; sourceTree = "<group>"; };
+		08926175199F971D00764E29 /* AssetBrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetBrowser.h; sourceTree = "<group>"; };
+		08926176199F971D00764E29 /* AssetBrowser.ui */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AssetBrowser.ui; sourceTree = "<group>"; };
+		08926177199F971D00764E29 /* MainWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MainWindow.cpp; sourceTree = "<group>"; };
+		08926178199F971D00764E29 /* MainWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainWindow.h; sourceTree = "<group>"; };
+		08926179199F971D00764E29 /* MainWindow.ui */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MainWindow.ui; sourceTree = "<group>"; };
+		0892617A199F971D00764E29 /* NewAsset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NewAsset.cpp; sourceTree = "<group>"; };
+		0892617B199F971D00764E29 /* NewAsset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewAsset.h; sourceTree = "<group>"; };
+		0892617C199F971D00764E29 /* NewAsset.ui */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = NewAsset.ui; sourceTree = "<group>"; };
+		0892617D199F971D00764E29 /* UIGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIGlobal.h; sourceTree = "<group>"; };
+		08926180199F972600764E29 /* NShader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NShader.h; sourceTree = "<group>"; };
+		08926181199F972600764E29 /* NAsset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NAsset.h; sourceTree = "<group>"; };
+		08926182199F972600764E29 /* NAssetHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NAssetHelpers.h; sourceTree = "<group>"; };
+		08926183199F972600764E29 /* NAssetManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NAssetManager.h; sourceTree = "<group>"; };
+		08926184199F972600764E29 /* NGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NGlobal.h; sourceTree = "<group>"; };
+		08926185199F972600764E29 /* NProject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NProject.h; sourceTree = "<group>"; };
+		08926186199F972600764E29 /* NReloadableAsset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NReloadableAsset.h; sourceTree = "<group>"; };
+		08926187199F972600764E29 /* NomadCore.qbs */ = {isa = PBXFileReference; lastKnownFileType = text; name = NomadCore.qbs; path = ../../NomadCore/NomadCore.qbs; sourceTree = "<group>"; };
+		0892618A199F972600764E29 /* NShader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NShader.cpp; sourceTree = "<group>"; };
+		0892618B199F972600764E29 /* NAsset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NAsset.cpp; sourceTree = "<group>"; };
+		0892618C199F972600764E29 /* NAssetManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NAssetManager.cpp; sourceTree = "<group>"; };
+		0892618D199F972600764E29 /* NGlobal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NGlobal.cpp; sourceTree = "<group>"; };
+		0892618E199F972600764E29 /* NProject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NProject.cpp; sourceTree = "<group>"; };
+		0892618F199F972600764E29 /* NReloadableAsset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NReloadableAsset.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		089261611998050F00764E29 = {
+			isa = PBXGroup;
+			children = (
+				0892617E199F972600764E29 /* include */,
+				08926187199F972600764E29 /* NomadCore.qbs */,
+				08926188199F972600764E29 /* src */,
+				08926168199F971D00764E29 /* Application.cpp */,
+				08926169199F971D00764E29 /* Application.h */,
+				0892616A199F971D00764E29 /* AssetInterface.cpp */,
+				0892616B199F971D00764E29 /* AssetInterface.h */,
+				0892616C199F971D00764E29 /* Canvas.cpp */,
+				0892616D199F971D00764E29 /* Canvas.h */,
+				0892616E199F971D00764E29 /* NomadEditor */,
+				08926172199F971D00764E29 /* NomadEditor.qbs */,
+				08926173199F971D00764E29 /* UI */,
+			);
+			sourceTree = "<group>";
+		};
+		0892616E199F971D00764E29 /* NomadEditor */ = {
+			isa = PBXGroup;
+			children = (
+				0892616F199F971D00764E29 /* NomadEditor.xcodeproj */,
+			);
+			name = NomadEditor;
+			sourceTree = "<group>";
+		};
+		08926170199F971D00764E29 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		08926173199F971D00764E29 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				08926174199F971D00764E29 /* AssetBrowser.cpp */,
+				08926175199F971D00764E29 /* AssetBrowser.h */,
+				08926176199F971D00764E29 /* AssetBrowser.ui */,
+				08926177199F971D00764E29 /* MainWindow.cpp */,
+				08926178199F971D00764E29 /* MainWindow.h */,
+				08926179199F971D00764E29 /* MainWindow.ui */,
+				0892617A199F971D00764E29 /* NewAsset.cpp */,
+				0892617B199F971D00764E29 /* NewAsset.h */,
+				0892617C199F971D00764E29 /* NewAsset.ui */,
+				0892617D199F971D00764E29 /* UIGlobal.h */,
+			);
+			name = UI;
+			path = ../UI;
+			sourceTree = "<group>";
+		};
+		0892617E199F972600764E29 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				0892617F199F972600764E29 /* Assets */,
+				08926181199F972600764E29 /* NAsset.h */,
+				08926182199F972600764E29 /* NAssetHelpers.h */,
+				08926183199F972600764E29 /* NAssetManager.h */,
+				08926184199F972600764E29 /* NGlobal.h */,
+				08926185199F972600764E29 /* NProject.h */,
+				08926186199F972600764E29 /* NReloadableAsset.h */,
+			);
+			name = include;
+			path = ../../NomadCore/include;
+			sourceTree = "<group>";
+		};
+		0892617F199F972600764E29 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				08926180199F972600764E29 /* NShader.h */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		08926188199F972600764E29 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				08926189199F972600764E29 /* Assets */,
+				0892618B199F972600764E29 /* NAsset.cpp */,
+				0892618C199F972600764E29 /* NAssetManager.cpp */,
+				0892618D199F972600764E29 /* NGlobal.cpp */,
+				0892618E199F972600764E29 /* NProject.cpp */,
+				0892618F199F972600764E29 /* NReloadableAsset.cpp */,
+			);
+			name = src;
+			path = ../../NomadCore/src;
+			sourceTree = "<group>";
+		};
+		08926189199F972600764E29 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				0892618A199F972600764E29 /* NShader.cpp */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		089261621998050F00764E29 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
+			buildConfigurationList = 089261651998050F00764E29 /* Build configuration list for PBXProject "NomadEditor" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 089261611998050F00764E29;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 08926170199F971D00764E29 /* Products */;
+					ProjectRef = 0892616F199F971D00764E29 /* NomadEditor.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		089261661998050F00764E29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		089261671998050F00764E29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		089261651998050F00764E29 /* Build configuration list for PBXProject "NomadEditor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				089261661998050F00764E29 /* Debug */,
+				089261671998050F00764E29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089261621998050F00764E29 /* Project object */;
+}

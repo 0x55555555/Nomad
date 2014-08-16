@@ -20,6 +20,7 @@ class NOMAD_EXPORT Project : public File
   S_ENTITY(Project, File)
 
 public:
+
   Shift::Array libraries;
   };
 

@@ -12,6 +12,7 @@ Eks.Application {
   Depends { name: "Qt.widgets" }
 
   Depends { name: "Eks3D" }
+  Depends { name: "EksGui" }
   Depends { name: "NomadCore" }
   Depends { name: "ShiftCore" }
 }

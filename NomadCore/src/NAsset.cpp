@@ -11,10 +11,7 @@ void Asset::createTypeInformation(
     Shift::PropertyInformationTyped<Asset> *info,
     const Shift::PropertyInformationCreateData &data)
   {
-  if(data.registerAttributes)
-    {
-    auto childBlock = info->createChildrenBlock(data);
-    }
+  auto childBlock = info->createChildrenBlock(data);
   }
 
 Asset::Asset()
