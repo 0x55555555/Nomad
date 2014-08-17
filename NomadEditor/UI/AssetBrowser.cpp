@@ -2,15 +2,12 @@
 #include "ui_AssetBrowser.h"
 #include "shift/TypeInformation/spropertyinformationhelpers.h"
 #include "shift/Properties/sdata.inl"
-#include "shift/Serialisation/sloader.h"
-#include "shift/Serialisation/sjsonio.h"
 #include "Application.h"
 #include "NewAsset.h"
 #include "NAsset.h"
-#include "Assets/NShader.h"
+#include "Assets/Shader.h"
 #include "QFileSystemModel"
 #include "QMessageBox"
-#include "QFile"
 
 namespace Nomad
 {
@@ -27,6 +24,7 @@ void AssetBrowserData::createTypeInformation(
   auto block = info->createChildrenBlock(data);
 
   block.add(&AssetBrowserData::manager, "manager");
+  block.add(&AssetBrowserData::assetHandles, "assetHandles");
   }
 
 AssetBrowserData::AssetBrowserData()
@@ -34,34 +32,9 @@ AssetBrowserData::AssetBrowserData()
   {
   }
 
-Nomad::Asset *AssetBrowserData::load(const char *name, Shift::Array *parent)
+Nomad::Editor::AssetType *AssetBrowserData::loadHandle(const QString &name)
   {
-  QFile toLoad(name);
-  if(!toLoad.open(QFile::ReadOnly))
-    {
-    xAssertFail(name);
-    return nullptr;
-    }
-
-  qDebug() << "loading file" << name;
-
-  Eks::String toLoadStr = toLoad.readAll().data();
-
-  Shift::LoadBuilder builder;
-  Eks::TemporaryAllocator alloc(parent->temporaryAllocator());
-  auto loading = builder.beginLoading(parent, &alloc);
-
-  Shift::JSONLoader loader;
-  loader.load(&toLoadStr, &builder);
-
-  xAssert(loading->loadedData().size() == 1);
-  if (loading->loadedData().size() != 1)
-    {
-    return nullptr;
-    }
-
-  auto asset = loading->loadedData().front()->castTo<Nomad::Asset>();
-  manager.registerAsset(asset);
+  AssetType *asset = AssetType::load(&assetHandles, name);
   _paths[asset->uuid()] = name;
 
   return asset;
@@ -78,7 +51,9 @@ Asset *AssetBrowserData::load(const QUuid &name, Shift::Array *parent)
     return nullptr;
     }
 
-  return load(it->first, parent);
+  AssetType* type = loadHandle(it->second);
+
+  return type->asset(parent, it->second);
   }
 
 bool AssetBrowserData::requiresReload(const QUuid &)
@@ -86,34 +61,18 @@ bool AssetBrowserData::requiresReload(const QUuid &)
   return false;
   }
 
-Asset *AssetBrowserData::createAsset(const Shift::PropertyInformation *info, const QString &location)
+AssetType *AssetBrowserData::createAsset(const Shift::PropertyInformation *info, const QString &location)
   {
-  Asset *a = manager.createAsset(info);
+  AssetType *a = AssetType::create(info, &assetHandles, manager.assetParent(), location);
   _paths[a->uuid()] = location;
-
-  saveAsset(a);
-
   return a;
   }
 
-void AssetBrowserData::saveAsset(Asset *a)
+void AssetBrowserData::saveAsset(AssetType *a)
   {
   xAssert(_paths.contains(a->uuid()), a->uuid().toByteArray().data());
-  QFile file(_paths[a->uuid()]);
-  file.open(QFile::WriteOnly);
 
-  Shift::SaveBuilder builder;
-  Shift::JSONSaver writer;
-  writer.setAutoWhitespace(true);
-
-  Eks::String fileStr;
-    {
-    auto block = writer.beginWriting(&fileStr);
-
-    builder.save(a, true, &writer);
-    }
-
-  file.write(fileStr.data());
+  a->save(_paths[a->uuid()]);
   }
 
 void AssetBrowserData::loadAsset(const QString &d)
@@ -208,7 +167,6 @@ void AssetBrowser::addAsset()
   if (rows.size() > 0 && _model->isDir(rows[0]))
     {
     path = _model->filePath(rows[0]);
-    qDebug() << path;
     }
 
   if (f->show(path) != QDialog::Accepted)

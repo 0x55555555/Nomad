@@ -10,6 +10,8 @@
 	<string>NomadEditor</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>B7CB9CDB-5928-4642-9AE0-4163F1865CC2</key>
+		<string>https://github.com/jorj1988/Eks.git</string>
 		<key>E000E4EB-3C14-4404-BD5D-0821EC3A0611</key>
 		<string>ssh://github.com/jorj1988/Nomad.git</string>
 	</dict>
@@ -17,6 +19,8 @@
 	<string>NomadEditor/NomadEditor/NomadEditor.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>B7CB9CDB-5928-4642-9AE0-4163F1865CC2</key>
+		<string>../../../../Eks</string>
 		<key>E000E4EB-3C14-4404-BD5D-0821EC3A0611</key>
 		<string>../../../..</string>
 	</dict>
@@ -28,6 +32,14 @@
 	<string>E000E4EB-3C14-4404-BD5D-0821EC3A0611</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>B7CB9CDB-5928-4642-9AE0-4163F1865CC2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Eks</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

@@ -8,7 +8,7 @@ class AssetManager;
 
 class NOMAD_EXPORT Asset : public Shift::UuidEntity
   {
-  S_ABSTRACT_ENTITY(Asset, UuidEntity)
+  S_ENTITY(Asset, UuidEntity)
 
 XProperties:
   XROProperty(AssetManager *, manager);

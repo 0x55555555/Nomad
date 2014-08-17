@@ -24,6 +24,8 @@ namespace Nomad
 namespace Editor
 {
 
+class AssetType;
+
 class AssetBrowserData
     : public Shift::Entity,
       public AssetManagerInterface
@@ -33,19 +35,19 @@ class AssetBrowserData
 public:
   AssetBrowserData();
 
-  Nomad::Asset *load(const char *name, Shift::Array *parent);
   Asset *load(const QUuid &name, Shift::Array *parent) X_OVERRIDE;
   bool requiresReload(const QUuid &id) X_OVERRIDE;
 
-  Asset *createAsset(const Shift::PropertyInformation *info, const QString &location);
-  void saveAsset(Asset *a);
+  Nomad::Editor::AssetType *loadHandle(const QString &name);
+  Editor::AssetType *createAsset(const Shift::PropertyInformation *info, const QString &location);
+  void saveAsset(Editor::AssetType *a);
   void loadAsset(const QString &d);
-
   bool hasLoaded(const QString &d) const;
 
   AssetManager manager;
 
 private:
+  Shift::Array assetHandles;
   Eks::UnorderedMap<QUuid, QString> _paths;
   };
 

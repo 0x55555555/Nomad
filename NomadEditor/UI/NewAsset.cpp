@@ -2,7 +2,7 @@
 #include "AssetBrowser.h"
 #include "ui_NewAsset.h"
 #include "shift/TypeInformation/spropertyinformation.h"
-#include "NAsset.h"
+#include "Assets/AssetType.h"
 #include "QFileDialog"
 
 NewAsset::NewAsset(QWidget *parent) :
@@ -14,7 +14,7 @@ NewAsset::NewAsset(QWidget *parent) :
 
   xForeach(const Shift::PropertyInformation *t, Shift::TypeRegistry::types())
     {
-    if (t->inheritsFromType(Nomad::Asset::staticTypeInformation()) && !t->isAbstract())
+    if (t->inheritsFromType(Nomad::Editor::AssetType::staticTypeInformation()) && !t->isAbstract())
       {
       _ui->type->addItem(t->typeName().data(), QVariant((qulonglong)t));
       }
