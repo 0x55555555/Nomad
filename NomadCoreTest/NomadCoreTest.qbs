@@ -6,4 +6,5 @@ Eks.Test {
 
   Depends { name: "NomadCore" }
   Depends { name: "ShiftCore" }
+  Depends { name: "ShiftQt" }
 }

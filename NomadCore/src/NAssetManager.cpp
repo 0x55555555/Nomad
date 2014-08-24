@@ -88,7 +88,7 @@ void AssetManager::reloadRequiredAssets()
       continue;
       }
 
-    auto newAsset = _assetInterface->load(id, &assets);
+    auto newAsset = _assetInterface->load(&assets, id);
     if(!newAsset)
       {
       continue;
@@ -101,12 +101,9 @@ void AssetManager::reloadRequiredAssets()
     }
   }
 
-Shift::Array *AssetManager::assetContainer()
-  {
-  return &assets;
-  }
-
-Asset *AssetManager::resolveAsset(const QUuid &id, Shift::ExternalPointerInstanceInformation::ResolveResult *res)
+Asset *AssetManager::resolveAsset(
+    const QUuid &id,
+    Shift::ExternalPointerInstanceInformation::ResolveResult *res)
   {
   xAssert(_assetInterface);
 
@@ -116,7 +113,7 @@ Asset *AssetManager::resolveAsset(const QUuid &id, Shift::ExternalPointerInstanc
     return as->second;
     }
 
-  auto asset = _assetInterface->load(id, &assets);
+  auto asset = _assetInterface->load(&assets, id);
 
   if(res)
     {

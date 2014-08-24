@@ -1,7 +1,7 @@
 #pragma once
 #include "shift/sentity.h"
 #include "shift/Properties/sarray.h"
-#include "shift/QtExtensions/sexternalpointer.h"
+#include "sexternalpointer.h"
 #include "NGlobal.h"
 
 namespace Nomad
@@ -18,7 +18,7 @@ XProperties:
 public:
   ~AssetManagerInterface();
 
-  virtual Asset *load(const QUuid &name, Shift::Array *parent) = 0;
+  virtual Asset *load(Shift::Set *parent, const QUuid &name) = 0;
   virtual bool requiresReload(const QUuid &id) = 0;
 
 
@@ -47,8 +47,6 @@ public:
   void reset(Interface *ifc);
   void reloadRequiredAssets();
 
-  Shift::Array *assetContainer();
-
   Asset *resolveAsset(
     const QUuid &id,
     Shift::ExternalPointerInstanceInformation::ResolveResult *res);
@@ -59,11 +57,11 @@ public:
     return createAsset(T::staticTypeInformation())->template uncheckedCastTo<T>();
     }
 
-  Shift::Array *assetParent() { return &assets; }
+  Shift::Set *assetParent() { return &assets; }
   void registerAsset(Asset *asset);
 
 private:
-  Shift::Array assets;
+  Shift::Set assets;
   Eks::UnorderedMap<QUuid, Asset *> _assets;
   };
 

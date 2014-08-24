@@ -1,8 +1,11 @@
 {
 	"version": "2",
 	"types": {
-		"FullStringProperty": {
+		"Array": {
 			"dynamicCount": "0"
+		},
+		"FullStringProperty": {
+			"dynamicCount": "2"
 		},
 		"Project": {
 			"dynamicCount": "1"
@@ -12,6 +15,19 @@
 	"data": {
 		"type": "Project",
 		"contents": {
+			"libraries": {
+				"contents": [
+					{
+						"type": "FullStringProperty",
+						"value": "libNomadRendererEditor.dylib"
+					},
+					{
+						"type": "FullStringProperty",
+						"value": "libNomadRenderer.dylib"
+					}
+				]
+			},
+			"binFolder": "/Volumes/User/Nomad-build/qtc_Desktop_Qt_5_3_clang_64bit-debug"
 		}
 	}
 }

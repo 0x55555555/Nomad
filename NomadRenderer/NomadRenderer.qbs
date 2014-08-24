@@ -2,12 +2,11 @@ import qbs
 import "../Eks/EksBuild" as Eks;
 
 Eks.Library {
-  name: "NomadCore"
+  name: "NomadRenderer"
   toRoot: "../"
 
-  Depends { name: "Qt.core" }
   Depends { name: "ShiftCore" }
-  Depends { name: "ShiftQt" }
+  Depends { name: "NomadCore" }
 
   Export {
     Depends { name: "cpp" }

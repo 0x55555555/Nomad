@@ -10,7 +10,10 @@ Eks.SubModule {
     "Eks/EksAll.qbs",
     "Shift/ShiftAll.qbs",
     "NomadCore/NomadCore.qbs",
+    "NomadRenderer/NomadRenderer.qbs",
+    "NomadRenderer/Editor/NomadRendererEditor.qbs",
     "NomadCoreTest/NomadCoreTest.qbs",
-    "NomadEditor/NomadEditor.qbs"
+    "NomadEditor/NomadEditor.qbs",
+    "NomadEditorApp/NomadEditorApp.qbs"
   ]
 }

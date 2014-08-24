@@ -116,10 +116,10 @@ public:
   Nomad::Asset *loadPrimaryAsset(const char *str)
     {
     xAssert(manager());
-    return load(str, manager()->assetContainer());
+    return load(manager()->assetParent(), str);
     }
 
-  Nomad::Asset *load(const char *name, Shift::Array *parent)
+  Nomad::Asset *load(Shift::Set *parent, const char *name)
     {
     QFile toLoad(name);
     if(!toLoad.open(QFile::ReadOnly))
@@ -161,7 +161,7 @@ public:
     }
 
 private:
-  Nomad::Asset *load(const QUuid &name, Shift::Array *parent) X_OVERRIDE
+  Nomad::Asset *load(Shift::Set *parent, const QUuid &name) X_OVERRIDE
     {
     _toReload.erase(name);
 
@@ -169,7 +169,7 @@ private:
 
     path = ":/resources/" + path + ".json";
 
-    return load(path.toUtf8().data(), parent);
+    return load(parent, path.toUtf8().data());
     }
 
   bool requiresReload(const QUuid &id) X_OVERRIDE

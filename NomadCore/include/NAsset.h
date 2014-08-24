@@ -1,5 +1,5 @@
 #pragma once
-#include "shift/QtExtensions/sexternalpointer.h"
+#include "sexternalpointer.h"
 #include "NGlobal.h"
 
 namespace Nomad
