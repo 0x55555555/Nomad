@@ -9,7 +9,7 @@ namespace Nomad
 namespace Editor
 {
 
-S_IMPLEMENT_PROPERTY(Shader, Nomad)
+S_IMPLEMENT_PROPERTY(Shader, NomadRendererEditor)
 
 void Shader::createTypeInformation(
     Shift::PropertyInformationTyped<Shader> *info,

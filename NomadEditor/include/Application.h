@@ -59,6 +59,7 @@ public:
   static FileResult offerToSave(Nomad::File *file);
 
   ApplicationDatabase *database() { return &_database; }
+  Shift::TypeRegistry *registry() { return &_registry; }
 
 private:
   Eks::Core _core;

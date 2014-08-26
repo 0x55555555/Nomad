@@ -32,6 +32,8 @@ public:
   virtual void addProjectAboutToChange(QObject *obj, const char *slot) = 0;
 
   virtual void openAssetEditor(AssetType *a) = 0;
+
+  virtual void reloadLibraries() = 0;
   };
 
 }

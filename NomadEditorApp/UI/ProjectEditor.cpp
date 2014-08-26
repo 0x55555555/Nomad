@@ -63,10 +63,13 @@ void ProjectEditor::setupProject()
   l3->addWidget(editor);
 
   l3->addStretch();
-  auto add = new QToolButton();
+  auto refresh = new QToolButton(_contents);
+  refresh->setText("Refresh");
+  auto add = new QToolButton(_contents);
   add->setText("+");
-  auto remove = new QToolButton();
+  auto remove = new QToolButton(_contents);
   remove->setText("-");
+  l3->addWidget(refresh);
   l3->addWidget(add);
   l3->addWidget(remove);
 
@@ -74,11 +77,18 @@ void ProjectEditor::setupProject()
   _libraries->setSelectionMode(QListWidget::ContiguousSelection);
   l->addWidget(_libraries);
 
+  connect(refresh, SIGNAL(clicked()), this, SLOT(reloadLibraries()));
   connect(add, SIGNAL(clicked()), this, SLOT(addNewLibrary()));
   connect(remove, SIGNAL(clicked()), this, SLOT(removeLibraries()));
 
   updateLibraries();
   currentProject->addTreeObserver(this);
+  currentProject->addObserver(this);
+  }
+
+void ProjectEditor::reloadLibraries()
+  {
+  _project->reloadLibraries();
   }
 
 void ProjectEditor::addNewLibrary()
@@ -139,6 +149,7 @@ void ProjectEditor::removeLibraries()
 void ProjectEditor::actOnChanges()
   {
   updateLibraries();
+  _project->reloadLibraries();
   }
 
 void ProjectEditor::onTreeChange(const Shift::Change *, bool)

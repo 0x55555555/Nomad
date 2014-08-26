@@ -26,6 +26,7 @@ public:
 
 private slots:
   void setupProject();
+  void reloadLibraries();
   void addNewLibrary();
   void removeLibraries();
 

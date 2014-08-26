@@ -20,10 +20,6 @@
 					{
 						"type": "FullStringProperty",
 						"value": "libNomadRendererEditor.dylib"
-					},
-					{
-						"type": "FullStringProperty",
-						"value": "libNomadRenderer.dylib"
 					}
 				]
 			},

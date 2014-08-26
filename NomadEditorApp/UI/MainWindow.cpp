@@ -10,6 +10,7 @@
 #include "UI/AssetEditor.h"
 #include "UI/ProjectUserData.h"
 #include "QSettings"
+#include "QLibrary"
 #include "NFile.h"
 
 namespace Nomad
@@ -18,10 +19,59 @@ namespace Nomad
 namespace Editor
 {
 
-MainWindow::MainWindow(Nomad::Editor::ApplicationDatabase *db, QWidget *parent) :
+struct MainWindow::ModuleWrapper
+  {
+  ModuleWrapper(Shift::TypeRegistry *reg, const QString &path)
+      : library(path),
+        registry(reg)
+    {
+    if(!library.load())
+      {
+      qWarning() << "......" << path << "failed to load:" << library.errorString();
+      return;
+      }
+
+    auto fn = (Shift::ModuleCSignature)library.resolve(S_MODULE_EXPORT_NAME);
+    if(!fn)
+      {
+      qWarning() << "......" << path << "failed to load: invalid shift module";
+      return;
+      }
+
+    module = fn();
+    if(!module)
+      {
+      qWarning() << "......" << path << "failed to load: invalid shift module returned";
+      return;
+      }
+
+    registry->installModule(*module);
+    qDebug() << "...... loaded" << (void*)fn;
+    }
+
+  ~ModuleWrapper()
+    {
+    if (module)
+      {
+      registry->uninstallModule(*module);
+      }
+
+    library.unload();
+    }
+
+  QLibrary library;
+  Shift::Module *module;
+  Shift::TypeRegistry *registry;
+  };
+
+MainWindow::MainWindow(
+    Shift::TypeRegistry *reg,
+    Nomad::Editor::ApplicationDatabase *db,
+    QWidget *parent) :
   QMainWindow(parent),
   _ui(new Ui::MainWindow),
   _db(db),
+  _registry(reg),
   _editors(Eks::Core::defaultAllocator())
   {
   _ui->setupUi(this);
@@ -178,6 +228,35 @@ const Eks::UnorderedMap<AssetType *, AssetEditor *> &MainWindow::openEditors()
   return _editors;
   }
 
+void MainWindow::reloadLibraries()
+  {
+  qDebug() << "Reloading libraries";
+  _libraries.clear();
+  auto project = getCurrentProject();
+  if (!project)
+    {
+    return;
+    }
+
+  QString bin = project->binFolder().data();
+  qDebug() << "... loading libraries from" << bin;
+
+  xForeach(auto str, project->libraries.walker<Shift::StringProperty>())
+    {
+    QString name = str->value().data();
+    QString path = bin + "/" + name;
+    qDebug() << "... loading" << name;
+
+    if(!QFile(path).exists())
+      {
+      qWarning() << "......" << path << "doesn't exist";
+      continue;
+      }
+
+    _libraries.emplace_back(std::unique_ptr<ModuleWrapper>(new ModuleWrapper(_registry, path)));
+    }
+  }
+
 void MainWindow::focusEditor(AssetEditor *editor)
   {
   editor->makeDockable(this);
@@ -268,8 +347,10 @@ bool MainWindow::openProject(const QString &path)
     newProjectUserData(toLoad);
     }
 
+
   addRecent(toLoad);
   _db->project.setPointed(file->uncheckedCastTo<Project>());
+  reloadLibraries();
   emit projectChanged();
 
   auto currentUser = _db->projectUserData();
@@ -392,7 +473,7 @@ int main(int argc, char **argv)
   {
   Nomad::Editor::Application app(argc, argv);
 
-  Nomad::Editor::MainWindow w(app.database());
+  Nomad::Editor::MainWindow w(app.registry(), app.database());
   w.show();
 
   return app.exec();

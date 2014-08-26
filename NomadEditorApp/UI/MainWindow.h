@@ -25,7 +25,7 @@ class MainWindow : public QMainWindow, ProjectInterface
   Q_OBJECT
 
 public:
-  explicit MainWindow(Nomad::Editor::ApplicationDatabase *db, QWidget *parent = 0);
+  explicit MainWindow(Shift::TypeRegistry *reg, Nomad::Editor::ApplicationDatabase *db, QWidget *parent = 0);
   ~MainWindow();
 
   Shift::Array *getScratchParent() X_OVERRIDE;
@@ -35,6 +35,7 @@ public:
   void addProjectAboutToChange(QObject *obj, const char *slot) X_OVERRIDE;
   void openAssetEditor(AssetType *a) X_OVERRIDE;
   const Eks::UnorderedMap<AssetType *, AssetEditor *>& openEditors() X_OVERRIDE;
+  void reloadLibraries() X_OVERRIDE;
 
   void closeEvent(QCloseEvent *event) X_OVERRIDE;
 
@@ -63,8 +64,12 @@ private:
 
   Ui::MainWindow *_ui;
   Nomad::Editor::ApplicationDatabase *_db;
+  Shift::TypeRegistry *_registry;
   Eks::UnorderedMap<AssetType *, AssetEditor *> _editors;
   AssetBrowser *_browser;
+
+  struct ModuleWrapper;
+  std::vector<std::unique_ptr<ModuleWrapper>> _libraries;
   };
 
 }
