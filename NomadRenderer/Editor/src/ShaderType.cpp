@@ -23,7 +23,7 @@ const char *Shader::extension()
   return "shader";
   }
 
-Asset *Shader::initialise(Shift::Set *a)
+Asset *Shader::defaultCreate(Shift::Set *a)
   {
   return a->add<Asset>();
   }

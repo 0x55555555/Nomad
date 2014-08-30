@@ -23,9 +23,18 @@ const char *VertexDescriptionType::extension()
   return "vtxd";
   }
 
-Asset *VertexDescriptionType::initialise(Shift::Set *a)
+QByteArray VertexDescriptionType::defaultSource() const
   {
-  return a->add<Asset>();
+  return QByteArray();
+  }
+
+Asset *VertexDescriptionType::process(Shift::Set *a, const QByteArray &s)
+  {
+  setSource(s);
+
+  auto desc = a->add<VertexDescription>();
+
+  ... load s ...
   }
 
 }

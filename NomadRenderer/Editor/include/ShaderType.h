@@ -14,7 +14,7 @@ class NOMAD_RENDERER_EDITOR_EXPORT Shader : public ExternalDbAsset
 
 public:
   virtual const char *extension() X_OVERRIDE;
-  Asset *initialise(Shift::Set *a) X_OVERRIDE;
+  Asset *defaultCreate(Shift::Set *a) X_OVERRIDE;
   };
 
 }

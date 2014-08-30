@@ -23,9 +23,9 @@ void ExternalAssetType::createTypeInformation(
   asset->setNeverSave(true);
   }
 
-void ExternalAssetType::initialise(Shift::Set *p, const QString &l)
+void ExternalAssetType::createNewAsset(Shift::Set *p, const QString &l)
   {
-  Asset *a = initialise(p);
+  Asset *a = defaultCreate(p);
 
   _uuid = a->uuid();
   _asset = a;

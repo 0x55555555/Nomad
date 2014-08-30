@@ -1,4 +1,4 @@
-#include "Assets/ExternalDbAsset.h"
+#include "Assets/ExternalSourceAsset.h"
 #include "shift/TypeInformation/spropertyinformationhelpers.h"
 #include "NAsset.h"
 #include "Application.h"
@@ -10,16 +10,16 @@ namespace Nomad
 namespace Editor
 {
 
-S_IMPLEMENT_PROPERTY(ExternalDbAsset, Nomad)
+S_IMPLEMENT_PROPERTY(ExternalSourceAsset, Nomad)
 
-void ExternalDbAsset::createTypeInformation(
-    Shift::PropertyInformationTyped<ExternalDbAsset> *info,
+void ExternalSourceAsset::createTypeInformation(
+    Shift::PropertyInformationTyped<ExternalSourceAsset> *info,
     const Shift::PropertyInformationCreateData &data)
   {
   auto childBlock = info->createChildrenBlock(data);
   }
 
-void ExternalDbAsset::clear()
+void ExternalSourceAsset::clear()
   {
   auto asset = cachedAsset();
   if (auto parent = asset->parent()->castTo<Shift::Set>())
@@ -28,28 +28,22 @@ void ExternalDbAsset::clear()
     }
   }
 
-Asset *ExternalDbAsset::process(Shift::Set *s, const QByteArray &src)
+QByteArray ExternalSourceAsset::unprocess(Asset *)
   {
-  auto asset = Application::loadSource(src, s);
-  if(!asset)
-    {
-    return nullptr;
-    }
-
-  return asset->castTo<Asset>();
+  return _source;
   }
 
-QByteArray ExternalDbAsset::unprocess(Asset *)
+Asset *ExternalSourceAsset::defaultCreate(Shift::Set *parent)
   {
-  return source();
+  return process(parent, defaultSource());
   }
 
-QWidget *ExternalDbAsset::createEditor()
+QWidget *ExternalSourceAsset::createEditor()
   {
   class Editor : public TextEditor
     {
   public:
-    Editor(const QString &s, ExternalDbAsset *ass)
+    Editor(const QString &s, ExternalSourceAsset *ass)
         : TextEditor(s),
           _asset(ass)
       {
@@ -74,21 +68,15 @@ QWidget *ExternalDbAsset::createEditor()
       }
 
   private:
-    ExternalDbAsset *_asset;
+    ExternalSourceAsset *_asset;
     };
 
-  return new Editor(source(), this);
+  return new Editor(_source, this);
   }
 
-QByteArray ExternalDbAsset::source()
+void ExternalSourceAsset::setSource(const QByteArray &src)
   {
-  auto ass = cachedAsset();
-  if(!ass)
-    {
-    return QByteArray();
-    }
-
-  return Application::toSource(ass);
+  _source = src;
   }
 }
 

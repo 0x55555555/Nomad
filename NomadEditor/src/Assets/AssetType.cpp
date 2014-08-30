@@ -59,7 +59,7 @@ AssetType *AssetType::create(
     }
 
   a->setPath(location.toUtf8().data(), ifc);
-  a->initialise(assetParent, location);
+  a->createNewAsset(assetParent, location);
 
   a->save();
   return a;

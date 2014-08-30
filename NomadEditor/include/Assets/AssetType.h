@@ -38,7 +38,7 @@ public:
   virtual QWidget *createEditor() = 0;
   virtual QWidget *createPreview();
 
-  virtual void initialise(Shift::Set *assetParent, const QString &fileLocation) = 0;
+  virtual void createNewAsset(Shift::Set *assetParent, const QString &fileLocation) = 0;
   virtual Asset *asset(Shift::Set *assetParent, const QString &fileLocation) = 0;
   virtual void save();
 
