@@ -44,6 +44,7 @@ public:
   AssetManager();
   ~AssetManager();
 
+  void clear();
   void reset(Interface *ifc);
   void reloadRequiredAssets();
 

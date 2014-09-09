@@ -12,6 +12,8 @@
 #include "QSettings"
 #include "QLibrary"
 #include "NFile.h"
+#include "XGLRenderer.h"
+#include "X3DCanvas.h"
 
 namespace Nomad
 {
@@ -72,14 +74,15 @@ MainWindow::MainWindow(
   _ui(new Ui::MainWindow),
   _db(db),
   _registry(reg),
-  _editors(Eks::Core::defaultAllocator())
+  _editors(Eks::Core::defaultAllocator()),
+  _renderer(nullptr)
   {
   _ui->setupUi(this);
   _ui->centralwidget->hide();
 
   connect(_ui->menuFile, SIGNAL(aboutToShow()), this, SLOT(updateFileMenu()));
 
-  _browser = new AssetBrowser(this);
+  _browser = new AssetBrowser(this, this);
   addDockWidget(Qt::LeftDockWidgetArea, _browser);
 
   addDockWidget(Qt::LeftDockWidgetArea, new ProjectEditor(this));
@@ -130,6 +133,10 @@ MainWindow::MainWindow(
 MainWindow::~MainWindow()
   {
   delete _ui;
+  if (_renderer)
+    {
+    Eks::GLRenderer::destroyGLRenderer(_renderer, Eks::Core::defaultAllocator());
+    }
   }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -159,6 +166,7 @@ bool MainWindow::closeProject()
     }
 
   _db->children.remove(current);
+  _db->clearChanges();
 
   auto currentUser = _db->projectUserData();
   if(currentUser)
@@ -217,7 +225,7 @@ void MainWindow::openAssetEditor(AssetType *a)
     return;
     }
 
-  found = AssetEditor::build(a);
+  found = AssetEditor::build(a, this, this);
   _editors[a] = found;
 
   focusEditor(found);
@@ -255,6 +263,42 @@ void MainWindow::reloadLibraries()
 
     _libraries.emplace_back(std::unique_ptr<ModuleWrapper>(new ModuleWrapper(_registry, path)));
     }
+  }
+
+Eks::Renderer *MainWindow::renderer()
+  {
+  return _renderer;
+  }
+
+QWidget *MainWindow::createViewport(QWidget *parent)
+  {
+  struct Viewport : Eks::GL3DCanvas
+    {
+    Viewport(MainWindow *m, QWidget *w)
+        : Eks::GL3DCanvas(w),
+          _mainWindow(m)
+      {
+      }
+
+    void initializeGL() X_OVERRIDE
+      {
+      setRenderer(_mainWindow->initRenderer(), false);
+      Eks::GL3DCanvas::initializeGL();
+      }
+
+    MainWindow *_mainWindow;
+    };
+
+  return new Viewport(this, parent);
+  }
+
+Eks::Renderer *MainWindow::initRenderer()
+  {
+  if (!_renderer)
+    {
+    _renderer = Eks::GLRenderer::createGLRenderer(false, Eks::Core::defaultAllocator());
+    }
+  return _renderer;
   }
 
 void MainWindow::focusEditor(AssetEditor *editor)

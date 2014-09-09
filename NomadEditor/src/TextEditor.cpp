@@ -1,5 +1,11 @@
 #include "TextEditor.h"
 
+namespace Nomad
+{
+
+namespace Editor
+{
+
 TextEditor::TextEditor(const QString &s)
   {
   setPlainText(s);
@@ -14,3 +20,7 @@ TextEditor::TextEditor(const QString &s)
   QFontMetrics metrics(font);
   setTabStopWidth(2 * metrics.width(' '));
   }
+
+}
+
+}

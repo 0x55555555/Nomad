@@ -4697,6 +4697,19 @@
 		0865741019AA1CC8009A9023 /* SkPoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SkPoint.cpp; sourceTree = "<group>"; };
 		0865741119AA1CC8009A9023 /* SkSketch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SkSketch.cpp; sourceTree = "<group>"; };
 		0865741219AA1CC8009A9023 /* SkSolver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SkSolver.cpp; sourceTree = "<group>"; };
+		08CF1A3119B7BE5F007C0295 /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
+		08CF1A3219B7BE5F007C0295 /* VertexDescription.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexDescription.cpp; sourceTree = "<group>"; };
+		08CF1A3519B7BE66007C0295 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		08CF1A3619B7BE66007C0295 /* VertexDescription.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VertexDescription.h; sourceTree = "<group>"; };
+		08CF1A3719B7BE75007C0295 /* RendererEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RendererEditor.h; sourceTree = "<group>"; };
+		08CF1A3819B7BE75007C0295 /* VertexDescriptionType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VertexDescriptionType.h; sourceTree = "<group>"; };
+		08CF1A3919B7BE7C007C0295 /* RendererEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RendererEditor.cpp; sourceTree = "<group>"; };
+		08CF1A3A19B7BE7C007C0295 /* VertexDescriptionType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexDescriptionType.cpp; sourceTree = "<group>"; };
+		08CF1A3B19B8E33E007C0295 /* NomadEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NomadEditor.h; sourceTree = "<group>"; };
+		08CF1A3C19B8E33E007C0295 /* TextEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextEditor.h; sourceTree = "<group>"; };
+		08CF1A3D19B8E361007C0295 /* TextEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TextEditor.cpp; sourceTree = "<group>"; };
+		08CF1A3E19B8E3A8007C0295 /* ExternalSourceAsset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExternalSourceAsset.cpp; sourceTree = "<group>"; };
+		08CF1A3F19B8E3AF007C0295 /* ExternalSourceAsset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExternalSourceAsset.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -6031,6 +6044,8 @@
 		086562D219AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08CF1A3C19B8E33E007C0295 /* TextEditor.h */,
+				08CF1A3B19B8E33E007C0295 /* NomadEditor.h */,
 				086562D319AA1CC0009A9023 /* Application.h */,
 				086562D419AA1CC0009A9023 /* AssetInterface.h */,
 				086562D519AA1CC0009A9023 /* Assets */,
@@ -6043,6 +6058,7 @@
 		086562D519AA1CC0009A9023 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				08CF1A3F19B8E3AF007C0295 /* ExternalSourceAsset.h */,
 				086562D619AA1CC0009A9023 /* AssetType.h */,
 				086562D719AA1CC0009A9023 /* ExternalAssetType.h */,
 				086562D819AA1CC0009A9023 /* ExternalDbAsset.h */,
@@ -6053,6 +6069,7 @@
 		086562DC19AA1CC0009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08CF1A3D19B8E361007C0295 /* TextEditor.cpp */,
 				086562DD19AA1CC0009A9023 /* Application.cpp */,
 				086562DE19AA1CC0009A9023 /* AssetInterface.cpp */,
 				086562DF19AA1CC0009A9023 /* Assets */,
@@ -6064,6 +6081,7 @@
 		086562DF19AA1CC0009A9023 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				08CF1A3E19B8E3A8007C0295 /* ExternalSourceAsset.cpp */,
 				086562E019AA1CC0009A9023 /* AssetType.cpp */,
 				086562E119AA1CC0009A9023 /* ExternalAssetType.cpp */,
 				086562E219AA1CC0009A9023 /* ExternalDbAsset.cpp */,
@@ -6143,6 +6161,8 @@
 		086562FD19AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08CF1A3719B7BE75007C0295 /* RendererEditor.h */,
+				08CF1A3819B7BE75007C0295 /* VertexDescriptionType.h */,
 				086562FE19AA1CC0009A9023 /* ShaderType.h */,
 			);
 			path = include;
@@ -6151,6 +6171,8 @@
 		0865630019AA1CC0009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08CF1A3919B7BE7C007C0295 /* RendererEditor.cpp */,
+				08CF1A3A19B7BE7C007C0295 /* VertexDescriptionType.cpp */,
 				0865630119AA1CC0009A9023 /* ShaderType.cpp */,
 			);
 			path = src;
@@ -6159,6 +6181,8 @@
 		0865630219AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08CF1A3519B7BE66007C0295 /* Renderer.h */,
+				08CF1A3619B7BE66007C0295 /* VertexDescription.h */,
 				0865630319AA1CC0009A9023 /* Shader.h */,
 			);
 			path = include;
@@ -6168,6 +6192,8 @@
 			isa = PBXGroup;
 			children = (
 				0865630619AA1CC0009A9023 /* Shader.cpp */,
+				08CF1A3119B7BE5F007C0295 /* Renderer.cpp */,
+				08CF1A3219B7BE5F007C0295 /* VertexDescription.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";

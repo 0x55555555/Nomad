@@ -6,6 +6,7 @@
 #include "shift/Utilities/sentityweakpointer.h"
 #include "shift/Properties/sdata.h"
 #include "NAssetManager.h"
+#include "Assets/AssetType.h"
 #include "ProjectInterface.h"
 #include "Containers/XUnorderedMap.h"
 
@@ -25,36 +26,7 @@ namespace Editor
 
 class AssetBrowser;
 class AssetType;
-
-class AssetBrowserData
-    : public Shift::Entity,
-      public AssetManagerInterface
-  {
-  S_ENTITY(AssetBrowserData, Entity);
-
-public:
-  AssetBrowserData();
-
-  Asset *load(Shift::Set *parent, const QUuid &name) X_OVERRIDE;
-  bool requiresReload(const QUuid &id) X_OVERRIDE;
-
-  Nomad::Editor::AssetType *loadHandle(const QString &file);
-  Editor::AssetType *createAsset(
-    const Shift::PropertyInformation *info,
-    const QString &location);
-  void saveAsset(Editor::AssetType *a);
-  Editor::AssetType *findHandle(const QString &file);
-
-  AssetManager manager;
-  ProjectInterface *interface;
-
-private:
-  void addHandle(const QString &, AssetType *t);
-
-  Shift::Set assetHandles;
-  Eks::UnorderedMap<QUuid, QString> _uuids;
-  QHash<QString, AssetType *> _paths;
-  };
+class AssetBrowserData;
 
 class AssetBrowser : public QDockWidget
   {
@@ -64,7 +36,7 @@ XProperties:
   XROProperty(ProjectInterface *, project);
 
 public:
-  explicit AssetBrowser(ProjectInterface *ifc, QWidget *parent = 0);
+  explicit AssetBrowser(ProjectInterface *ifc, AssetType::CreateInterface *ctx, QWidget *parent = 0);
   ~AssetBrowser();
 
 private slots:

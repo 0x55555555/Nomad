@@ -23,25 +23,25 @@ void ExternalAssetType::createTypeInformation(
   asset->setNeverSave(true);
   }
 
-void ExternalAssetType::createNewAsset(Shift::Set *p, const QString &l)
+void ExternalAssetType::createNewAsset(const QString &l, CreateInterface *c)
   {
-  Asset *a = defaultCreate(p);
+  Asset *a = defaultCreate(c);
 
   _uuid = a->uuid();
   _asset = a;
   saveContents(l);
   }
 
-Asset *ExternalAssetType::initialiseFromSource(Shift::Set *parent, const QByteArray &src)
+Asset *ExternalAssetType::initialiseFromSource(const QByteArray &src, CreateInterface *c)
   {
-  Asset *a = process(parent, src);
+  Asset *a = process(src, c);
   _uuid = a->uuid();
   _asset = a;
 
   return a;
   }
 
-Asset *ExternalAssetType::asset(Shift::Set *p, const QString &l)
+Asset *ExternalAssetType::asset(const QString &l, CreateInterface *c)
   {
   if(auto p = _asset())
     {
@@ -55,7 +55,7 @@ Asset *ExternalAssetType::asset(Shift::Set *p, const QString &l)
     }
 
   QByteArray data = f.readAll();
-  return initialiseFromSource(p, data);
+  return initialiseFromSource(data, c);
   }
 
 void ExternalAssetType::save()

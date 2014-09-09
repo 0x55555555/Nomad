@@ -25,6 +25,9 @@ void AssetType::createTypeInformation(
   auto childBlock = info->createChildrenBlock(data);
 
   childBlock.add(&AssetType::_uuid, "uuid");
+
+  auto parent = childBlock.add(&AssetType::_assetParent, "_assetParent");
+  parent->setNeverSave(true);
   }
 
 QString AssetType::relativePath() const
@@ -40,29 +43,9 @@ void AssetType::setPath(const Eks::String &s, ProjectInterface *ifc)
   _project = ifc;
   }
 
-QWidget *AssetType::createPreview()
+QWidget *AssetType::createPreview(UIInterface *)
   {
   return nullptr;
-  }
-
-AssetType *AssetType::create(
-    const Shift::PropertyInformation *info,
-    Shift::Set *handleParent,
-    Shift::Set *assetParent,
-    const QString &location,
-    ProjectInterface *ifc)
-  {
-  AssetType *a = handleParent->add(info)->uncheckedCastTo<AssetType>();
-  if (!a)
-    {
-    return nullptr;
-    }
-
-  a->setPath(location.toUtf8().data(), ifc);
-  a->createNewAsset(assetParent, location);
-
-  a->save();
-  return a;
   }
 
 void AssetType::save()
@@ -70,7 +53,35 @@ void AssetType::save()
   Application::save(this);
   }
 
-AssetType *AssetType::load(const QString &location, Shift::Set *parent)
+AssetType *AssetType::create(
+    const Shift::PropertyInformation *info,
+    const QString &location,
+    Shift::Set *handleParent,
+    Shift::Set *assetParent,
+    ProjectInterface *ifc,
+    CreateInterface *c)
+  {
+  AssetType *a = handleParent->add(info)->uncheckedCastTo<AssetType>();
+  if (!a)
+    {
+    return nullptr;
+    }
+
+  a->_assetParent.setPointed(assetParent);
+  a->setPath(location.toUtf8().data(), ifc);
+  a->createNewAsset(location, c);
+
+  a->save();
+  return a;
+  }
+
+AssetType *AssetType::load(
+    const QString &location,
+    Shift::Set *parent,
+    Shift::Set *assetParent,
+    ProjectInterface *ifc,
+    CreateInterface *
+    )
   {
   auto type = Application::load(location.toUtf8().data(), parent);
   if(!type)
@@ -78,7 +89,15 @@ AssetType *AssetType::load(const QString &location, Shift::Set *parent)
     return nullptr;
     }
 
-  return type->castTo<AssetType>();
+  auto asset = type->castTo<AssetType>();
+  if(!asset)
+    {
+    return nullptr;
+    }
+
+  asset->setPath(location.toUtf8().data(), ifc);
+  asset->_assetParent.setPointed(assetParent);
+  return asset;
   }
 
 }

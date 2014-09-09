@@ -23,9 +23,9 @@ const char *Shader::extension()
   return "shader";
   }
 
-Asset *Shader::defaultCreate(Shift::Set *a)
+Asset *Shader::defaultCreate(CreateInterface *)
   {
-  return a->add<Asset>();
+  return assetParent()->add<Asset>();
   }
 
 }

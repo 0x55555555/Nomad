@@ -2,8 +2,10 @@
 #include <QMainWindow>
 #include "UI/UIGlobal.h"
 #include "ProjectInterface.h"
+#include "UIInterface.h"
 #include "XGlobal.h"
 #include "NProject.h"
+#include "Assets/AssetType.h"
 #include "shift/Properties/sdata.inl"
 #include <Containers/XUnorderedMap.h>
 
@@ -20,7 +22,7 @@ class AssetBrowser;
 class AssetEditor;
 class ApplicationDatabase;
 
-class MainWindow : public QMainWindow, ProjectInterface
+class MainWindow : public QMainWindow, ProjectInterface, AssetType::CreateInterface, UIInterface
   {
   Q_OBJECT
 
@@ -36,6 +38,10 @@ public:
   void openAssetEditor(AssetType *a) X_OVERRIDE;
   const Eks::UnorderedMap<AssetType *, AssetEditor *>& openEditors() X_OVERRIDE;
   void reloadLibraries() X_OVERRIDE;
+
+  Eks::Renderer *renderer() X_OVERRIDE;
+
+  QWidget *createViewport(QWidget *parent) X_OVERRIDE;
 
   void closeEvent(QCloseEvent *event) X_OVERRIDE;
 
@@ -62,6 +68,8 @@ private:
   void newProjectUserData(const QString &path);
   QString userDataPath(const QString &path) const;
 
+  Eks::Renderer *initRenderer();
+
   Ui::MainWindow *_ui;
   Nomad::Editor::ApplicationDatabase *_db;
   Shift::TypeRegistry *_registry;
@@ -70,6 +78,8 @@ private:
 
   struct ModuleWrapper;
   std::vector<std::unique_ptr<ModuleWrapper>> _libraries;
+
+  Eks::Renderer *_renderer;
   };
 
 }

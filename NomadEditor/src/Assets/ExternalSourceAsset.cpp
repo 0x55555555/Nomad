@@ -22,6 +22,11 @@ void ExternalSourceAsset::createTypeInformation(
 void ExternalSourceAsset::clear()
   {
   auto asset = cachedAsset();
+  if (!asset)
+    {
+    return;
+    }
+
   if (auto parent = asset->parent()->castTo<Shift::Set>())
     {
     parent->remove(asset);
@@ -33,45 +38,38 @@ QByteArray ExternalSourceAsset::unprocess(Asset *)
   return _source;
   }
 
-Asset *ExternalSourceAsset::defaultCreate(Shift::Set *parent)
+Asset *ExternalSourceAsset::defaultCreate(CreateInterface *c)
   {
-  return process(parent, defaultSource());
+  return process(defaultSource(), c);
   }
 
-QWidget *ExternalSourceAsset::createEditor()
+QWidget *ExternalSourceAsset::createEditor(CreateInterface *c)
   {
   class Editor : public TextEditor
     {
   public:
-    Editor(const QString &s, ExternalSourceAsset *ass)
+    Editor(const QString &s, ExternalSourceAsset *ass, CreateInterface *c)
         : TextEditor(s),
-          _asset(ass)
+          _asset(ass),
+          _ctx(c)
       {
       connect(
         this,
         &QTextEdit::textChanged,
         [this]()
           {
-          auto asset = _asset->cachedAsset();
-          if (!asset)
-            {
-            return;
-            }
-
-          if (auto parent = asset->parent()->castTo<Shift::Set>())
-            {
-            _asset->clear();
-            _asset->initialiseFromSource(parent, toPlainText().toUtf8());
-            }
+          _asset->clear();
+          _asset->initialiseFromSource(toPlainText().toUtf8(), _ctx);
           }
         );
       }
 
   private:
     ExternalSourceAsset *_asset;
+    CreateInterface *_ctx;
     };
 
-  return new Editor(_source, this);
+  return new Editor(_source, this, c);
   }
 
 void ExternalSourceAsset::setSource(const QByteArray &src)

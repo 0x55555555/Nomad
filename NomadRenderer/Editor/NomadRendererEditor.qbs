@@ -12,6 +12,8 @@ Eks.Library {
   Depends { name: "NomadEditor" }
 
   Depends { name: "Qt.core" }
+  Depends { name: "Qt.gui" }
+  Depends { name: "Qt.widgets" }
 
   Export {
     Depends { name: "cpp" }

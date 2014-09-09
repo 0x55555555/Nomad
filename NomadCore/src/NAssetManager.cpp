@@ -43,11 +43,15 @@ AssetManager::~AssetManager()
   reset(nullptr);
   }
 
-void AssetManager::reset(Interface *ifc)
+void AssetManager::clear()
   {
   assets.clear();
   _assets.clear();
+  }
 
+void AssetManager::reset(Interface *ifc)
+  {
+  clear();
   if (_assetInterface)
     {
     _assetInterface->_manager = nullptr;

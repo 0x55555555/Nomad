@@ -14,8 +14,8 @@ class NOMAD_EXPORT ExternalSourceAsset : public ExternalAssetType
 public:
   void clear() X_OVERRIDE;
   QByteArray unprocess(Asset *a) X_OVERRIDE;
-  Asset *defaultCreate(Shift::Set *parent) X_OVERRIDE;
-  QWidget *createEditor() X_OVERRIDE;
+  Asset *defaultCreate(CreateInterface *c) X_OVERRIDE;
+  QWidget *createEditor(CreateInterface *c) X_OVERRIDE;
 
   virtual QByteArray defaultSource() const = 0;
 

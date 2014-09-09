@@ -5,7 +5,6 @@
 #include "Application.h"
 #include "NewAsset.h"
 #include "NAsset.h"
-#include "Assets/AssetType.h"
 #include "UI/ProjectUserData.h"
 #include "QFileSystemModel"
 #include "QMessageBox"
@@ -15,6 +14,38 @@ namespace Nomad
 
 namespace Editor
 {
+
+class AssetBrowserData
+    : public Shift::Entity,
+      public AssetManagerInterface
+  {
+  S_ENTITY(AssetBrowserData, Entity);
+
+public:
+  AssetBrowserData();
+
+  Asset *load(Shift::Set *parent, const QUuid &name) X_OVERRIDE;
+  bool requiresReload(const QUuid &id) X_OVERRIDE;
+
+  Nomad::Editor::AssetType *loadHandle(const QString &file);
+  Editor::AssetType *createAsset(
+    const Shift::PropertyInformation *info,
+    const QString &location);
+  void saveAsset(Editor::AssetType *a);
+  Editor::AssetType *findHandle(const QString &file);
+  void clear();
+
+  AssetManager manager;
+  ProjectInterface *interface;
+  AssetType::CreateInterface *createContext;
+
+private:
+  void addHandle(const QString &, AssetType *t);
+
+  Shift::Set assetHandles;
+  Eks::UnorderedMap<QUuid, QString> _uuids;
+  QHash<QString, AssetType *> _paths;
+  };
 
 S_IMPLEMENT_PROPERTY(AssetBrowserData, NomadEditor)
 
@@ -40,7 +71,7 @@ Nomad::Editor::AssetType *AssetBrowserData::loadHandle(const QString &name)
     return handle;
     }
 
-  AssetType *asset = AssetType::load(name, &assetHandles);
+  AssetType *asset = AssetType::load(name, &assetHandles, manager.assetParent(), interface, createContext);
   if (!asset)
     {
     return nullptr;
@@ -64,7 +95,8 @@ Asset *AssetBrowserData::load(Shift::Set *parent, const QUuid &name)
 
   AssetType* type = loadHandle(it->second);
 
-  return type->asset(parent, it->second);
+  xAssert(manager.assetParent() == parent);
+  return type->asset(it->second, createContext);
   }
 
 bool AssetBrowserData::requiresReload(const QUuid &)
@@ -76,7 +108,7 @@ AssetType *AssetBrowserData::createAsset(
     const Shift::PropertyInformation *info,
     const QString &location)
   {
-  AssetType *a = AssetType::create(info, &assetHandles, manager.assetParent(), location, interface);
+  AssetType *a = AssetType::create(info, location, &assetHandles, manager.assetParent(), interface, createContext);
   addHandle(location, a);
   return a;
   }
@@ -94,6 +126,13 @@ Editor::AssetType *AssetBrowserData::findHandle(const QString &file)
   return _paths[f.canonicalFilePath()];
   }
 
+void AssetBrowserData::clear()
+  {
+  Shift::Block b(database());
+  assetHandles.clear();
+  manager.clear();
+  }
+
 void AssetBrowserData::addHandle(const QString &file, AssetType *t)
   {
   QFileInfo f(file);
@@ -103,7 +142,7 @@ void AssetBrowserData::addHandle(const QString &file, AssetType *t)
   t->setPath(path, interface);
   }
 
-AssetBrowser::AssetBrowser(ProjectInterface *ifc, QWidget *parent) :
+AssetBrowser::AssetBrowser(ProjectInterface *ifc, AssetType::CreateInterface *ctx, QWidget *parent) :
   QDockWidget(parent),
   _project(ifc),
   _ui(new Ui::AssetBrowser)
@@ -119,6 +158,7 @@ AssetBrowser::AssetBrowser(ProjectInterface *ifc, QWidget *parent) :
   auto scratch = _project->getScratchParent();
   _browser = scratch->add<AssetBrowserData>();
   _browser->interface = ifc;
+  _browser->createContext = ctx;
 
   _model = new QFileSystemModel;
 
@@ -139,6 +179,8 @@ void AssetBrowser::tearDownProject()
     auto prop = currentUser->openFiles.add<Shift::StringProperty>();
     prop->assign(a->path());
     }
+
+  _browser->clear();
   }
 
 void AssetBrowser::setupProject()

@@ -11,6 +11,8 @@ Eks.Library {
 
   Export {
     Depends { name: "cpp" }
+    Depends { name: "ShiftQt" }
+    Depends { name: "Qt.core" }
 
     cpp.includePaths: [ "./include" ]
   }
