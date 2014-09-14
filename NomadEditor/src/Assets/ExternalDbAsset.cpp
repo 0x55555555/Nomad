@@ -44,7 +44,7 @@ QByteArray ExternalDbAsset::unprocess(Asset *)
   return source();
   }
 
-QWidget *ExternalDbAsset::createEditor(CreateInterface *c)
+QWidget *ExternalDbAsset::createEditor(ProjectInterface *, CreateInterface *c)
   {
   class Editor : public TextEditor
     {
@@ -61,6 +61,7 @@ QWidget *ExternalDbAsset::createEditor(CreateInterface *c)
           {
           _asset->clear();
           _asset->initialiseFromSource(toPlainText().toUtf8(), _ctx);
+          _asset->setNeedsSave();
           }
         );
       }

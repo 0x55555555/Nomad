@@ -1,0 +1,22 @@
+{
+	"version": "2",
+	"types": {
+		"ExternalUuidPointer": {
+			"dynamicCount": "0"
+		},
+		"Fulluuid": {
+			"dynamicCount": "0"
+		},
+		"ObjMeshType": {
+			"dynamicCount": "1"
+		}
+	},
+	"noroot": "0",
+	"data": {
+		"type": "ObjMeshType",
+		"contents": {
+			"uuid": "{b8286f34-2411-458c-aae6-505eaca7979e}",
+			"layout": "{00000000-0000-0000-0000-000000000000}"
+		}
+	}
+}

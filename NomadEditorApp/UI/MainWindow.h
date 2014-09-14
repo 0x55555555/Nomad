@@ -47,7 +47,7 @@ public:
 
 signals:
   void projectChanged();
-  void projectAboutToChange();
+  void projectAboutToChange(bool *abort);
 
 public slots:
   bool closeProject();

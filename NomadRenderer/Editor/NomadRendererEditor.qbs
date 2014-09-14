@@ -5,6 +5,7 @@ Eks.Library {
   name: "NomadRendererEditor"
   toRoot: "../"
 
+  Depends { name: "EksGui" }
   Depends { name: "ShiftCore" }
   Depends { name: "ShiftQt" }
   Depends { name: "NomadCore" }

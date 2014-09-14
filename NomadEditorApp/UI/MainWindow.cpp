@@ -158,12 +158,20 @@ bool MainWindow::closeProject()
     return false;
     }
 
-  emit projectAboutToChange();
+  bool abort = false;
+  emit projectAboutToChange(&abort);
 
-  if(Application::offerToSave(current) != Application::Success)
+  if(abort || Application::offerToSave(current) != Application::Success)
     {
     return false;
     }
+
+  xForeach(auto e, _editors.values())
+    {
+    delete e;
+    }
+
+  _editors.clear();
 
   _db->children.remove(current);
   _db->clearChanges();
@@ -207,7 +215,7 @@ void MainWindow::addProjectChanged(QObject *obj, const char *slot)
 
 void MainWindow::addProjectAboutToChange(QObject *obj, const char *slot)
   {
-  connect(this, SIGNAL(projectAboutToChange()), obj, slot);
+  connect(this, SIGNAL(projectAboutToChange(bool*)), obj, slot);
   }
 
 void MainWindow::openAssetEditor(AssetType *a)
@@ -225,7 +233,7 @@ void MainWindow::openAssetEditor(AssetType *a)
     return;
     }
 
-  found = AssetEditor::build(a, this, this);
+  found = AssetEditor::build(a, this, this, this);
   _editors[a] = found;
 
   focusEditor(found);

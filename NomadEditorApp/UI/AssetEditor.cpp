@@ -11,7 +11,7 @@ namespace Nomad
 namespace Editor
 {
 
-AssetEditor::AssetEditor(AssetType *t, AssetType::CreateInterface *c, UIInterface *ui)
+AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui)
     : _asset(t)
   {
   QVBoxLayout *l = new QVBoxLayout();
@@ -20,8 +20,9 @@ AssetEditor::AssetEditor(AssetType *t, AssetType::CreateInterface *c, UIInterfac
 
   QSplitter *splitter = new QSplitter(this);
   l->addWidget(splitter);
+  splitter->setHandleWidth(4);
 
-  if (auto e = t->createEditor(c))
+  if (auto e = t->createEditor(ifc, c))
     {
     splitter->addWidget(e);
     }
@@ -32,9 +33,9 @@ AssetEditor::AssetEditor(AssetType *t, AssetType::CreateInterface *c, UIInterfac
     }
   }
 
-AssetEditor *AssetEditor::build(AssetType *t, AssetType::CreateInterface *c, UIInterface *ui)
+AssetEditor *AssetEditor::build(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui)
   {
-  return new AssetEditor(t, c, ui);
+  return new AssetEditor(t, ifc, c, ui);
   }
 
 void AssetEditor::makeDockable(QMainWindow *mw)

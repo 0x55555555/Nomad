@@ -13,10 +13,13 @@ class NOMAD_EXPORT ExternalAssetType : public AssetType
   S_ABSTRACT_ENTITY(ExternalAssetType, AssetType)
 
 public:
-  virtual void createNewAsset(const QString &fileLocation, CreateInterface *c) X_OVERRIDE;
+  ExternalAssetType();
+
+  virtual void createNewAsset(CreateInterface *c) X_OVERRIDE;
   virtual Asset *initialiseFromSource(const QByteArray &source, CreateInterface *c);
-  virtual Asset *asset(const QString &fileLocation, CreateInterface *c) X_OVERRIDE;
-  virtual void save() X_OVERRIDE;
+  virtual Asset *asset(CreateInterface *c) X_OVERRIDE;
+  virtual bool save() X_OVERRIDE;
+  virtual bool needsSave() X_OVERRIDE;
 
   virtual void clear() = 0;
   virtual const char *extension() = 0;
@@ -26,12 +29,14 @@ public:
 
 protected:
   Asset *cachedAsset();
+  bool setNeedsSave();
 
 private:
-  void saveContents(const QString &assFile);
+  bool saveContents(const QString &assFile);
   QString contentsPath(const QString &assFile);
 
   Shift::TypedPointer<Asset> _asset;
+  bool _needsSave;
   };
 
 }

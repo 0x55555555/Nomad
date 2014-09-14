@@ -23,13 +23,19 @@ void ExternalAssetType::createTypeInformation(
   asset->setNeverSave(true);
   }
 
-void ExternalAssetType::createNewAsset(const QString &l, CreateInterface *c)
+ExternalAssetType::ExternalAssetType()
+    : _needsSave(false)
+  {
+  }
+
+void ExternalAssetType::createNewAsset(CreateInterface *c)
   {
   Asset *a = defaultCreate(c);
 
   _uuid = a->uuid();
   _asset = a;
-  saveContents(l);
+  _needsSave = false;
+  save();
   }
 
 Asset *ExternalAssetType::initialiseFromSource(const QByteArray &src, CreateInterface *c)
@@ -37,18 +43,20 @@ Asset *ExternalAssetType::initialiseFromSource(const QByteArray &src, CreateInte
   Asset *a = process(src, c);
   _uuid = a->uuid();
   _asset = a;
+  _needsSave = false;
+  setSaved();
 
   return a;
   }
 
-Asset *ExternalAssetType::asset(const QString &l, CreateInterface *c)
+Asset *ExternalAssetType::asset(CreateInterface *c)
   {
   if(auto p = _asset())
     {
     return p;
     }
 
-  QFile f(contentsPath(l));
+  QFile f(contentsPath(path().data()));
   if (!f.open(QFile::ReadOnly))
     {
     return nullptr;
@@ -58,10 +66,14 @@ Asset *ExternalAssetType::asset(const QString &l, CreateInterface *c)
   return initialiseFromSource(data, c);
   }
 
-void ExternalAssetType::save()
+bool ExternalAssetType::save()
   {
-  AssetType::save();
-  saveContents(path().data());
+  return AssetType::save() && saveContents(path().data());
+  }
+
+bool ExternalAssetType::needsSave()
+  {
+  return AssetType::needsSave() || _needsSave;
   }
 
 void ExternalAssetType::clear()
@@ -73,12 +85,18 @@ Asset *ExternalAssetType::cachedAsset()
   return _asset();
   }
 
-void ExternalAssetType::saveContents(const QString &assFile)
+bool ExternalAssetType::setNeedsSave()
+  {
+  return _needsSave;
+  }
+
+bool ExternalAssetType::saveContents(const QString &assFile)
   {
   auto ass = _asset();
   if (!ass)
     {
-    return;
+    _needsSave = false;
+    return true;
     }
 
   QString path = contentsPath(assFile);
@@ -86,12 +104,14 @@ void ExternalAssetType::saveContents(const QString &assFile)
   QFile f(path);
   if (!f.open(QFile::WriteOnly))
     {
-    return;
+    return false;
     }
 
   QString data = unprocess(ass);
 
   f.write(data.toUtf8());
+  _needsSave = false;
+  return false;
   }
 
 QString ExternalAssetType::contentsPath(const QString &assFile)

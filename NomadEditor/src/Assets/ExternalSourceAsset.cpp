@@ -40,10 +40,11 @@ QByteArray ExternalSourceAsset::unprocess(Asset *)
 
 Asset *ExternalSourceAsset::defaultCreate(CreateInterface *c)
   {
-  return process(defaultSource(), c);
+  auto src = defaultSource();
+  return process(src, c);
   }
 
-QWidget *ExternalSourceAsset::createEditor(CreateInterface *c)
+QWidget *ExternalSourceAsset::createEditor(ProjectInterface *, CreateInterface *c)
   {
   class Editor : public TextEditor
     {
@@ -60,6 +61,7 @@ QWidget *ExternalSourceAsset::createEditor(CreateInterface *c)
           {
           _asset->clear();
           _asset->initialiseFromSource(toPlainText().toUtf8(), _ctx);
+          _asset->setNeedsSave();
           }
         );
       }
@@ -68,6 +70,11 @@ QWidget *ExternalSourceAsset::createEditor(CreateInterface *c)
     ExternalSourceAsset *_asset;
     CreateInterface *_ctx;
     };
+
+  // ensure the asset is loaded.
+  auto ass = asset(c);
+  xAssert(ass);
+  (void)ass;
 
   return new Editor(_source, this, c);
   }

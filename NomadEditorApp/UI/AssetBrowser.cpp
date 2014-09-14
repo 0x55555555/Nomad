@@ -96,7 +96,7 @@ Asset *AssetBrowserData::load(Shift::Set *parent, const QUuid &name)
   AssetType* type = loadHandle(it->second);
 
   xAssert(manager.assetParent() == parent);
-  return type->asset(it->second, createContext);
+  return type->asset(createContext);
   }
 
 bool AssetBrowserData::requiresReload(const QUuid &)
@@ -153,7 +153,7 @@ AssetBrowser::AssetBrowser(ProjectInterface *ifc, AssetType::CreateInterface *ct
   _ui->remove->setIcon(QIcon::fromTheme("list-remove"));
 
   _project->addProjectChanged(this, SLOT(setupProject()));
-  _project->addProjectAboutToChange(this, SLOT(tearDownProject()));
+  _project->addProjectAboutToChange(this, SLOT(tearDownProject(bool*)));
 
   auto scratch = _project->getScratchParent();
   _browser = scratch->add<AssetBrowserData>();
@@ -170,7 +170,7 @@ AssetBrowser::~AssetBrowser()
   delete _ui;
   }
 
-void AssetBrowser::tearDownProject()
+void AssetBrowser::tearDownProject(bool *abort)
   {
   auto currentUser = _project->getCurrentProjectUserData();
   currentUser->openFiles.clear();
@@ -178,6 +178,11 @@ void AssetBrowser::tearDownProject()
     {
     auto prop = currentUser->openFiles.add<Shift::StringProperty>();
     prop->assign(a->path());
+
+    if (a->offerToSave() != Application::Success)
+      {
+      *abort = true;
+      }
     }
 
   _browser->clear();

@@ -1,10 +1,13 @@
 #include "ObjMeshType.h"
 #include "Mesh.h"
 #include "VertexDescription.h"
+#include "VertexDescriptionType.h"
 #include "shift/TypeInformation/spropertyinformationhelpers.h"
 #include "NAsset.h"
 #include "XObjLoader.h"
 #include "PreviewViewport.h"
+#include "QVBoxLayout"
+#include "AssetSelector.h"
 
 namespace Nomad
 {
@@ -20,7 +23,13 @@ void ObjMeshType::createTypeInformation(
   {
   auto childBlock = info->createChildrenBlock(data);
 
-  childBlock.add(&ObjMeshType::_layout, "layout");
+  auto layout = childBlock.add(&ObjMeshType::_layout, "layout");
+  layout->setResolveFunction([](const Shift::ExternalPointer *,
+                             const Shift::ExternalPointerInstanceInformation *,
+                             Shift::ExternalPointer::ResolveResult *) -> const Property *
+    {
+    return nullptr;
+    });
   }
 
 const char *ObjMeshType::extension()
@@ -65,12 +74,14 @@ QByteArray ObjMeshType::defaultSource() const
 
 Asset *ObjMeshType::process(const QByteArray &source, CreateInterface *c)
   {
+  setSource(source);
   auto mesh = assetParent()->add<Mesh>();
 
   auto layout = _layout.pointed<VertexDescription>();
   if(!layout)
     {
     qWarning() << "invalid vertex layout";
+    return mesh;
     }
 
   Eks::TemporaryAllocator alloc(Attribute::temporaryAllocator());
@@ -107,6 +118,23 @@ Asset *ObjMeshType::process(const QByteArray &source, CreateInterface *c)
     }
 
   return mesh;
+  }
+
+QWidget *ObjMeshType::createEditor(ProjectInterface *ifc, CreateInterface *c)
+  {
+  QWidget *w = new QWidget();
+  QVBoxLayout *l = new QVBoxLayout();
+  l->setContentsMargins(2, 2, 2, 2);
+  w->setLayout(l);
+
+  auto box = new AssetSelector(ifc, &_layout, VertexDescriptionType::staticTypeInformation(), w);
+  l->addWidget(box);
+
+  auto editor = ExternalSourceAsset::createEditor(ifc, c);
+  editor->setParent(w);
+  l->addWidget(editor);
+
+  return w;
   }
 
 QWidget *ObjMeshType::createPreview(UIInterface *ifc)

@@ -15,7 +15,7 @@ public:
   void clear() X_OVERRIDE;
   Asset *process(const QByteArray &source, CreateInterface *c) X_OVERRIDE;
   QByteArray unprocess(Asset *a) X_OVERRIDE;
-  QWidget *createEditor(CreateInterface *c) X_OVERRIDE;
+  QWidget *createEditor(ProjectInterface *ifc, CreateInterface *c) X_OVERRIDE;
 
 protected:
   QByteArray source();

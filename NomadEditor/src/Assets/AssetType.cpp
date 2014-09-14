@@ -9,6 +9,7 @@
 #include "QFile"
 #include "QDir"
 #include "QDebug"
+#include "QMessageBox"
 
 namespace Nomad
 {
@@ -48,9 +49,38 @@ QWidget *AssetType::createPreview(UIInterface *)
   return nullptr;
   }
 
-void AssetType::save()
+bool AssetType::save()
   {
-  Application::save(this);
+  return Application::save(this);
+  }
+
+bool AssetType::needsSave()
+  {
+  return hasChangedFromFile();
+  }
+
+Application::FileResult AssetType::offerToSave()
+  {
+  if (!needsSave())
+    {
+    return Application::Success;
+    }
+
+  auto result = QMessageBox::question(
+        nullptr,
+        "Save changes",
+        QObject::tr("Would you like to save changes to asset %1").arg(path().data()),
+        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+  if (result == QMessageBox::Cancel)
+    {
+    return Application::Cancel;
+    }
+  else if (result == QMessageBox::No)
+    {
+    return Application::Success;
+    }
+
+  return save() == true ? Application::Success : Application::Failure;
   }
 
 AssetType *AssetType::create(
@@ -69,7 +99,7 @@ AssetType *AssetType::create(
 
   a->_assetParent.setPointed(assetParent);
   a->setPath(location.toUtf8().data(), ifc);
-  a->createNewAsset(location, c);
+  a->createNewAsset(c);
 
   a->save();
   return a;
@@ -97,6 +127,7 @@ AssetType *AssetType::load(
 
   asset->setPath(location.toUtf8().data(), ifc);
   asset->_assetParent.setPointed(assetParent);
+  asset->setSaved();
   return asset;
   }
 

@@ -4697,6 +4697,8 @@
 		0865741019AA1CC8009A9023 /* SkPoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SkPoint.cpp; sourceTree = "<group>"; };
 		0865741119AA1CC8009A9023 /* SkSketch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SkSketch.cpp; sourceTree = "<group>"; };
 		0865741219AA1CC8009A9023 /* SkSolver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SkSolver.cpp; sourceTree = "<group>"; };
+		08A3BCD319C49B990070C188 /* ObjMeshType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ObjMeshType.cpp; sourceTree = "<group>"; };
+		08A3BCD619C49BA10070C188 /* ObjMeshType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjMeshType.h; sourceTree = "<group>"; };
 		08CF1A3119B7BE5F007C0295 /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		08CF1A3219B7BE5F007C0295 /* VertexDescription.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexDescription.cpp; sourceTree = "<group>"; };
 		08CF1A3519B7BE66007C0295 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
@@ -6161,6 +6163,7 @@
 		086562FD19AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08A3BCD619C49BA10070C188 /* ObjMeshType.h */,
 				08CF1A3719B7BE75007C0295 /* RendererEditor.h */,
 				08CF1A3819B7BE75007C0295 /* VertexDescriptionType.h */,
 				086562FE19AA1CC0009A9023 /* ShaderType.h */,
@@ -6171,6 +6174,7 @@
 		0865630019AA1CC0009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08A3BCD319C49B990070C188 /* ObjMeshType.cpp */,
 				08CF1A3919B7BE7C007C0295 /* RendererEditor.cpp */,
 				08CF1A3A19B7BE7C007C0295 /* VertexDescriptionType.cpp */,
 				0865630119AA1CC0009A9023 /* ShaderType.cpp */,

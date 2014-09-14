@@ -4,6 +4,7 @@
 #include "shift/Properties/sbasepointerproperties.h"
 #include "NGlobal.h"
 #include "NFile.h"
+#include "Application.h"
 
 class QWidget;
 
@@ -48,12 +49,14 @@ public:
 
   void setPath(const Eks::String &s, ProjectInterface *ifc);
 
-  virtual QWidget *createEditor(CreateInterface *c) = 0;
+  virtual QWidget *createEditor(ProjectInterface *ifc, CreateInterface *c) = 0;
   virtual QWidget *createPreview(UIInterface *ctx);
 
-  virtual void createNewAsset(const QString &fileLocation, CreateInterface *c) = 0;
-  virtual Asset *asset(const QString &fileLocation, CreateInterface *c) = 0;
-  virtual void save();
+  virtual void createNewAsset(CreateInterface *c) = 0;
+  virtual Asset *asset(CreateInterface *c) = 0;
+  virtual bool save();
+  virtual bool needsSave();
+  Application::FileResult offerToSave();
 
   static AssetType *create(
     const Shift::PropertyInformation *info,

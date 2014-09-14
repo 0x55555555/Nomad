@@ -40,7 +40,7 @@ public:
   ~AssetBrowser();
 
 private slots:
-  void tearDownProject();
+  void tearDownProject(bool *abort);
   void setupProject();
   void openAsset(const QModelIndex &);
   void openAsset(const QString &);

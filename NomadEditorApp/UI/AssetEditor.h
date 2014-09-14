@@ -19,13 +19,13 @@ XProperties:
   XROProperty(AssetType *, asset);
 
 public:
-  static AssetEditor *build(AssetType *t, AssetType::CreateInterface *c, UIInterface *ui);
+  static AssetEditor *build(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui);
 
   void makeDockable(QMainWindow *mw);
   void showEditor();
 
 protected:
-  AssetEditor(AssetType *t, AssetType::CreateInterface *c, UIInterface *ui);
+  AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui);
 
   QWidget *getTopLevel();
   };
