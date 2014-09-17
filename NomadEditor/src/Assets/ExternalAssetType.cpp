@@ -85,9 +85,9 @@ Asset *ExternalAssetType::cachedAsset()
   return _asset();
   }
 
-bool ExternalAssetType::setNeedsSave()
+void ExternalAssetType::setNeedsSave()
   {
-  return _needsSave;
+  _needsSave = true;
   }
 
 bool ExternalAssetType::saveContents(const QString &assFile)
@@ -111,7 +111,7 @@ bool ExternalAssetType::saveContents(const QString &assFile)
 
   f.write(data.toUtf8());
   _needsSave = false;
-  return false;
+  return true;
   }
 
 QString ExternalAssetType::contentsPath(const QString &assFile)

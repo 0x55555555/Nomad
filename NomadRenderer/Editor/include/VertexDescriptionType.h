@@ -15,7 +15,7 @@ class NOMAD_RENDERER_EDITOR_EXPORT VertexDescriptionType : public ExternalSource
 public:
   const char *extension() X_OVERRIDE;
   QByteArray defaultSource() const X_OVERRIDE;
-  Asset *process(const QByteArray &source, CreateInterface *c) X_OVERRIDE;
+  Asset *processSource(const QByteArray &source, CreateInterface *c) X_OVERRIDE;
   };
 
 }

@@ -44,6 +44,11 @@ public:
   AssetManager();
   ~AssetManager();
 
+  static const Shift::Property *resolveAssetPointer(
+    const Shift::ExternalPointer *,
+    const Shift::ExternalPointerInstanceInformation *,
+    Shift::ExternalPointer::ResolveResult *);
+
   void clear();
   void reset(Interface *ifc);
   void reloadRequiredAssets();
@@ -64,6 +69,8 @@ public:
 private:
   Shift::Set assets;
   Eks::UnorderedMap<QUuid, Asset *> _assets;
+
+  static AssetManager *_manager;
   };
 
 }

@@ -33,6 +33,17 @@ void ExternalSourceAsset::clear()
     }
   }
 
+Asset *ExternalSourceAsset::process(const QByteArray &source, CreateInterface *c)
+  {
+  setSource(source);
+  auto s = processSource(source, c);
+  if (s)
+    {
+    s->setUuid(uuid());
+    }
+  return s;
+  }
+
 QByteArray ExternalSourceAsset::unprocess(Asset *)
   {
   return _source;

@@ -4699,6 +4699,11 @@
 		0865741219AA1CC8009A9023 /* SkSolver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SkSolver.cpp; sourceTree = "<group>"; };
 		08A3BCD319C49B990070C188 /* ObjMeshType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ObjMeshType.cpp; sourceTree = "<group>"; };
 		08A3BCD619C49BA10070C188 /* ObjMeshType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjMeshType.h; sourceTree = "<group>"; };
+		08A3BCD719C63E610070C188 /* AssetSelector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetSelector.h; sourceTree = "<group>"; };
+		08A3BCD819C63E610070C188 /* PreviewViewport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreviewViewport.h; sourceTree = "<group>"; };
+		08A3BCD919C63E610070C188 /* UIInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIInterface.h; sourceTree = "<group>"; };
+		08A3BCDA19C63E6B0070C188 /* AssetSelector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssetSelector.cpp; sourceTree = "<group>"; };
+		08A3BCDB19C63E6B0070C188 /* PreviewViewport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PreviewViewport.cpp; sourceTree = "<group>"; };
 		08CF1A3119B7BE5F007C0295 /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		08CF1A3219B7BE5F007C0295 /* VertexDescription.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexDescription.cpp; sourceTree = "<group>"; };
 		08CF1A3519B7BE66007C0295 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
@@ -6046,6 +6051,9 @@
 		086562D219AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08A3BCD719C63E610070C188 /* AssetSelector.h */,
+				08A3BCD819C63E610070C188 /* PreviewViewport.h */,
+				08A3BCD919C63E610070C188 /* UIInterface.h */,
 				08CF1A3C19B8E33E007C0295 /* TextEditor.h */,
 				08CF1A3B19B8E33E007C0295 /* NomadEditor.h */,
 				086562D319AA1CC0009A9023 /* Application.h */,
@@ -6071,6 +6079,8 @@
 		086562DC19AA1CC0009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08A3BCDA19C63E6B0070C188 /* AssetSelector.cpp */,
+				08A3BCDB19C63E6B0070C188 /* PreviewViewport.cpp */,
 				08CF1A3D19B8E361007C0295 /* TextEditor.cpp */,
 				086562DD19AA1CC0009A9023 /* Application.cpp */,
 				086562DE19AA1CC0009A9023 /* AssetInterface.cpp */,

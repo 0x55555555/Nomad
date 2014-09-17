@@ -7,6 +7,9 @@
 	},
 	"noroot": "0",
 	"data": {
-		"type": "VertexDescriptionType"
+		"type": "VertexDescriptionType",
+		"contents": {
+			"uuid": "{0cc3c4db-fe43-4b49-a406-a5bed03a2b6c}"
+		}
 	}
 }

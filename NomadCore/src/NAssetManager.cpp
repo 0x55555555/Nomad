@@ -32,15 +32,39 @@ AssetManagerInterface::AssetManagerInterface()
   {
   }
 
+AssetManager *AssetManager::_manager = nullptr;
+
 AssetManager::AssetManager()
     : _assetInterface(nullptr),
       _assets(Shift::TypeRegistry::generalPurposeAllocator())
   {
+  xAssert(!_manager);
+  _manager = this;
   }
 
 AssetManager::~AssetManager()
   {
   reset(nullptr);
+  xAssert(_manager == this);
+  _manager = nullptr;
+  }
+
+const Shift::Property *AssetManager::resolveAssetPointer(
+  const Shift::ExternalPointer *ptr,
+  const Shift::ExternalPointerInstanceInformation *,
+  Shift::ExternalPointer::ResolveResult *result)
+  {
+  xAssert(_manager);
+
+  auto uuidPtr = ptr->castTo<Shift::ExternalUuidPointer>();
+  if (!uuidPtr)
+    {
+    // incorrect parameter
+    xAssertFail();
+    return nullptr;
+    }
+
+  return _manager->resolveAsset(uuidPtr->uuid(), result);
   }
 
 void AssetManager::clear()

@@ -4,10 +4,11 @@
 #include "VertexDescriptionType.h"
 #include "shift/TypeInformation/spropertyinformationhelpers.h"
 #include "NAsset.h"
+#include "NAssetManager.h"
 #include "XObjLoader.h"
 #include "PreviewViewport.h"
-#include "QVBoxLayout"
 #include "AssetSelector.h"
+#include "QVBoxLayout"
 
 namespace Nomad
 {
@@ -24,12 +25,7 @@ void ObjMeshType::createTypeInformation(
   auto childBlock = info->createChildrenBlock(data);
 
   auto layout = childBlock.add(&ObjMeshType::_layout, "layout");
-  layout->setResolveFunction([](const Shift::ExternalPointer *,
-                             const Shift::ExternalPointerInstanceInformation *,
-                             Shift::ExternalPointer::ResolveResult *) -> const Property *
-    {
-    return nullptr;
-    });
+  layout->setResolveFunction(AssetManager::resolveAssetPointer);
   }
 
 const char *ObjMeshType::extension()
@@ -72,9 +68,8 @@ QByteArray ObjMeshType::defaultSource() const
 "f  2//1  8//1  4//1\n";
   }
 
-Asset *ObjMeshType::process(const QByteArray &source, CreateInterface *c)
+Asset *ObjMeshType::processSource(const QByteArray &source, CreateInterface *c)
   {
-  setSource(source);
   auto mesh = assetParent()->add<Mesh>();
 
   auto layout = _layout.pointed<VertexDescription>();
@@ -106,10 +101,16 @@ Asset *ObjMeshType::process(const QByteArray &source, CreateInterface *c)
     &vertexSize,
     elements.data());
 
-  loader.computeUnusedElements(elements.data(), itemCount, &triangles);
+  //loader.computeUnusedElements(elements.data(), itemCount, &triangles);
 
   Eks::Vector<xuint8> dataOut(&alloc);
-  loader.bake(triangles, elements.data(), itemCount, &dataOut);
+  bool result = loader.bake(triangles, elements.data(), itemCount, &dataOut);
+  if (!result)
+    {
+    qWarning() << "invalid obj";
+    return mesh;
+    }
+
   xsize vertCount = dataOut.size() / vertexSize;
 
   if(!Eks::Geometry::delayedCreate(mesh->geometry(), c->renderer(), dataOut.data(), dataOut.size(), vertCount))
@@ -127,7 +128,13 @@ QWidget *ObjMeshType::createEditor(ProjectInterface *ifc, CreateInterface *c)
   l->setContentsMargins(2, 2, 2, 2);
   w->setLayout(l);
 
-  auto box = new AssetSelector(ifc, &_layout, VertexDescriptionType::staticTypeInformation(), w);
+  auto box = new AssetSelector(ifc, c, &_layout, VertexDescriptionType::staticTypeInformation(), w);
+  QObject::connect(box, &AssetSelector::assetChanged, [this, c]()
+    {
+    clear();
+    initialiseFromSource(source(), c);
+    setNeedsSave();
+    });
   l->addWidget(box);
 
   auto editor = ExternalSourceAsset::createEditor(ifc, c);

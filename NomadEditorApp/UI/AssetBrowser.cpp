@@ -36,13 +36,13 @@ public:
   void clear();
 
   AssetManager manager;
+  Shift::Set assetHandles;
   ProjectInterface *interface;
   AssetType::CreateInterface *createContext;
 
 private:
   void addHandle(const QString &, AssetType *t);
 
-  Shift::Set assetHandles;
   Eks::UnorderedMap<QUuid, QString> _uuids;
   QHash<QString, AssetType *> _paths;
   };
@@ -168,6 +168,16 @@ AssetBrowser::AssetBrowser(ProjectInterface *ifc, AssetType::CreateInterface *ct
 AssetBrowser::~AssetBrowser()
   {
   delete _ui;
+  }
+
+AssetManager *AssetBrowser::getManager()
+  {
+  return &_browser->manager;
+  }
+
+Shift::Set *AssetBrowser::getHandleParent()
+  {
+  return &_browser->assetHandles;
   }
 
 void AssetBrowser::tearDownProject(bool *abort)

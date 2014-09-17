@@ -75,12 +75,21 @@ MainWindow::MainWindow(
   _db(db),
   _registry(reg),
   _editors(Eks::Core::defaultAllocator()),
+  _primaryContext(Eks::GL3DCanvas::makeFormat()),
   _renderer(nullptr)
   {
   _ui->setupUi(this);
   _ui->centralwidget->hide();
 
   connect(_ui->menuFile, SIGNAL(aboutToShow()), this, SLOT(updateFileMenu()));
+
+  if(!_primaryContext.isValid())
+  {
+    qWarning() << "Cannot create GL context";
+    return;
+  }
+  _primaryContext.makeCurrent();
+  _renderer = Eks::GLRenderer::createGLRenderer(false, Eks::Core::defaultAllocator());
 
   _browser = new AssetBrowser(this, this);
   addDockWidget(Qt::LeftDockWidgetArea, _browser);
@@ -203,6 +212,16 @@ Nomad::Project *MainWindow::getCurrentProject()
   return _db->project.pointed();
   }
 
+AssetManager *MainWindow::getAssetManager()
+  {
+  return _browser->getManager();
+  }
+
+Shift::Set *MainWindow::getAssetHandleParent()
+  {
+  return _browser->getHandleParent();
+  }
+
 Nomad::Editor::ProjectUserData *MainWindow::getCurrentProjectUserData()
   {
   return _db->projectUserData.pointed();
@@ -283,14 +302,14 @@ QWidget *MainWindow::createViewport(QWidget *parent)
   struct Viewport : Eks::GL3DCanvas
     {
     Viewport(MainWindow *m, QWidget *w)
-        : Eks::GL3DCanvas(w),
+        : Eks::GL3DCanvas(&m->_primaryContext, w),
           _mainWindow(m)
       {
       }
 
     void initializeGL() X_OVERRIDE
       {
-      setRenderer(_mainWindow->initRenderer(), false);
+      setRenderer(_mainWindow->renderer(), false);
       Eks::GL3DCanvas::initializeGL();
       }
 
@@ -298,15 +317,6 @@ QWidget *MainWindow::createViewport(QWidget *parent)
     };
 
   return new Viewport(this, parent);
-  }
-
-Eks::Renderer *MainWindow::initRenderer()
-  {
-  if (!_renderer)
-    {
-    _renderer = Eks::GLRenderer::createGLRenderer(false, Eks::Core::defaultAllocator());
-    }
-  return _renderer;
   }
 
 void MainWindow::focusEditor(AssetEditor *editor)

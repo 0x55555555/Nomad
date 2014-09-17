@@ -39,6 +39,9 @@ public:
   explicit AssetBrowser(ProjectInterface *ifc, AssetType::CreateInterface *ctx, QWidget *parent = 0);
   ~AssetBrowser();
 
+  AssetManager *getManager();
+  Shift::Set *getHandleParent();
+
 private slots:
   void tearDownProject(bool *abort);
   void setupProject();

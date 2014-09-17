@@ -29,7 +29,7 @@ public:
 
 protected:
   Asset *cachedAsset();
-  bool setNeedsSave();
+  void setNeedsSave();
 
 private:
   bool saveContents(const QString &assFile);

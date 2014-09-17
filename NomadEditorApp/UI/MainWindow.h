@@ -1,5 +1,6 @@
 #pragma once
-#include <QMainWindow>
+#include "QMainWindow"
+#include "QGLContext"
 #include "UI/UIGlobal.h"
 #include "ProjectInterface.h"
 #include "UIInterface.h"
@@ -32,6 +33,8 @@ public:
 
   Shift::Array *getScratchParent() X_OVERRIDE;
   Nomad::Project *getCurrentProject() X_OVERRIDE;
+  AssetManager *getAssetManager() X_OVERRIDE;
+  Shift::Set *getAssetHandleParent() X_OVERRIDE;
   Nomad::Editor::ProjectUserData *getCurrentProjectUserData() X_OVERRIDE;
   void addProjectChanged(QObject *obj, const char *slot) X_OVERRIDE;
   void addProjectAboutToChange(QObject *obj, const char *slot) X_OVERRIDE;
@@ -68,8 +71,6 @@ private:
   void newProjectUserData(const QString &path);
   QString userDataPath(const QString &path) const;
 
-  Eks::Renderer *initRenderer();
-
   Ui::MainWindow *_ui;
   Nomad::Editor::ApplicationDatabase *_db;
   Shift::TypeRegistry *_registry;
@@ -79,6 +80,7 @@ private:
   struct ModuleWrapper;
   std::vector<std::unique_ptr<ModuleWrapper>> _libraries;
 
+  QGLWidget _primaryContext;
   Eks::Renderer *_renderer;
   };
 

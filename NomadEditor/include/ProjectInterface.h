@@ -5,11 +5,13 @@ class QObject;
 namespace Shift
 {
 class Array;
+class Set;
 }
 
 namespace Nomad
 {
 class Project;
+class AssetManager;
 
 namespace Editor
 {
@@ -23,6 +25,9 @@ class ProjectInterface
 public:
   virtual Nomad::Project *getCurrentProject() = 0;
   virtual Nomad::Editor::ProjectUserData *getCurrentProjectUserData() = 0;
+
+  virtual AssetManager *getAssetManager() = 0;
+  virtual Shift::Set *getAssetHandleParent() = 0;
 
   virtual const Eks::UnorderedMap<AssetType *, AssetEditor *>& openEditors() = 0;
 

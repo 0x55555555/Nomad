@@ -31,10 +31,8 @@ QByteArray VertexDescriptionType::defaultSource() const
   return QByteArray();
   }
 
-Asset *VertexDescriptionType::process(const QByteArray &s, CreateInterface *)
+Asset *VertexDescriptionType::processSource(const QByteArray &s, CreateInterface *)
   {
-  setSource(s);
-
   auto desc = assetParent()->add<VertexDescription>();
 
   const char *names[] = {
@@ -60,17 +58,12 @@ Asset *VertexDescriptionType::process(const QByteArray &s, CreateInterface *)
     auto obj = el.toObject();
 
     QString name = obj["name"].toString();
-    Eks::ShaderVertexLayoutDescription::Format f = (Eks::ShaderVertexLayoutDescription::Format)obj["count"].toInt();
-    Eks::ShaderVertexLayoutDescription::Semantic semantic = Eks::ShaderVertexLayoutDescription::Position;
+    Eks::ShaderVertexLayoutDescription::Format f = (Eks::ShaderVertexLayoutDescription::Format)(obj["count"].toInt()-1);
+    Eks::ShaderVertexLayoutDescription::Semantic semantic = Eks::ShaderVertexLayoutDescription::InvalidSemantic;
 
     if (f < 0 || f >= Eks::ShaderVertexLayoutDescription::FormatCount)
       {
       qWarning() << "invalid format" << obj["count"].toString();
-      continue;
-      }
-    if (semantic < 0 || semantic >= Eks::ShaderVertexLayoutDescription::SemanticCount)
-      {
-      qWarning() << "invalid semantic" << obj["name"].toString();
       continue;
       }
 
@@ -81,7 +74,12 @@ Asset *VertexDescriptionType::process(const QByteArray &s, CreateInterface *)
         semantic = (Eks::ShaderVertexLayoutDescription::Semantic)i;
         break;
         }
-      ++i;
+      }
+
+    if (semantic < 0 || semantic >= Eks::ShaderVertexLayoutDescription::SemanticCount)
+      {
+      qWarning() << "invalid semantic" << obj["name"].toString();
+      continue;
       }
 
     desc->addElement(semantic, f);
