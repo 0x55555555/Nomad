@@ -10,6 +10,7 @@
 #include "XTransform.h"
 #include "Containers/XVector.h"
 
+#include "QComboBox"
 
 namespace Nomad
 {
@@ -30,12 +31,16 @@ protected slots:
   void tick();
 
 protected:
-  virtual void bindShader(Eks::Renderer *r);
+  virtual void bindShader(Eks::Renderer *r, const QString &shader);
   virtual void renderGeometry(Eks::Renderer *r);
   virtual const Eks::Vector<Eks::ShaderVertexLayoutDescription> &vertexLayout() const;
 
   Eks::Transform spinTransform(float t);
 
+  void setShaderModes(const QStringList &l);
+  const QStringList &shaderModes() const { return _shaders; }
+
+private:
   QWidget *_widget;
 
   Eks::ComplexTransform _proj;
@@ -46,11 +51,20 @@ protected:
   Eks::IndexGeometry _igeo;
 
   bool _shaderInitialised;
-  Eks::ShaderVertexLayout _layout;
-  Eks::Shader _shader;
-  Eks::ShaderComponent _f;
-  Eks::ShaderVertexComponent _v;
+  struct Shader
+    {
+    Eks::ShaderVertexLayout layout;
+    Eks::Shader shader;
+    Eks::ShaderComponent frag;
+    Eks::ShaderVertexComponent vert;
+    };
+  Shader _normal;
+  Shader _texture;
+  Shader _default;
   Eks::DepthStencilState _state;
+
+  QStringList _shaders;
+  QComboBox *_modes;
 
   mutable Eks::Vector<Eks::ShaderVertexLayoutDescription> _defaultLayout;
 

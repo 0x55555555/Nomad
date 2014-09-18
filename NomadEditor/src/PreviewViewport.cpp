@@ -13,6 +13,63 @@ namespace Nomad
 namespace Editor
 {
 
+#define DEFAULT_SHADER "Default"
+#define NORMAL_DEBUG "Normal Debug"
+#define TEXTURE_DEBUG "Texture Debug"
+
+const char *defaultShaderSrc =
+    "#if X_GLSL_VERSION >= 130 || defined(X_GLES)\n"
+    "precision mediump float;\n"
+    "#endif\n"
+    "in vec2 textureCoordinateOut;"
+    "in vec3 normalOut;"
+    "out vec4 outColour;"
+    "void main(void)"
+    "  {"
+    "  vec3 col = vec3(1.0, 1.0, 1.0);"
+    "  vec3 dir = normalize(vec3(1.0, 1.0, 1.0));"
+    "  outColour = vec4(col * clamp(dot(normalOut, dir), 0.0, 1.0), 1.0);"
+    "  }";
+
+const char *normalShaderSrc =
+    "#if X_GLSL_VERSION >= 130 || defined(X_GLES)\n"
+    "precision mediump float;\n"
+    "#endif\n"
+    "in vec2 textureCoordinateOut;"
+    "in vec3 normalOut;"
+    "out vec4 outColour;"
+    "void main(void)"
+    "  {"
+    "  outColour = vec4(abs(normalOut), 1.0);"
+    "  }";
+
+const char *textureShaderSrc =
+    "#if X_GLSL_VERSION >= 130 || defined(X_GLES)\n"
+    "precision mediump float;\n"
+    "#endif\n"
+    "in vec3 normalOut;"
+    "in vec2 textureCoordinateOut;"
+    "out vec4 outColour;"
+    "void main(void)"
+    "  {"
+    "  outColour = vec4(abs(textureCoordinateOut), 0.0, 1.0);"
+    "  }";
+
+const char *vsrc =
+    "layout (std140) uniform cb0 { mat4 model; mat4 modelView; mat4 modelViewProj; };"
+    "layout (std140) uniform cb1 { mat4 view; mat4 proj; };"
+    "in vec3 position;"
+    "in vec3 normal;"
+    "in vec2 textureCoordinate;"
+    "out vec3 normalOut;"
+    "out vec2 textureCoordinateOut;"
+    "void main(void)"
+    "  {"
+    "  normalOut = normal;"
+    "  textureCoordinateOut = textureCoordinate;"
+    "  gl_Position = modelViewProj * vec4(position, 1.0);"
+    "  }";
+
 PreviewViewport::PreviewViewport(UIInterface *r)
     : _geometryInitialised(false),
       _shaderInitialised(false),
@@ -37,6 +94,10 @@ PreviewViewport::PreviewViewport(UIInterface *r)
     _spin = t;
     }
   );
+
+  _modes = new QComboBox(this);
+  t->addWidget(_modes);
+  setShaderModes(QStringList() << DEFAULT_SHADER << NORMAL_DEBUG << TEXTURE_DEBUG);
 
   _widget = r->createViewport(this);
   l->addWidget(_widget);
@@ -79,45 +140,42 @@ void PreviewViewport::tick()
   _widget->update();
   }
 
-void PreviewViewport::bindShader(Eks::Renderer *r)
+void PreviewViewport::bindShader(Eks::Renderer *r, const QString &mode)
   {
   if (!_shaderInitialised)
     {
     _shaderInitialised = true;
-    const char *fsrc =
-        "#if X_GLSL_VERSION >= 130 || defined(X_GLES)\n"
-        "precision mediump float;\n"
-        "#endif\n"
-        "in vec3 colOut;"
-        "out vec4 outColour;"
-        "void main(void)"
-        "  {"
-        "  outColour = vec4(abs(colOut), 1.0);"
-        "  }";
-
-    const char *vsrc =
-        "layout (std140) uniform cb0 { mat4 model; mat4 modelView; mat4 modelViewProj; };"
-        "layout (std140) uniform cb1 { mat4 view; mat4 proj; };"
-        "in vec3 position;"
-        "in vec3 normal;"
-        "out vec3 colOut;"
-        "void main(void)"
-        "  {"
-        "  colOut = normal;"
-        "  gl_Position = modelViewProj * vec4(position, 1.0);"
-        "  }";
 
     auto& desc = vertexLayout();
 
-    Eks::ShaderVertexComponent::delayedCreate(_v, r, vsrc, strlen(vsrc), desc.data(), desc.size(), &_layout);
-    Eks::ShaderComponent::delayedCreate(_f, r, Eks::ShaderComponent::Fragment, fsrc, strlen(fsrc));
+    auto buildShader = [desc, r](const char *vsrc, const char *fsrc, Shader *s)
+      {
+      Eks::ShaderVertexComponent::delayedCreate(s->vert, r, vsrc, strlen(vsrc), desc.data(), desc.size(), &s->layout);
+      Eks::ShaderComponent::delayedCreate(s->frag, r, Eks::ShaderComponent::Fragment, fsrc, strlen(fsrc));
 
-    Eks::ShaderComponent* comps[] = { &_v, &_f };
-    const char *outputs[] = { "outColour" };
-    Eks::Shader::delayedCreate(_shader, r, comps, X_ARRAY_COUNT(comps), outputs, X_ARRAY_COUNT(outputs));
+      Eks::ShaderComponent* comps[] = { &s->vert, &s->frag };
+      const char *outputs[] = { "outColour" };
+      Eks::Shader::delayedCreate(s->shader, r, comps, X_ARRAY_COUNT(comps), outputs, X_ARRAY_COUNT(outputs));
+      };
+
+    buildShader(vsrc, normalShaderSrc, &_normal);
+    buildShader(vsrc, textureShaderSrc, &_texture);
+    buildShader(vsrc, defaultShaderSrc, &_default);
     }
 
-  r->setShader(&_shader, &_layout);
+  qDebug() << mode;
+  if (mode == NORMAL_DEBUG)
+    {
+    r->setShader(&_normal.shader, &_normal.layout);
+    }
+  else if (mode == TEXTURE_DEBUG)
+    {
+    r->setShader(&_texture.shader, &_texture.layout);
+    }
+  else if (mode == DEFAULT_SHADER)
+    {
+    r->setShader(&_default.shader, &_default.layout);
+    }
   }
 
 void PreviewViewport::renderGeometry(Eks::Renderer *r)
@@ -128,6 +186,7 @@ void PreviewViewport::renderGeometry(Eks::Renderer *r)
 
     Eks::Modeller m(Eks::Core::defaultAllocator());
     m.drawCube();
+    m.drawSphere(0.7f, 36, 36);
 
     Eks::Vector<Eks::ShaderVertexLayoutDescription::Semantic, 8> desc;
     xForeach(auto &d, vertexLayout())
@@ -168,7 +227,7 @@ void PreviewViewport::paint3D(Eks::Renderer *r, Eks::FrameBuffer *buffer)
 
   r->setDepthStencilState(&_state);
 
-  bindShader(r);
+  bindShader(r, _modes->currentText());
   renderGeometry(r);
   }
 
@@ -178,6 +237,13 @@ Eks::Transform PreviewViewport::spinTransform(float t)
     Eks::Vector3D(sinf(t) * _distance, 3, cosf(t) * _distance),
     Eks::Vector3D(0, 0, 0),
     Eks::Vector3D(0, 1, 0));
+  }
+
+void PreviewViewport::setShaderModes(const QStringList &l)
+  {
+  _shaders = l;
+  _modes->clear();
+  _modes->addItems(_shaders);
   }
 
 }
