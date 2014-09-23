@@ -18,7 +18,7 @@ void Shader::createTypeInformation(
   auto childBlock = info->createChildrenBlock(data);
   }
 
-const char *Shader::extension()
+const char *Shader::extension() const
   {
   return "shader";
   }

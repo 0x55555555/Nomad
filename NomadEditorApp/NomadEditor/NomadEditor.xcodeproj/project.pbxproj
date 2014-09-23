@@ -4717,6 +4717,8 @@
 		08CF1A3D19B8E361007C0295 /* TextEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TextEditor.cpp; sourceTree = "<group>"; };
 		08CF1A3E19B8E3A8007C0295 /* ExternalSourceAsset.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExternalSourceAsset.cpp; sourceTree = "<group>"; };
 		08CF1A3F19B8E3AF007C0295 /* ExternalSourceAsset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExternalSourceAsset.h; sourceTree = "<group>"; };
+		08D7A2DE19CE2FD000848F61 /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
+		08D7A2E119CE2FD600848F61 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -6195,6 +6197,7 @@
 		0865630219AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08D7A2DE19CE2FD000848F61 /* Mesh.h */,
 				08CF1A3519B7BE66007C0295 /* Renderer.h */,
 				08CF1A3619B7BE66007C0295 /* VertexDescription.h */,
 				0865630319AA1CC0009A9023 /* Shader.h */,
@@ -6205,6 +6208,7 @@
 		0865630519AA1CC0009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08D7A2E119CE2FD600848F61 /* Mesh.cpp */,
 				0865630619AA1CC0009A9023 /* Shader.cpp */,
 				08CF1A3119B7BE5F007C0295 /* Renderer.cpp */,
 				08CF1A3219B7BE5F007C0295 /* VertexDescription.cpp */,

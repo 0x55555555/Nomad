@@ -18,7 +18,7 @@ public:
   QWidget *createEditor(ProjectInterface *ifc, CreateInterface *c) X_OVERRIDE;
 
 protected:
-  QByteArray source();
+  QByteArray source() const;
   };
 
 }

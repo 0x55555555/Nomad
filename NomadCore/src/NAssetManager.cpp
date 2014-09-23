@@ -89,6 +89,18 @@ void AssetManager::reset(Interface *ifc)
     }
   }
 
+void AssetManager::markForReload(Asset *a)
+  {
+  xAssert(_assetInterface);
+  _assetInterface->markForReload(a->uuid());
+  }
+
+void AssetManager::markForReload(const QUuid &a)
+  {
+  xAssert(_assetInterface);
+  _assetInterface->markForReload(a);
+  }
+
 void AssetManager::reloadRequiredAssets()
   {
   xAssert(_assetInterface);

@@ -12,6 +12,8 @@ class NOMAD_EXPORT ExternalSourceAsset : public ExternalAssetType
   S_ABSTRACT_ENTITY(ExternalSourceAsset, ExternalAssetType)
 
 public:
+  ExternalSourceAsset();
+
   void clear() X_OVERRIDE;
   Asset *process(const QByteArray &source, CreateInterface *c) X_OVERRIDE;
   QByteArray unprocess(Asset *a) X_OVERRIDE;
@@ -23,10 +25,11 @@ public:
 
 protected:
   void setSource(const QByteArray &src);
-  const QByteArray &source() const { return _source; }
+  QByteArray source() const X_OVERRIDE;
 
 private:
   QByteArray _source;
+  bool _hasSource;
   };
 
 }

@@ -14,6 +14,7 @@
 #include "NFile.h"
 #include "XGLRenderer.h"
 #include "X3DCanvas.h"
+#include "Utilities/XOptional.h"
 
 namespace Nomad
 {
@@ -297,7 +298,7 @@ Eks::Renderer *MainWindow::renderer()
   return _renderer;
   }
 
-QWidget *MainWindow::createViewport(QWidget *parent)
+QWidget *MainWindow::createViewport(QWidget *parent, Eks::AbstractCanvas** canOpt)
   {
   struct Viewport : Eks::GL3DCanvas
     {
@@ -316,7 +317,12 @@ QWidget *MainWindow::createViewport(QWidget *parent)
     MainWindow *_mainWindow;
     };
 
-  return new Viewport(this, parent);
+  auto vp = new Viewport(this, parent);
+
+  Eks::Optional<Eks::AbstractCanvas*> can(canOpt);
+  can = vp;
+
+  return vp;
   }
 
 void MainWindow::focusEditor(AssetEditor *editor)

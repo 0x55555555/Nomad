@@ -109,7 +109,7 @@ bool Application::save(File *file)
   }
 
 
-QByteArray Application::toSource(Shift::Entity *file)
+QByteArray Application::toSource(const Shift::Entity *file)
   {
   Shift::SaveBuilder builder;
 

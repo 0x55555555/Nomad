@@ -21,6 +21,8 @@ XProperties:
 public:
   static AssetEditor *build(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui);
 
+  void onReloadAvailable();
+
   void makeDockable(QMainWindow *mw);
   void showEditor();
 
@@ -28,6 +30,8 @@ protected:
   AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui);
 
   QWidget *getTopLevel();
+
+  QAction *_reload;
   };
 
 }

@@ -44,7 +44,7 @@ public:
 
   Eks::Renderer *renderer() X_OVERRIDE;
 
-  QWidget *createViewport(QWidget *parent) X_OVERRIDE;
+  QWidget *createViewport(QWidget *parent, Eks::AbstractCanvas** can) X_OVERRIDE;
 
   void closeEvent(QCloseEvent *event) X_OVERRIDE;
 

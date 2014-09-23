@@ -20,6 +20,7 @@ public:
 
   virtual Asset *load(Shift::Set *parent, const QUuid &name) = 0;
   virtual bool requiresReload(const QUuid &id) = 0;
+  virtual void markForReload(const QUuid &id) = 0;
 
 
 protected:
@@ -51,7 +52,10 @@ public:
 
   void clear();
   void reset(Interface *ifc);
+
   void reloadRequiredAssets();
+  void markForReload(Asset *a);
+  void markForReload(const QUuid &a);
 
   Asset *resolveAsset(
     const QUuid &id,

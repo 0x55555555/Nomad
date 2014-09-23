@@ -4,6 +4,7 @@
 #include "shift/Properties/sdata.inl"
 #include "Application.h"
 #include "NewAsset.h"
+#include "AssetEditor.h"
 #include "NAsset.h"
 #include "UI/ProjectUserData.h"
 #include "QFileSystemModel"
@@ -26,6 +27,7 @@ public:
 
   Asset *load(Shift::Set *parent, const QUuid &name) X_OVERRIDE;
   bool requiresReload(const QUuid &id) X_OVERRIDE;
+  void markForReload(const QUuid &a) X_OVERRIDE;
 
   Nomad::Editor::AssetType *loadHandle(const QString &file);
   Editor::AssetType *createAsset(
@@ -99,9 +101,44 @@ Asset *AssetBrowserData::load(Shift::Set *parent, const QUuid &name)
   return type->asset(createContext);
   }
 
-bool AssetBrowserData::requiresReload(const QUuid &)
+bool AssetBrowserData::requiresReload(const QUuid &name)
   {
-  return false;
+  auto it = _uuids.find(name);
+  if (it == _uuids.end())
+    {
+    return false;
+    }
+
+  AssetType* type = loadHandle(it->second);
+  if (!type)
+    {
+    return false;
+    }
+
+  return type->requiresReload();
+  }
+
+void AssetBrowserData::markForReload(const QUuid  &a)
+  {
+  auto it = _uuids.find(a);
+  if (it == _uuids.end())
+    {
+    xAssertFail();
+    return;
+    }
+
+  AssetType* type = loadHandle(it->second);
+  if (!type)
+    {
+    xAssertFail();
+    return;
+    }
+
+  type->setRequiresReload(true);
+  if(auto editor = interface->openEditors().value(type))
+    {
+    editor->onReloadAvailable();
+    }
   }
 
 AssetType *AssetBrowserData::createAsset(

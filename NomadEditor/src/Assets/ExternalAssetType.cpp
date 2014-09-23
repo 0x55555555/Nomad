@@ -24,7 +24,8 @@ void ExternalAssetType::createTypeInformation(
   }
 
 ExternalAssetType::ExternalAssetType()
-    : _needsSave(false)
+    : _needsSave(false),
+      _failedLoad(false)
   {
   }
 
@@ -37,33 +38,77 @@ void ExternalAssetType::createNewAsset(CreateInterface *c)
   _needsSave = false;
   save();
   }
+  
+void ExternalAssetType::reload(CreateInterface *c)
+  {
+  reinitialise(source(), c);
+  }
+
+Asset *ExternalAssetType::reinitialise(const QByteArray &src, CreateInterface *c)
+  {
+  markDependantsForReload();
+  clear();
+  auto a = initialiseFromSource(src, c);
+  setNeedsSave();
+  return a;
+  }
 
 Asset *ExternalAssetType::initialiseFromSource(const QByteArray &src, CreateInterface *c)
   {
+  xAssert(!_asset());
   Asset *a = process(src, c);
+  if(!a)
+    {
+    _failedLoad = true;
+    return nullptr;
+    }
+
+  _failedLoad = false;
   _uuid = a->uuid();
   _asset = a;
   _needsSave = false;
   setSaved();
+
 
   return a;
   }
 
 Asset *ExternalAssetType::asset(CreateInterface *c)
   {
+  if (_failedLoad)
+    {
+    xAssert(!_asset());
+    return nullptr;
+    }
+
   if(auto p = _asset())
     {
     return p;
     }
 
+  if (c)
+    {
+    QByteArray src = source();
+    return initialiseFromSource(src, c);
+    }
+
+  return nullptr;
+  }
+
+QByteArray ExternalAssetType::getDiskSource() const
+  {
   QFile f(contentsPath(path().data()));
   if (!f.open(QFile::ReadOnly))
     {
     return nullptr;
     }
 
-  QByteArray data = f.readAll();
-  return initialiseFromSource(data, c);
+  return f.readAll();
+  }
+
+QByteArray ExternalAssetType::source() const
+  {
+  return getDiskSource();
   }
 
 bool ExternalAssetType::save()
@@ -81,6 +126,11 @@ void ExternalAssetType::clear()
   }
 
 Asset *ExternalAssetType::cachedAsset()
+  {
+  return _asset();
+  }
+
+const Asset *ExternalAssetType::cachedAsset() const
   {
   return _asset();
   }
@@ -114,7 +164,7 @@ bool ExternalAssetType::saveContents(const QString &assFile)
   return true;
   }
 
-QString ExternalAssetType::contentsPath(const QString &assFile)
+QString ExternalAssetType::contentsPath(const QString &assFile) const
   {
   QFileInfo f(assFile);
   return f.path() + "/"+ f.baseName() + "." + extension();

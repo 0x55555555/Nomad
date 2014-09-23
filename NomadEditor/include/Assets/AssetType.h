@@ -36,8 +36,11 @@ class NOMAD_EXPORT AssetType : public File
 
 XProperties:
   XROProperty(ProjectInterface *, project)
+  XProperty(bool, requiresReload, setRequiresReload)
 
 public:
+  AssetType();
+
   class CreateInterface
     {
   public:
@@ -50,10 +53,11 @@ public:
   void setPath(const Eks::String &s, ProjectInterface *ifc);
 
   virtual QWidget *createEditor(ProjectInterface *ifc, CreateInterface *c) = 0;
-  virtual QWidget *createPreview(UIInterface *ctx);
+  virtual QWidget *createPreview(UIInterface *ctx, CreateInterface *c);
 
   virtual void createNewAsset(CreateInterface *c) = 0;
-  virtual Asset *asset(CreateInterface *c) = 0;
+  virtual void reload(CreateInterface *c) = 0;
+  virtual Asset *asset(CreateInterface *c=nullptr) = 0;
   virtual bool save();
   virtual bool needsSave();
   Application::FileResult offerToSave();
@@ -76,6 +80,8 @@ public:
   const Shift::Set *assetParent() const { return _assetParent(); }
 
 protected:
+  void markDependantsForReload();
+
   Shift::Data<QUuid> _uuid;
   Shift::TypedPointer<Shift::Set> _assetParent;
 

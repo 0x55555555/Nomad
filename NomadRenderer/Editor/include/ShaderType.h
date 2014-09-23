@@ -13,7 +13,7 @@ class NOMAD_RENDERER_EDITOR_EXPORT Shader : public ExternalDbAsset
   S_ENTITY(Shader, ExternalDbAsset)
 
 public:
-  virtual const char *extension() X_OVERRIDE;
+  virtual const char *extension() const X_OVERRIDE;
   Asset *defaultCreate(CreateInterface *c) X_OVERRIDE;
   };
 

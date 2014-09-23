@@ -4,20 +4,24 @@
 #include "UIInterface.h"
 #include "XShader.h"
 #include "QTimer"
+#include "QComboBox"
 #include "XGeometry.h"
 #include "XRasteriserState.h"
 #include "XDepthStencilState.h"
 #include "XTransform.h"
 #include "Containers/XVector.h"
+#include "XCameraCanvasController.h"
 
-#include "QComboBox"
 
 namespace Nomad
 {
 namespace Editor
 {
 
-class NOMAD_EDITOR_EXPORT PreviewViewport : public QWidget
+class NOMAD_EDITOR_EXPORT PreviewViewport
+    : public QWidget,
+    Eks::CameraCanvasController,
+    Eks::CameraCanvasController::CameraInterface
   {
   Q_OBJECT
 
@@ -33,7 +37,7 @@ protected slots:
 protected:
   virtual void bindShader(Eks::Renderer *r, const QString &shader);
   virtual void renderGeometry(Eks::Renderer *r);
-  virtual const Eks::Vector<Eks::ShaderVertexLayoutDescription> &vertexLayout() const;
+  virtual const Eks::Vector<Eks::ShaderVertexLayoutDescription, 8> *vertexLayout() const;
 
   Eks::Transform spinTransform(float t);
 
@@ -41,6 +45,14 @@ protected:
   const QStringList &shaderModes() const { return _shaders; }
 
 private:
+  void renderGrid(Eks::Renderer *r);
+
+  Eks::CameraCanvasController::CameraInterface *camera() X_OVERRIDE { return this; }
+  void zoom(float, float, float) X_OVERRIDE;
+  void track(float, float) X_OVERRIDE;
+  void dolly(float, float) X_OVERRIDE;
+  void pan(float, float) X_OVERRIDE;
+
   QWidget *_widget;
 
   Eks::ComplexTransform _proj;
@@ -58,6 +70,7 @@ private:
     Eks::ShaderComponent frag;
     Eks::ShaderVertexComponent vert;
     };
+  Shader _colour;
   Shader _normal;
   Shader _texture;
   Shader _default;
@@ -66,11 +79,18 @@ private:
   QStringList _shaders;
   QComboBox *_modes;
 
-  mutable Eks::Vector<Eks::ShaderVertexLayoutDescription> _defaultLayout;
+  bool _gridInitialised;
+  Shader _gridShader;
+  Eks::Geometry _gridGeo;
+  Eks::IndexGeometry _gridIGeo;
+
+  const Eks::Vector<Eks::ShaderVertexLayoutDescription, 8> *_oldLayout;
+  mutable Eks::Vector<Eks::ShaderVertexLayoutDescription, 8> _defaultLayout;
 
   float _t;
   float _distance;
   bool _spin;
+  bool _grid;
   QTimer _refresh;
   };
 

@@ -4,6 +4,8 @@
 #include "shift/Serialisation/sloader.h"
 #include "shift/Serialisation/sjsonio.h"
 #include "NProject.h"
+#include "NAsset.h"
+#include "NAssetManager.h"
 #include "Application.h"
 #include "ProjectInterface.h"
 #include "QFile"
@@ -31,6 +33,11 @@ void AssetType::createTypeInformation(
   parent->setNeverSave(true);
   }
 
+AssetType::AssetType()
+    : _requiresReload(false)
+  {
+  }
+
 QString AssetType::relativePath() const
   {
   QDir s(QFileInfo(project()->getCurrentProject()->path().data()).dir());
@@ -44,7 +51,7 @@ void AssetType::setPath(const Eks::String &s, ProjectInterface *ifc)
   _project = ifc;
   }
 
-QWidget *AssetType::createPreview(UIInterface *)
+QWidget *AssetType::createPreview(UIInterface *, CreateInterface *)
   {
   return nullptr;
   }
@@ -131,6 +138,43 @@ AssetType *AssetType::load(
   return asset;
   }
 
+void AssetType::markDependantsForReload()
+  {
+  Shift::Property *ass = asset();
+  if (!ass)
+    {
+    return;
+    }
+
+  for(auto op = ass->output(); op; op = op->nextOutput())
+    {
+    Shift::Property* owner = op;
+    while(owner)
+      {
+      QUuid id;
+      Asset *a = owner->castTo<Asset>();
+      if(a)
+        {
+        id = a->uuid();
+        }
+      else if(auto t = owner->castTo<AssetType>())
+        {
+        id = t->uuid();
+        }
+
+      if(!id.isNull())
+        {
+        if (id != uuid())
+          {
+          project()->getAssetManager()->markForReload(id);
+          }
+        break;
+        }
+
+      owner = owner->parent();
+      }
+    }
+  }
 }
 
 }

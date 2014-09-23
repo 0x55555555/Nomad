@@ -28,6 +28,15 @@ private:
 class AssetPointer : public Shift::ExternalUuidPointer
   {
 public:
+  Asset *pointed()
+    {
+    auto ptd = resolve();
+    if(!ptd)
+      {
+      return nullptr;
+      }
+    return ptd->uncheckedCastTo<Asset>();
+    }
   const Asset *pointed() const
     {
     auto ptd = resolve();
@@ -37,7 +46,8 @@ public:
       }
     return ptd->uncheckedCastTo<Asset>();
     }
-  const Asset *operator()() { return pointed(); }
+  Asset *operator()() { return pointed(); }
+  const Asset *operator()() const { return pointed(); }
 
   template <typename T>const T *pointed() const
     {

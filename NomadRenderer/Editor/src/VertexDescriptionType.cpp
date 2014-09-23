@@ -21,7 +21,7 @@ void VertexDescriptionType::createTypeInformation(
   auto childBlock = info->createChildrenBlock(data);
   }
 
-const char *VertexDescriptionType::extension()
+const char *VertexDescriptionType::extension() const
   {
   return "vtxd";
   }

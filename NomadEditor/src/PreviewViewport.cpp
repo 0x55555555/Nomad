@@ -14,6 +14,7 @@ namespace Editor
 {
 
 #define DEFAULT_SHADER "Default"
+#define COLOUR_DEBUG "Colour Debug"
 #define NORMAL_DEBUG "Normal Debug"
 #define TEXTURE_DEBUG "Texture Debug"
 
@@ -55,6 +56,16 @@ const char *textureShaderSrc =
     "  outColour = vec4(abs(textureCoordinateOut), 0.0, 1.0);"
     "  }";
 
+const char *colourShaderSrc =
+    "#if X_GLSL_VERSION >= 130 || defined(X_GLES)\n"
+    "precision mediump float;\n"
+    "#endif\n"
+    "out vec4 outColour;"
+    "void main(void)"
+    "  {"
+    "  outColour = vec4(1.0, 1.0, 1.0, 1.0);"
+    "  }";
+
 const char *vsrc =
     "layout (std140) uniform cb0 { mat4 model; mat4 modelView; mat4 modelViewProj; };"
     "layout (std140) uniform cb1 { mat4 view; mat4 proj; };"
@@ -73,10 +84,12 @@ const char *vsrc =
 PreviewViewport::PreviewViewport(UIInterface *r)
     : _geometryInitialised(false),
       _shaderInitialised(false),
+      _gridInitialised(false),
       _defaultLayout(Eks::Core::defaultAllocator()),
       _t(0.0f),
       _distance(5.0f),
-      _spin(true)	
+      _spin(true),
+      _grid(true)
   {
   QVBoxLayout *l = new QVBoxLayout();
   l->setContentsMargins(0, 0, 0, 0);
@@ -95,11 +108,23 @@ PreviewViewport::PreviewViewport(UIInterface *r)
     }
   );
 
+  auto grid = t->addAction("Grid");
+  grid->setCheckable(true);
+  grid->setChecked(_grid);
+  connect(grid, &QAction::toggled, [this](bool t)
+    {
+    _grid = t;
+    }
+  );
+
   _modes = new QComboBox(this);
   t->addWidget(_modes);
-  setShaderModes(QStringList() << DEFAULT_SHADER << NORMAL_DEBUG << TEXTURE_DEBUG);
+  setShaderModes(QStringList() << DEFAULT_SHADER << COLOUR_DEBUG << NORMAL_DEBUG << TEXTURE_DEBUG);
 
-  _widget = r->createViewport(this);
+  Eks::AbstractCanvas* canvas = nullptr;
+  _widget = r->createViewport(this, &canvas);
+  xAssert(canvas);
+  setCanvas(canvas);
   l->addWidget(_widget);
 
   connect(&_refresh, SIGNAL(timeout()), this, SLOT(tick()));
@@ -142,37 +167,50 @@ void PreviewViewport::tick()
 
 void PreviewViewport::bindShader(Eks::Renderer *r, const QString &mode)
   {
-  if (!_shaderInitialised)
+  auto* desc = vertexLayout();
+  if (!desc->size())
+    {
+    return;
+    }
+
+  if((!_shaderInitialised && desc) || desc != _oldLayout)
     {
     _shaderInitialised = true;
 
-    auto& desc = vertexLayout();
-
     auto buildShader = [desc, r](const char *vsrc, const char *fsrc, Shader *s)
       {
-      Eks::ShaderVertexComponent::delayedCreate(s->vert, r, vsrc, strlen(vsrc), desc.data(), desc.size(), &s->layout);
-      Eks::ShaderComponent::delayedCreate(s->frag, r, Eks::ShaderComponent::Fragment, fsrc, strlen(fsrc));
+      s->vert.~ShaderVertexComponent();
+      s->frag.~ShaderComponent();
+      s->shader.~Shader();
+      s->layout.~ShaderVertexLayout();
+      new(&s->vert) Eks::ShaderVertexComponent(r, vsrc, strlen(vsrc), desc->data(), desc->size(), &s->layout);
+      new(&s->frag) Eks::ShaderComponent(r, Eks::ShaderComponent::Fragment, fsrc, strlen(fsrc));
 
       Eks::ShaderComponent* comps[] = { &s->vert, &s->frag };
       const char *outputs[] = { "outColour" };
-      Eks::Shader::delayedCreate(s->shader, r, comps, X_ARRAY_COUNT(comps), outputs, X_ARRAY_COUNT(outputs));
+      new(&s->shader) Eks::Shader(r, comps, X_ARRAY_COUNT(comps), outputs, X_ARRAY_COUNT(outputs));
       };
+
 
     buildShader(vsrc, normalShaderSrc, &_normal);
     buildShader(vsrc, textureShaderSrc, &_texture);
+    buildShader(vsrc, colourShaderSrc, &_colour);
     buildShader(vsrc, defaultShaderSrc, &_default);
     }
 
-  qDebug() << mode;
-  if (mode == NORMAL_DEBUG)
+  if(mode == NORMAL_DEBUG)
     {
     r->setShader(&_normal.shader, &_normal.layout);
     }
-  else if (mode == TEXTURE_DEBUG)
+  else if(mode == TEXTURE_DEBUG)
     {
     r->setShader(&_texture.shader, &_texture.layout);
     }
-  else if (mode == DEFAULT_SHADER)
+  else if(mode == COLOUR_DEBUG)
+    {
+    r->setShader(&_colour.shader, &_colour.layout);
+    }
+  else if(mode == DEFAULT_SHADER)
     {
     r->setShader(&_default.shader, &_default.layout);
     }
@@ -180,7 +218,9 @@ void PreviewViewport::bindShader(Eks::Renderer *r, const QString &mode)
 
 void PreviewViewport::renderGeometry(Eks::Renderer *r)
   {
-  if (!_geometryInitialised)
+  auto* layout = vertexLayout();
+
+  if(!_geometryInitialised || layout != _oldLayout)
     {
     _geometryInitialised = true;
 
@@ -189,17 +229,24 @@ void PreviewViewport::renderGeometry(Eks::Renderer *r)
     m.drawSphere(0.7f, 36, 36);
 
     Eks::Vector<Eks::ShaderVertexLayoutDescription::Semantic, 8> desc;
-    xForeach(auto &d, vertexLayout())
+    if(auto layout = vertexLayout())
       {
-      desc << d.semantic;
+      xForeach(auto &d, *layout)
+        {
+        desc << d.semantic;
+        }
       }
 
+    _igeo.~IndexGeometry();
+    _geo.~Geometry();
+    new(&_igeo) Eks::IndexGeometry();
+    new(&_geo) Eks::Geometry();
     m.bakeTriangles(r, desc.data(), desc.size(), &_igeo, &_geo);
     }
   r->drawTriangles(&_igeo, &_geo);
   }
 
-const Eks::Vector<Eks::ShaderVertexLayoutDescription> &PreviewViewport::vertexLayout() const
+const Eks::Vector<Eks::ShaderVertexLayoutDescription, 8> *PreviewViewport::vertexLayout() const
   {
   if (_defaultLayout.isEmpty())
     {
@@ -213,7 +260,7 @@ const Eks::Vector<Eks::ShaderVertexLayoutDescription> &PreviewViewport::vertexLa
       Eks::ShaderVertexLayoutDescription(Eks::ShaderVertexLayoutDescription::TextureCoordinate,
         Eks::ShaderVertexLayoutDescription::FormatFloat2);
     }
-  return _defaultLayout;
+  return &_defaultLayout;
   }
 
 void PreviewViewport::paint3D(Eks::Renderer *r, Eks::FrameBuffer *buffer)
@@ -229,6 +276,13 @@ void PreviewViewport::paint3D(Eks::Renderer *r, Eks::FrameBuffer *buffer)
 
   bindShader(r, _modes->currentText());
   renderGeometry(r);
+
+  if (_grid)
+    {
+    renderGrid(r);
+    }
+
+  _oldLayout = vertexLayout();
   }
 
 Eks::Transform PreviewViewport::spinTransform(float t)
@@ -244,6 +298,62 @@ void PreviewViewport::setShaderModes(const QStringList &l)
   _shaders = l;
   _modes->clear();
   _modes->addItems(_shaders);
+  }
+
+void PreviewViewport::renderGrid(Eks::Renderer *r)
+  {
+  if(!_gridInitialised)
+    {
+    const Eks::ShaderVertexLayoutDescription desc[] = {
+      { Eks::ShaderVertexLayoutDescription::Position, Eks::ShaderVertexLayoutDescription::FormatFloat3 }
+    };
+    const Eks::ShaderVertexLayoutDescription::Semantic descSem[] = {
+      Eks::ShaderVertexLayoutDescription::Position
+    };
+    _gridInitialised = true;
+    Eks::ShaderVertexComponent::delayedCreate(_gridShader.vert, r, vsrc, strlen(vsrc), desc, X_ARRAY_COUNT(desc), &_gridShader.layout);
+    Eks::ShaderComponent::delayedCreate(_gridShader.frag, r, Eks::ShaderComponent::Fragment, colourShaderSrc, strlen(colourShaderSrc));
+
+    Eks::ShaderComponent* comps[] = { &_gridShader.vert, &_gridShader.frag };
+    const char *outputs[] = { "outColour" };
+    Eks::Shader::delayedCreate(_gridShader.shader, r, comps, X_ARRAY_COUNT(comps), outputs, X_ARRAY_COUNT(outputs));
+
+    Eks::Modeller m(Eks::Core::defaultAllocator());
+
+    m.begin(Eks::Modeller::Lines);
+      for (int i = -5; i <= 5; ++i)
+        {
+        m.vertex(-5, 0, i);
+        m.vertex(5, 0, i);
+        }
+      for (int i = -5; i <= 5; ++i)
+        {
+        m.vertex(i, 0, -5);
+        m.vertex(i, 0, 5);
+        }
+    m.end();
+
+    m.bakeLines(r, descSem, X_ARRAY_COUNT(descSem), &_gridIGeo, &_gridGeo);
+    }
+
+  r->setShader(&_gridShader.shader, &_gridShader.layout);
+  r->drawLines(&_gridIGeo, &_gridGeo);
+  }
+
+void PreviewViewport::zoom(float, float, float)
+  {
+  }
+
+void PreviewViewport::track(float, float)
+  {
+  }
+
+void PreviewViewport::dolly(float, float)
+  {
+  }
+
+void PreviewViewport::pan(float, float)
+  {
   }
 
 }

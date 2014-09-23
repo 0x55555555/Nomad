@@ -55,7 +55,7 @@ public:
   static File *load(const Eks::String &path, Shift::Set *parent);
   static Shift::Entity *loadSource(const QByteArray &contents, Shift::Set *parent);
   static bool save(Nomad::File *file);
-  static QByteArray toSource(Shift::Entity *file);
+  static QByteArray toSource(const Shift::Entity *file);
   static FileResult offerToSave(Nomad::File *file);
 
   ApplicationDatabase *database() { return &_database; }

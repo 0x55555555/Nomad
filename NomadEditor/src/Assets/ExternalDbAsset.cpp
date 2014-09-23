@@ -74,12 +74,12 @@ QWidget *ExternalDbAsset::createEditor(ProjectInterface *, CreateInterface *c)
   return new Editor(source(), this, c);
   }
 
-QByteArray ExternalDbAsset::source()
+QByteArray ExternalDbAsset::source() const
   {
   auto ass = cachedAsset();
   if(!ass)
     {
-    return QByteArray();
+    return getDiskSource();
     }
 
   return Application::toSource(ass);

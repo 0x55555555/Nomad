@@ -150,9 +150,9 @@ public:
     return asset;
     }
 
-  void triggerReload(const QUuid &uuid)
+  void markForReload(const QUuid &a) X_OVERRIDE
     {
-    _toReload.insert(uuid);
+    _toReload.insert(a);
     }
 
   xsize loadCount() const
@@ -229,15 +229,15 @@ void NomadCoreTest::reloadResource()
 
   QCOMPARE(testInterface.loadCount(), 1U);
 
-  auto as = data->asset();
-  auto rel = data->reloadableAsset();
+  Nomad::Asset* as = data->asset.pointed();
+  Nomad::Asset* rel = data->reloadableAsset.pointed();
   QVERIFY(as);
   QVERIFY(rel);
 
   QCOMPARE(testInterface.loadCount(), 3U);
 
-  testInterface.triggerReload(asId);
-  testInterface.triggerReload(relId);
+  testInterface.markForReload(as->uuid());
+  testInterface.markForReload(rel->uuid());
 
   QCOMPARE(testInterface.loadCount(), 3U);
 

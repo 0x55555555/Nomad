@@ -19,6 +19,11 @@ void ExternalSourceAsset::createTypeInformation(
   auto childBlock = info->createChildrenBlock(data);
   }
 
+ExternalSourceAsset::ExternalSourceAsset()
+    : _hasSource(false)
+  {
+  }
+
 void ExternalSourceAsset::clear()
   {
   auto asset = cachedAsset();
@@ -27,6 +32,7 @@ void ExternalSourceAsset::clear()
     return;
     }
 
+  _hasSource = false;
   if (auto parent = asset->parent()->castTo<Shift::Set>())
     {
     parent->remove(asset);
@@ -70,9 +76,7 @@ QWidget *ExternalSourceAsset::createEditor(ProjectInterface *, CreateInterface *
         &QTextEdit::textChanged,
         [this]()
           {
-          _asset->clear();
-          _asset->initialiseFromSource(toPlainText().toUtf8(), _ctx);
-          _asset->setNeedsSave();
+          _asset->reinitialise(toPlainText().toUtf8(), _ctx);
           }
         );
       }
@@ -84,15 +88,24 @@ QWidget *ExternalSourceAsset::createEditor(ProjectInterface *, CreateInterface *
 
   // ensure the asset is loaded.
   auto ass = asset(c);
-  xAssert(ass);
   (void)ass;
-
   return new Editor(_source, this, c);
   }
 
 void ExternalSourceAsset::setSource(const QByteArray &src)
   {
+  _hasSource = true;
   _source = src;
+  }
+
+QByteArray ExternalSourceAsset::source() const
+  {
+  if (!_hasSource)
+    {
+    return getDiskSource();
+    }
+
+  return _source;
   }
 }
 

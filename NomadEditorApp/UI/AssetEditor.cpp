@@ -4,6 +4,8 @@
 #include "QVBoxLayout"
 #include "Assets/AssetType.h"
 #include "QSplitter"
+#include "QToolBar"
+#include "QAction"
 
 namespace Nomad
 {
@@ -18,6 +20,16 @@ AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateI
   l->setContentsMargins(0, 0, 0, 0);
   setLayout(l);
 
+  auto tools = new QToolBar(this);
+  l->addWidget(tools);
+  _reload = tools->addAction("Reload");
+  _reload->setEnabled(false);
+  connect(_reload, &QAction::triggered, [this, c]()
+    {
+    _asset->reload(c);
+    });
+
+
   QSplitter *splitter = new QSplitter(this);
   l->addWidget(splitter);
   splitter->setHandleWidth(4);
@@ -27,7 +39,7 @@ AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateI
     splitter->addWidget(e);
     }
 
-  if (auto e = t->createPreview(ui))
+  if (auto e = t->createPreview(ui, c))
     {
     splitter->addWidget(e);
     }
@@ -36,6 +48,11 @@ AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateI
 AssetEditor *AssetEditor::build(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui)
   {
   return new AssetEditor(t, ifc, c, ui);
+  }
+
+void AssetEditor::onReloadAvailable()
+  {
+  _reload->setEnabled(true);
   }
 
 void AssetEditor::makeDockable(QMainWindow *mw)

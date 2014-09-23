@@ -28,7 +28,7 @@ void ObjMeshType::createTypeInformation(
   layout->setResolveFunction(AssetManager::resolveAssetPointer);
   }
 
-const char *ObjMeshType::extension()
+const char *ObjMeshType::extension() const
   {
   return "obj";
   }
@@ -76,7 +76,7 @@ Asset *ObjMeshType::processSource(const QByteArray &source, CreateInterface *c)
   if(!layout)
     {
     qWarning() << "invalid vertex layout";
-    return mesh;
+    return 0;
     }
 
   Eks::TemporaryAllocator alloc(Attribute::temporaryAllocator());
@@ -92,14 +92,18 @@ Asset *ObjMeshType::processSource(const QByteArray &source, CreateInterface *c)
   layout->bakeSemantics(&semantics);
 
   Eks::ObjLoader loader(&alloc);
-  loader.load(
-    source.data(),
-    source.size(),
-    semantics.data(),
-    itemCount,
-    &triangles,
-    &vertexSize,
-    elements.data());
+  if(!loader.load(
+      source.data(),
+      source.size(),
+      semantics.data(),
+      itemCount,
+      &triangles,
+      &vertexSize,
+      elements.data()))
+    {
+    qWarning() << "invalid obj";
+    return 0;
+    }
 
   //loader.computeUnusedElements(elements.data(), itemCount, &triangles);
 
@@ -107,13 +111,13 @@ Asset *ObjMeshType::processSource(const QByteArray &source, CreateInterface *c)
   bool result = loader.bake(triangles, elements.data(), itemCount, &dataOut);
   if (!result)
     {
-    qWarning() << "invalid obj";
-    return mesh;
+    qWarning() << "invalid baked obj";
+    return 0;
     }
 
   xsize vertCount = dataOut.size() / vertexSize;
 
-  if(!Eks::Geometry::delayedCreate(mesh->geometry(), c->renderer(), dataOut.data(), dataOut.size(), vertCount))
+  if(!Eks::Geometry::delayedCreate(mesh->geometry(), c->renderer(), dataOut.data(), vertexSize, vertCount))
     {
     return mesh;
     }
@@ -131,9 +135,7 @@ QWidget *ObjMeshType::createEditor(ProjectInterface *ifc, CreateInterface *c)
   auto box = new AssetSelector(ifc, c, &_layout, VertexDescriptionType::staticTypeInformation(), w);
   QObject::connect(box, &AssetSelector::assetChanged, [this, c]()
     {
-    clear();
-    initialiseFromSource(source(), c);
-    setNeedsSave();
+    reinitialise(source(), c);
     });
   l->addWidget(box);
 
@@ -144,17 +146,45 @@ QWidget *ObjMeshType::createEditor(ProjectInterface *ifc, CreateInterface *c)
   return w;
   }
 
-QWidget *ObjMeshType::createPreview(UIInterface *ifc)
+QWidget *ObjMeshType::createPreview(UIInterface *ifc, CreateInterface *c)
   {
   struct MeshViewport : public PreviewViewport
     {
-    MeshViewport(UIInterface *ifc, ObjMeshType *)
-        : PreviewViewport(ifc)
+    MeshViewport(UIInterface *ifc, CreateInterface *c, ObjMeshType *m)
+        : PreviewViewport(ifc),
+          createInterface(c),
+          mesh(m)
       {
       }
+
+    const VertexDescription::Layout *vertexLayout() const X_OVERRIDE
+      {
+      layout = const_cast<VertexDescription*>(mesh->_layout.pointed<VertexDescription>());
+      if (!layout)
+        {
+        return nullptr;
+        }
+
+      return &layout->layout();
+      }
+
+    void renderGeometry(Eks::Renderer *r) X_OVERRIDE
+      {
+      auto a = mesh->asset(createInterface);
+      if (!a)
+        {
+        return;
+        }
+      Mesh *m = a->castTo<Mesh>();
+      r->drawTriangles(&m->geometry());
+      }
+
+    mutable Shift::EntityWeakPointer<VertexDescription> layout;
+    CreateInterface *createInterface;
+    ObjMeshType *mesh;
     };
 
-  return new MeshViewport(ifc, this);
+  return new MeshViewport(ifc, c, this);
   }
 
 }

@@ -1,6 +1,9 @@
 {
 	"version": "2",
 	"types": {
+		"Fulluuid": {
+			"dynamicCount": "0"
+		},
 		"VertexDescriptionType": {
 			"dynamicCount": "1"
 		}
