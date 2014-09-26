@@ -37,6 +37,9 @@ signals:
 
 private slots:
   void comboChanged(int);
+
+private:
+  bool _disableChanges;
   };
 
 }

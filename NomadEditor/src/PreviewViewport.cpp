@@ -168,7 +168,7 @@ void PreviewViewport::tick()
 void PreviewViewport::bindShader(Eks::Renderer *r, const QString &mode)
   {
   auto* desc = vertexLayout();
-  if (!desc->size())
+  if (!desc || !desc->size())
     {
     return;
     }

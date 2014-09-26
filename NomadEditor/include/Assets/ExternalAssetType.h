@@ -23,8 +23,6 @@ public:
   virtual bool save() X_OVERRIDE;
   virtual bool needsSave() X_OVERRIDE;
 
-
-  virtual void clear() = 0;
   virtual const char *extension() const = 0;
   virtual Asset *process(const QByteArray &source, CreateInterface *c) = 0;
   virtual QByteArray unprocess(Asset *a) = 0;

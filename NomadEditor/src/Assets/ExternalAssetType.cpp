@@ -46,6 +46,7 @@ void ExternalAssetType::reload(CreateInterface *c)
 
 Asset *ExternalAssetType::reinitialise(const QByteArray &src, CreateInterface *c)
   {
+  setRequiresReload(false);
   markDependantsForReload();
   clear();
   auto a = initialiseFromSource(src, c);
@@ -119,10 +120,6 @@ bool ExternalAssetType::save()
 bool ExternalAssetType::needsSave()
   {
   return AssetType::needsSave() || _needsSave;
-  }
-
-void ExternalAssetType::clear()
-  {
   }
 
 Asset *ExternalAssetType::cachedAsset()

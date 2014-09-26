@@ -11,6 +11,8 @@ namespace Nomad
 namespace Editor
 {
 
+class MessageList;
+
 class AssetEditor : public QWidget
   {
   Q_OBJECT
@@ -21,15 +23,19 @@ XProperties:
 public:
   static AssetEditor *build(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui);
 
-  void onReloadAvailable();
-
   void makeDockable(QMainWindow *mw);
   void showEditor();
+
+protected slots:
+  void updateMessages();
+  void reloadableChanged();
 
 protected:
   AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui);
 
   QWidget *getTopLevel();
+
+  MessageList *_messages;
 
   QAction *_reload;
   };

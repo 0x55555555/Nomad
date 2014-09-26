@@ -1,7 +1,8 @@
-	#include "AssetSelector.h"
+#include "AssetSelector.h"
 #include "NAssetManager.h"
 #include "shift/Properties/scontaineriterators.h"
 #include "NAsset.h"
+#include "Utilities/XScopedValue.h"
 
 namespace Nomad
 {
@@ -18,7 +19,8 @@ AssetSelector::AssetSelector(
     : SUIBase<QComboBox, Shift::ExternalUuidPointer>(parent, ptr),
       _projectInterface(ifc),
       _createInterface(cre),
-      _type(assetTypeType)
+      _type(assetTypeType),
+      _disableChanges(false)
   {
   updateCombo();
   connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(comboChanged(int)));
@@ -31,6 +33,7 @@ void AssetSelector::syncGUI()
 
 void AssetSelector::updateCombo()
   {
+  Eks::ScopedValue<bool> s(_disableChanges, true);
   clear();
 
   addItem("None");
@@ -59,6 +62,14 @@ void AssetSelector::updateCombo()
 
 void AssetSelector::comboChanged(int i)
   {
+  if (_disableChanges)
+    {
+    return;
+    }
+
+  Eks::ScopedValue<bool> s(_disableChanges, true);
+
+  Shift::Block h(propertyValue()->handler());
   auto old = propertyValue()->pointed();
   auto v = (AssetType*)itemData(i).toLongLong();
   if (v)
@@ -73,6 +84,10 @@ void AssetSelector::comboChanged(int i)
       {
       propertyValue()->setPointed(asset);
       }
+    }
+  else if(old != nullptr)
+    {
+    propertyValue()->setPointed(nullptr);
     }
 
   if (old != propertyValue()->pointed())

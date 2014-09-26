@@ -12,7 +12,6 @@ class NOMAD_RENDERER_EXPORT Mesh : public Asset
 
 public:
   Eks::Geometry &geometry() { return _geo; }
-
   const Eks::Geometry &geometry() const { return _geo; }
 
 private:

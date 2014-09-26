@@ -86,10 +86,14 @@ Nomad::Editor::AssetType *AssetBrowserData::loadHandle(const QString &name)
 
 Asset *AssetBrowserData::load(Shift::Set *parent, const QUuid &name)
   {
-  QString path = name.toString();
+  if(name.isNull())
+    {
+    return nullptr;
+    }
 
+  QString path = name.toString();
   auto it = _uuids.find(name);
-  if (it == _uuids.end())
+  if(it == _uuids.end())
     {
     qWarning() << "Can't find asset for " << name;
     return nullptr;
@@ -135,10 +139,6 @@ void AssetBrowserData::markForReload(const QUuid  &a)
     }
 
   type->setRequiresReload(true);
-  if(auto editor = interface->openEditors().value(type))
-    {
-    editor->onReloadAvailable();
-    }
   }
 
 AssetType *AssetBrowserData::createAsset(

@@ -9,6 +9,7 @@
 #include "PreviewViewport.h"
 #include "AssetSelector.h"
 #include "QVBoxLayout"
+#include "Utilities/XParseException.h"
 
 namespace Nomad
 {
@@ -75,7 +76,7 @@ Asset *ObjMeshType::processSource(const QByteArray &source, CreateInterface *c)
   auto layout = _layout.pointed<VertexDescription>();
   if(!layout)
     {
-    qWarning() << "invalid vertex layout";
+    addError(X_CURRENT_CODE_LOCATION_DETAILED, "Missing vertex layout");
     return 0;
     }
 
@@ -91,35 +92,41 @@ Asset *ObjMeshType::processSource(const QByteArray &source, CreateInterface *c)
   Eks::Vector<Eks::ShaderVertexLayoutDescription::Semantic> semantics(&alloc);
   layout->bakeSemantics(&semantics);
 
-  Eks::ObjLoader loader(&alloc);
-  if(!loader.load(
-      source.data(),
-      source.size(),
-      semantics.data(),
-      itemCount,
-      &triangles,
-      &vertexSize,
-      elements.data()))
+  try
     {
-    qWarning() << "invalid obj";
-    return 0;
+    Eks::ObjLoader loader(&alloc);
+    if(!loader.load(
+        source.data(),
+        source.size(),
+        semantics.data(),
+        itemCount,
+        &triangles,
+        &vertexSize,
+        elements.data()))
+      {
+      return 0;
+      }
+
+    //loader.computeUnusedElements(elements.data(), itemCount, &triangles);
+
+    Eks::Vector<xuint8> dataOut(&alloc);
+    bool result = loader.bake(triangles, elements.data(), itemCount, &dataOut);
+    if (!result)
+      {
+      return 0;
+      }
+
+    xsize vertCount = dataOut.size() / vertexSize;
+
+    if(!Eks::Geometry::delayedCreate(mesh->geometry(), c->renderer(), dataOut.data(), vertexSize, vertCount))
+      {
+      return mesh;
+      }
     }
-
-  //loader.computeUnusedElements(elements.data(), itemCount, &triangles);
-
-  Eks::Vector<xuint8> dataOut(&alloc);
-  bool result = loader.bake(triangles, elements.data(), itemCount, &dataOut);
-  if (!result)
+  catch(const Eks::ParseException &e)
     {
-    qWarning() << "invalid baked obj";
+    addError(e);
     return 0;
-    }
-
-  xsize vertCount = dataOut.size() / vertexSize;
-
-  if(!Eks::Geometry::delayedCreate(mesh->geometry(), c->renderer(), dataOut.data(), vertexSize, vertCount))
-    {
-    return mesh;
     }
 
   return mesh;
@@ -129,7 +136,7 @@ QWidget *ObjMeshType::createEditor(ProjectInterface *ifc, CreateInterface *c)
   {
   QWidget *w = new QWidget();
   QVBoxLayout *l = new QVBoxLayout();
-  l->setContentsMargins(2, 2, 2, 2);
+  l->setContentsMargins(0, 0, 0, 0);
   w->setLayout(l);
 
   auto box = new AssetSelector(ifc, c, &_layout, VertexDescriptionType::staticTypeInformation(), w);

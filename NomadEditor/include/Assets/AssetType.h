@@ -10,6 +10,7 @@ class QWidget;
 
 namespace Eks
 {
+class ParseException;
 class Renderer;
 }
 
@@ -30,13 +31,14 @@ class UIInterface;
 class ProjectInterface;
 class AssetBrowser;
 
-class NOMAD_EXPORT AssetType : public File
+class NOMAD_EXPORT AssetType : public QObject, public File
   {
+  Q_OBJECT
   S_ABSTRACT_ENTITY(AssetType, File)
 
 XProperties:
   XROProperty(ProjectInterface *, project)
-  XProperty(bool, requiresReload, setRequiresReload)
+  XROProperty(bool, requiresReload)
 
 public:
   AssetType();
@@ -60,6 +62,7 @@ public:
   virtual Asset *asset(CreateInterface *c=nullptr) = 0;
   virtual bool save();
   virtual bool needsSave();
+  virtual void clear();
   Application::FileResult offerToSave();
 
   static AssetType *create(
@@ -79,11 +82,39 @@ public:
   Shift::Set *assetParent() { return _assetParent(); }
   const Shift::Set *assetParent() const { return _assetParent(); }
 
+  void setRequiresReload(bool r);
+
+  struct Message
+    {
+    enum Type
+      {
+      Error,
+      Warning
+      };
+
+    Type type;
+    Eks::DetailedCodeLocation location;
+    Eks::String context;
+    Eks::String message;
+    };
+
+  const Eks::Vector<Message> &messages() const { return _messages; }
+
+signals:
+  void requiresReloadChanged();
+  void messagesChanged();
+
 protected:
   void markDependantsForReload();
 
+  void addError(const Eks::DetailedCodeLocation& loc, const Eks::String &s);
+  void addError(const Eks::ParseException &s);
+
   Shift::Data<QUuid> _uuid;
   Shift::TypedPointer<Shift::Set> _assetParent;
+
+private:
+  Eks::Vector<Message> _messages;
 
   friend class AssetBrowser;
   };

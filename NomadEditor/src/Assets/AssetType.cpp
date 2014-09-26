@@ -3,6 +3,7 @@
 #include "shift/Properties/sarray.h"
 #include "shift/Serialisation/sloader.h"
 #include "shift/Serialisation/sjsonio.h"
+#include "Utilities/XParseException.h"
 #include "NProject.h"
 #include "NAsset.h"
 #include "NAssetManager.h"
@@ -34,7 +35,8 @@ void AssetType::createTypeInformation(
   }
 
 AssetType::AssetType()
-    : _requiresReload(false)
+    : _requiresReload(false),
+      _messages(Shift::TypeRegistry::generalPurposeAllocator())
   {
   }
 
@@ -64,6 +66,12 @@ bool AssetType::save()
 bool AssetType::needsSave()
   {
   return hasChangedFromFile();
+  }
+
+void AssetType::clear()
+  {
+  _messages.clear();
+  emit messagesChanged();
   }
 
 Application::FileResult AssetType::offerToSave()
@@ -138,6 +146,12 @@ AssetType *AssetType::load(
   return asset;
   }
 
+void AssetType::setRequiresReload(bool r)
+  {
+  _requiresReload = r;
+  emit requiresReloadChanged();
+  }
+
 void AssetType::markDependantsForReload()
   {
   Shift::Property *ass = asset();
@@ -174,6 +188,25 @@ void AssetType::markDependantsForReload()
       owner = owner->parent();
       }
     }
+  }
+
+void AssetType::addError(const Eks::DetailedCodeLocation &d, const Eks::String &m)
+  {
+  auto &b = _messages.createBack();
+  b.type = Message::Error;
+  b.location = d;
+  b.message = m;
+  emit messagesChanged();
+  }
+
+void AssetType::addError(const Eks::ParseException &e)
+  {
+  auto &b = _messages.createBack();
+  b.type = Message::Error;
+  b.location = e.location();
+  b.context = e.fileLocation();
+  b.message = e.message();
+  emit messagesChanged();
   }
 }
 

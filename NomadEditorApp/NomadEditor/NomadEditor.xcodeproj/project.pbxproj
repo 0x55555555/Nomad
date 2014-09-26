@@ -4719,6 +4719,10 @@
 		08CF1A3F19B8E3AF007C0295 /* ExternalSourceAsset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExternalSourceAsset.h; sourceTree = "<group>"; };
 		08D7A2DE19CE2FD000848F61 /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
 		08D7A2E119CE2FD600848F61 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		08FB1B9119D42C0900A68030 /* XParseException.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XParseException.cpp; sourceTree = "<group>"; };
+		08FB1B9419D42C1000A68030 /* XParseException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XParseException.h; path = Utilities/XParseException.h; sourceTree = "<group>"; };
+		08FB1B9519D46D7200A68030 /* MessageList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageList.h; sourceTree = "<group>"; };
+		08FB1B9619D46D7700A68030 /* MessageList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MessageList.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -5071,6 +5075,7 @@
 		086560C419AA1CBF009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08FB1B9419D42C1000A68030 /* XParseException.h */,
 				086560C519AA1CBF009A9023 /* Async */,
 				086560C819AA1CBF009A9023 /* Containers */,
 				086560CF19AA1CBF009A9023 /* Math */,
@@ -5688,6 +5693,7 @@
 		0865621619AA1CBF009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08FB1B9119D42C0900A68030 /* XParseException.cpp */,
 				0865621719AA1CBF009A9023 /* XAssert.cpp */,
 				0865621819AA1CBF009A9023 /* XAsyncTask.cpp */,
 				0865621919AA1CBF009A9023 /* XBucketAllocator.cpp */,
@@ -6053,6 +6059,7 @@
 		086562D219AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08FB1B9519D46D7200A68030 /* MessageList.h */,
 				08A3BCD719C63E610070C188 /* AssetSelector.h */,
 				08A3BCD819C63E610070C188 /* PreviewViewport.h */,
 				08A3BCD919C63E610070C188 /* UIInterface.h */,
@@ -6081,6 +6088,7 @@
 		086562DC19AA1CC0009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08FB1B9619D46D7700A68030 /* MessageList.cpp */,
 				08A3BCDA19C63E6B0070C188 /* AssetSelector.cpp */,
 				08A3BCDB19C63E6B0070C188 /* PreviewViewport.cpp */,
 				08CF1A3D19B8E361007C0295 /* TextEditor.cpp */,

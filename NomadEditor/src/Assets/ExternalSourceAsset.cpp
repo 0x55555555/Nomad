@@ -26,6 +26,7 @@ ExternalSourceAsset::ExternalSourceAsset()
 
 void ExternalSourceAsset::clear()
   {
+  ExternalAssetType::clear();
   auto asset = cachedAsset();
   if (!asset)
     {

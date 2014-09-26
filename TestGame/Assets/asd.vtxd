@@ -6,9 +6,5 @@
   {
 		"name": "normal",
     "count": 3
-  },
-  {
-		"name": "texturecoordinate",
-    "count": 2
   }
 ]

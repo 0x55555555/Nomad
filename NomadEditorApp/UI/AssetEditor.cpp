@@ -1,4 +1,5 @@
 #include "AssetEditor.h"
+#include "MessageList.h"
 #include "QMainWindow"
 #include "QDockWidget"
 #include "QVBoxLayout"
@@ -14,10 +15,11 @@ namespace Editor
 {
 
 AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui)
-    : _asset(t)
+    : _asset(t),
+      _messages(nullptr)
   {
   QVBoxLayout *l = new QVBoxLayout();
-  l->setContentsMargins(0, 0, 0, 0);
+  l->setContentsMargins(2, 2, 2, 2);
   setLayout(l);
 
   auto tools = new QToolBar(this);
@@ -28,7 +30,9 @@ AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateI
     {
     _asset->reload(c);
     });
+  connect(t, SIGNAL(requiresReloadChanged()), this, SLOT(reloadableChanged()));
 
+  connect(t, SIGNAL(messagesChanged()), this, SLOT(updateMessages()));
 
   QSplitter *splitter = new QSplitter(this);
   l->addWidget(splitter);
@@ -36,7 +40,16 @@ AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateI
 
   if (auto e = t->createEditor(ifc, c))
     {
-    splitter->addWidget(e);
+    QSplitter *vSplit = new QSplitter(splitter);
+    splitter->addWidget(vSplit);
+    vSplit->setOrientation(Qt::Vertical);
+    vSplit->setHandleWidth(4);
+
+    vSplit->addWidget(e);
+
+    _messages = new MessageList(vSplit);
+    vSplit->addWidget(_messages);
+    updateMessages();
     }
 
   if (auto e = t->createPreview(ui, c))
@@ -50,9 +63,24 @@ AssetEditor *AssetEditor::build(AssetType *t, ProjectInterface *ifc, AssetType::
   return new AssetEditor(t, ifc, c, ui);
   }
 
-void AssetEditor::onReloadAvailable()
+void AssetEditor::updateMessages()
   {
-  _reload->setEnabled(true);
+  if(!_messages)
+    {
+    return;
+    }
+
+  _messages->clear();
+  xForeach(auto &m, _asset->messages())
+    {
+    auto type = m.type == AssetType::Message::Error ? MessageList::Error : MessageList::Warning;
+    _messages->add(type, m.location, m.context, m.message);
+    }
+  }
+
+void AssetEditor::reloadableChanged()
+  {
+  _reload->setEnabled(_asset->requiresReload());
   }
 
 void AssetEditor::makeDockable(QMainWindow *mw)

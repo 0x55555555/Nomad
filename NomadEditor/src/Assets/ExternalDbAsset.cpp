@@ -21,6 +21,7 @@ void ExternalDbAsset::createTypeInformation(
 
 void ExternalDbAsset::clear()
   {
+  ExternalAssetType::clear();
   auto asset = cachedAsset();
   if (auto parent = asset->parent()->castTo<Shift::Set>())
     {
