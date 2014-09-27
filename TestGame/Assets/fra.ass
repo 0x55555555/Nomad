@@ -1,0 +1,18 @@
+{
+	"version": "2",
+	"types": {
+		"Fulluuid": {
+			"dynamicCount": "0"
+		},
+		"ShaderComponentType": {
+			"dynamicCount": "1"
+		}
+	},
+	"noroot": "0",
+	"data": {
+		"type": "ShaderComponentType",
+		"contents": {
+			"uuid": "{c1ba5047-d2ff-46af-8488-7ce7572a6d16}"
+		}
+	}
+}

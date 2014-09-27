@@ -1,6 +1,9 @@
 {
 	"version": "2",
 	"types": {
+		"ExternalUuidPointer": {
+			"dynamicCount": "0"
+		},
 		"Fulluuid": {
 			"dynamicCount": "0"
 		},
@@ -12,7 +15,8 @@
 	"data": {
 		"type": "ShaderVertexComponentType",
 		"contents": {
-			"uuid": "{a0ae3d24-e12f-4019-be37-7490e7a9c9c0}"
+			"uuid": "{a0ae3d24-e12f-4019-be37-7490e7a9c9c0}",
+			"layout": "{0cc3c4db-fe43-4b49-a406-a5bed03a2b6c}"
 		}
 	}
 }

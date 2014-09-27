@@ -17,6 +17,8 @@ public:
   QByteArray defaultSource() const X_OVERRIDE;
   Asset *processSource(const QByteArray &source, CreateInterface *c) X_OVERRIDE;
 
+  QWidget *createEditor(ProjectInterface *ifc, CreateInterface *c) X_OVERRIDE;
+
   Shift::EnumProperty type;
   };
 
