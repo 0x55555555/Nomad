@@ -14,7 +14,7 @@ class NOMAD_EXPORT ExternalDbAsset : public ExternalAssetType
 public:
   void clear() X_OVERRIDE;
   Asset *process(const QByteArray &source, CreateInterface *c) X_OVERRIDE;
-  QByteArray unprocess(Asset *a) X_OVERRIDE;
+  QByteArray unprocess() X_OVERRIDE;
   QWidget *createEditor(ProjectInterface *ifc, CreateInterface *c) X_OVERRIDE;
 
 protected:

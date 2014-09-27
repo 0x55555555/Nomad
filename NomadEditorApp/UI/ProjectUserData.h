@@ -19,6 +19,7 @@ class ProjectUserData : public Nomad::File
   {
   S_ENTITY(ProjectUserData, File)
 
+  Shift::StringProperty geometry;
   Shift::StringProperty layout;
   Shift::Array openFiles;
   };

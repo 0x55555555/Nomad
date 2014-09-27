@@ -40,7 +40,7 @@ Asset *ExternalDbAsset::process(const QByteArray &src, CreateInterface *)
   return asset->castTo<Asset>();
   }
 
-QByteArray ExternalDbAsset::unprocess(Asset *)
+QByteArray ExternalDbAsset::unprocess()
   {
   return source();
   }

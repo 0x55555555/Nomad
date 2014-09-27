@@ -10,7 +10,7 @@ class QWidget;
 
 namespace Eks
 {
-class ParseException;
+class ParseError;
 class Renderer;
 }
 
@@ -108,7 +108,8 @@ protected:
   void markDependantsForReload();
 
   void addError(const Eks::DetailedCodeLocation& loc, const Eks::String &s);
-  void addError(const Eks::ParseException &s);
+  void addError(const Eks::ParseError &s);
+  void addWarning(const Eks::ParseError &s);
 
   Shift::Data<QUuid> _uuid;
   Shift::TypedPointer<Shift::Set> _assetParent;

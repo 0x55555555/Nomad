@@ -51,7 +51,7 @@ Asset *ExternalSourceAsset::process(const QByteArray &source, CreateInterface *c
   return s;
   }
 
-QByteArray ExternalSourceAsset::unprocess(Asset *)
+QByteArray ExternalSourceAsset::unprocess()
   {
   return _source;
   }

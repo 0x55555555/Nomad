@@ -136,8 +136,9 @@ QWidget *ObjMeshType::createEditor(ProjectInterface *ifc, CreateInterface *c)
   {
   QWidget *w = new QWidget();
   QVBoxLayout *l = new QVBoxLayout();
-  l->setContentsMargins(0, 0, 0, 0);
   w->setLayout(l);
+  l->setContentsMargins(0, 0, 0, 0);
+  l->setSpacing(8);
 
   auto box = new AssetSelector(ifc, c, &_layout, VertexDescriptionType::staticTypeInformation(), w);
   QObject::connect(box, &AssetSelector::assetChanged, [this, c]()

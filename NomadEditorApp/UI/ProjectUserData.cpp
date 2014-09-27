@@ -15,6 +15,7 @@ void ProjectUserData::createTypeInformation(
   auto childBlock = info->createChildrenBlock(data);
 
   childBlock.add(&ProjectUserData::layout, "layout");
+  childBlock.add(&ProjectUserData::geometry, "geometry");
   childBlock.add(&ProjectUserData::openFiles, "openFiles");
   }
 

@@ -199,10 +199,20 @@ void AssetType::addError(const Eks::DetailedCodeLocation &d, const Eks::String &
   emit messagesChanged();
   }
 
-void AssetType::addError(const Eks::ParseException &e)
+void AssetType::addError(const Eks::ParseError &e)
   {
   auto &b = _messages.createBack();
   b.type = Message::Error;
+  b.location = e.location();
+  b.context = e.fileLocation();
+  b.message = e.message();
+  emit messagesChanged();
+  }
+
+void AssetType::addWarning(const Eks::ParseError &e)
+  {
+  auto &b = _messages.createBack();
+  b.type = Message::Warning;
   b.location = e.location();
   b.context = e.fileLocation();
   b.message = e.message();

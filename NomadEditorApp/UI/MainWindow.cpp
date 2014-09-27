@@ -189,7 +189,8 @@ bool MainWindow::closeProject()
   auto currentUser = _db->projectUserData();
   if(currentUser)
     {
-    currentUser->layout.assign(saveGeometry().toBase64().data());
+    currentUser->geometry.assign(saveGeometry().toBase64().data());
+    currentUser->layout.assign(saveState().toBase64().data());
     }
 
   Application::save(currentUser);
@@ -422,10 +423,22 @@ bool MainWindow::openProject(const QString &path)
   emit projectChanged();
 
   auto currentUser = _db->projectUserData();
-  auto str = QByteArray::fromBase64(currentUser->layout().data());
+  auto str = QByteArray::fromBase64(currentUser->geometry().data());
   if (!str.isEmpty())
     {
-    restoreGeometry(str);
+    if (!restoreGeometry(str))
+      {
+      qWarning() << "Failed to restore application geometry";
+      }
+    }
+
+  str = QByteArray::fromBase64(currentUser->layout().data());
+  if (!str.isEmpty())
+    {
+    if (!restoreState(str))
+      {
+      qWarning() << "Failed to restore application ui state";
+      }
     }
 
   return true;

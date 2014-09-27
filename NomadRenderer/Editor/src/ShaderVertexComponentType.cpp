@@ -6,6 +6,7 @@
 #include "NAsset.h"
 #include "NAssetManager.h"
 #include "AssetSelector.h"
+#include "Utilities/XParseException.h"
 #include "QVBoxLayout"
 
 namespace Nomad
@@ -36,7 +37,9 @@ QByteArray ShaderVertexComponentType::defaultSource() const
   return
 "layout (std140) uniform cb0 { mat4 model; mat4 modelView; mat4 modelViewProj; };\n"
 "layout (std140) uniform cb1 { mat4 view; mat4 proj; };\n"
+"\n"
 "in vec3 position;\n"
+"\n"
 "void main()\n"
 "  {\n"
 "  gl_Position = modelViewProj * vec4(position, 1.0);\n"
@@ -54,6 +57,22 @@ Asset *ShaderVertexComponentType::processSource(const QByteArray &source, Create
     return 0;
     }
 
+  struct Test : public Eks::ParseErrorInterface
+    {
+    void error(const Eks::ParseError &e) X_OVERRIDE
+      {
+      asset->addError(e);
+      }
+
+    void warning(const Eks::ParseError &e) X_OVERRIDE
+      {
+      asset->addWarning(e);
+      }
+
+    ShaderVertexComponentType *asset;
+    } ifc;
+  ifc.asset = this;
+
   if(!Eks::ShaderVertexComponent::delayedCreate(
       comp->component(),
       c->renderer(),
@@ -61,7 +80,8 @@ Asset *ShaderVertexComponentType::processSource(const QByteArray &source, Create
       source.length(),
       layout->layout().data(),
       layout->layout().size(),
-      &comp->layout()))
+      &comp->layout(),
+      &ifc))
     {
     return comp;
     }

@@ -20,6 +20,7 @@ AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateI
   {
   QVBoxLayout *l = new QVBoxLayout();
   l->setContentsMargins(2, 2, 2, 2);
+  l->setSpacing(4);
   setLayout(l);
 
   auto tools = new QToolBar(this);
@@ -40,14 +41,17 @@ AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateI
 
   if (auto e = t->createEditor(ifc, c))
     {
-    QSplitter *vSplit = new QSplitter(splitter);
-    splitter->addWidget(vSplit);
-    vSplit->setOrientation(Qt::Vertical);
-    vSplit->setHandleWidth(4);
+    QWidget *w = new QWidget(splitter);
+    QVBoxLayout *vSplit = new QVBoxLayout();
+    vSplit->setContentsMargins(0, 0, 0, 0);
+    vSplit->setSpacing(2);
+    w->setLayout(vSplit);
+    splitter->addWidget(w);
 
     vSplit->addWidget(e);
 
-    _messages = new MessageList(vSplit);
+    _messages = new MessageList(w);
+    _messages->setMaximumHeight(100);
     vSplit->addWidget(_messages);
     updateMessages();
     }
@@ -91,6 +95,7 @@ void AssetEditor::makeDockable(QMainWindow *mw)
     }
 
   QDockWidget *w = new QDockWidget(asset()->relativePath());
+  w->setObjectName(asset()->relativePath());
   w->setAllowedAreas(Qt::AllDockWidgetAreas);
 
   w->setWidget(this);

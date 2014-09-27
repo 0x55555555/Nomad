@@ -4723,6 +4723,14 @@
 		08FB1B9419D42C1000A68030 /* XParseException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XParseException.h; path = Utilities/XParseException.h; sourceTree = "<group>"; };
 		08FB1B9519D46D7200A68030 /* MessageList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageList.h; sourceTree = "<group>"; };
 		08FB1B9619D46D7700A68030 /* MessageList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MessageList.cpp; sourceTree = "<group>"; };
+		08FB1B9719D7350C00A68030 /* ShaderComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderComponent.h; sourceTree = "<group>"; };
+		08FB1B9819D7350C00A68030 /* ShaderVertexComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderVertexComponent.h; sourceTree = "<group>"; };
+		08FB1B9919D7351500A68030 /* ShaderComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderComponent.cpp; sourceTree = "<group>"; };
+		08FB1B9A19D7351500A68030 /* ShaderVertexComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderVertexComponent.cpp; sourceTree = "<group>"; };
+		08FB1B9B19D7351D00A68030 /* ShaderComponentType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderComponentType.h; sourceTree = "<group>"; };
+		08FB1B9C19D7351D00A68030 /* ShaderVertexComponentType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderVertexComponentType.h; sourceTree = "<group>"; };
+		08FB1B9D19D7352400A68030 /* ShaderComponentType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderComponentType.cpp; sourceTree = "<group>"; };
+		08FB1B9E19D7352400A68030 /* ShaderVertexComponentType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderVertexComponentType.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -6183,6 +6191,8 @@
 		086562FD19AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08FB1B9B19D7351D00A68030 /* ShaderComponentType.h */,
+				08FB1B9C19D7351D00A68030 /* ShaderVertexComponentType.h */,
 				08A3BCD619C49BA10070C188 /* ObjMeshType.h */,
 				08CF1A3719B7BE75007C0295 /* RendererEditor.h */,
 				08CF1A3819B7BE75007C0295 /* VertexDescriptionType.h */,
@@ -6194,6 +6204,8 @@
 		0865630019AA1CC0009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08FB1B9D19D7352400A68030 /* ShaderComponentType.cpp */,
+				08FB1B9E19D7352400A68030 /* ShaderVertexComponentType.cpp */,
 				08A3BCD319C49B990070C188 /* ObjMeshType.cpp */,
 				08CF1A3919B7BE7C007C0295 /* RendererEditor.cpp */,
 				08CF1A3A19B7BE7C007C0295 /* VertexDescriptionType.cpp */,
@@ -6205,6 +6217,8 @@
 		0865630219AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08FB1B9719D7350C00A68030 /* ShaderComponent.h */,
+				08FB1B9819D7350C00A68030 /* ShaderVertexComponent.h */,
 				08D7A2DE19CE2FD000848F61 /* Mesh.h */,
 				08CF1A3519B7BE66007C0295 /* Renderer.h */,
 				08CF1A3619B7BE66007C0295 /* VertexDescription.h */,
@@ -6216,6 +6230,8 @@
 		0865630519AA1CC0009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08FB1B9919D7351500A68030 /* ShaderComponent.cpp */,
+				08FB1B9A19D7351500A68030 /* ShaderVertexComponent.cpp */,
 				08D7A2E119CE2FD600848F61 /* Mesh.cpp */,
 				0865630619AA1CC0009A9023 /* Shader.cpp */,
 				08CF1A3119B7BE5F007C0295 /* Renderer.cpp */,

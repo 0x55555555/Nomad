@@ -25,7 +25,7 @@ public:
 
   virtual const char *extension() const = 0;
   virtual Asset *process(const QByteArray &source, CreateInterface *c) = 0;
-  virtual QByteArray unprocess(Asset *a) = 0;
+  virtual QByteArray unprocess() = 0;
   virtual Asset *defaultCreate(CreateInterface *c) = 0;
 
 protected:

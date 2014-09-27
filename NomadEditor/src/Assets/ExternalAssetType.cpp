@@ -33,8 +33,13 @@ void ExternalAssetType::createNewAsset(CreateInterface *c)
   {
   Asset *a = defaultCreate(c);
 
-  _uuid = a->uuid();
-  _asset = a;
+  _failedLoad = a == nullptr;
+  if (a)
+    {
+    _uuid = a->uuid();
+    _asset = a;
+    }
+
   _needsSave = false;
   save();
   }
@@ -139,13 +144,6 @@ void ExternalAssetType::setNeedsSave()
 
 bool ExternalAssetType::saveContents(const QString &assFile)
   {
-  auto ass = _asset();
-  if (!ass)
-    {
-    _needsSave = false;
-    return true;
-    }
-
   QString path = contentsPath(assFile);
 
   QFile f(path);
@@ -154,7 +152,7 @@ bool ExternalAssetType::saveContents(const QString &assFile)
     return false;
     }
 
-  QString data = unprocess(ass);
+  QString data = unprocess();
 
   f.write(data.toUtf8());
   _needsSave = false;
