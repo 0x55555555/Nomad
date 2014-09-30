@@ -57,7 +57,7 @@ Asset *ShaderVertexComponentType::processSource(const QByteArray &source, Create
     return 0;
     }
 
-  struct Test : public Eks::ParseErrorInterface
+  struct Error : public Eks::ParseErrorInterface
     {
     void error(const Eks::ParseError &e) X_OVERRIDE
       {
@@ -85,6 +85,8 @@ Asset *ShaderVertexComponentType::processSource(const QByteArray &source, Create
     {
     return comp;
     }
+
+  comp->setLayoutDescription(layout);
 
   return comp;
   }

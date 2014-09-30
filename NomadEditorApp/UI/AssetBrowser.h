@@ -41,6 +41,7 @@ public:
 
   AssetManager *getManager();
   Shift::Set *getHandleParent();
+  AssetType *getAssetHandle(const QUuid &t);
 
 private slots:
   void tearDownProject(bool *abort);

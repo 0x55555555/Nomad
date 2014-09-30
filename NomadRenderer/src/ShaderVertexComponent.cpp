@@ -11,6 +11,7 @@ void ShaderVertexComponent::createTypeInformation(
     const Shift::PropertyInformationCreateData &data)
   {
   auto childBlock = info->createChildrenBlock(data);
+  childBlock.add(&ShaderVertexComponent::_layoutDescription, "layoutDescription");
   }
 
 }

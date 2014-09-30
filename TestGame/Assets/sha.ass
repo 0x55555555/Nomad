@@ -7,16 +7,16 @@
 		"Fulluuid": {
 			"dynamicCount": "0"
 		},
-		"ShaderVertexComponentType": {
+		"ShaderType": {
 			"dynamicCount": "1"
 		}
 	},
 	"noroot": "0",
 	"data": {
-		"type": "ShaderVertexComponentType",
+		"type": "ShaderType",
 		"contents": {
-			"uuid": "{3bdbbd5e-8ae9-444a-bfc9-d1314b29905f}",
-			"layout": "{0cc3c4db-fe43-4b49-a406-a5bed03a2b6c}"
+			"uuid": "{385de450-7b34-4b52-883c-b249790ce5ac}",
+			"vert": "{3bdbbd5e-8ae9-444a-bfc9-d1314b29905f}"
 		}
 	}
 }

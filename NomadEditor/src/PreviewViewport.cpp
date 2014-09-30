@@ -210,7 +210,7 @@ void PreviewViewport::bindShader(Eks::Renderer *r, const QString &mode)
     {
     r->setShader(&_colour.shader, &_colour.layout);
     }
-  else if(mode == DEFAULT_SHADER)
+  else
     {
     r->setShader(&_default.shader, &_default.layout);
     }
@@ -222,8 +222,6 @@ void PreviewViewport::renderGeometry(Eks::Renderer *r)
 
   if(!_geometryInitialised || layout != _oldLayout)
     {
-    _geometryInitialised = true;
-
     Eks::Modeller m(Eks::Core::defaultAllocator());
     m.drawCube();
     m.drawSphere(0.7f, 36, 36);
@@ -237,11 +235,17 @@ void PreviewViewport::renderGeometry(Eks::Renderer *r)
         }
       }
 
+    if (!desc.size())
+      {
+      return;
+      }
+
     _igeo.~IndexGeometry();
     _geo.~Geometry();
     new(&_igeo) Eks::IndexGeometry();
     new(&_geo) Eks::Geometry();
     m.bakeTriangles(r, desc.data(), desc.size(), &_igeo, &_geo);
+    _geometryInitialised = true;
     }
   r->drawTriangles(&_igeo, &_geo);
   }
@@ -298,6 +302,11 @@ void PreviewViewport::setShaderModes(const QStringList &l)
   _shaders = l;
   _modes->clear();
   _modes->addItems(_shaders);
+  }
+
+void PreviewViewport::setCurrentShaderMode(const QString &m)
+  {
+  _modes->setCurrentText(m);
   }
 
 void PreviewViewport::renderGrid(Eks::Renderer *r)

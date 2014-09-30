@@ -224,6 +224,11 @@ Shift::Set *MainWindow::getAssetHandleParent()
   return _browser->getHandleParent();
   }
 
+AssetType *MainWindow::getAssetHandle(const QUuid &h)
+  {
+  return _browser->getAssetHandle(h);
+  }
+
 Nomad::Editor::ProjectUserData *MainWindow::getCurrentProjectUserData()
   {
   return _db->projectUserData.pointed();
@@ -258,6 +263,13 @@ void MainWindow::openAssetEditor(AssetType *a)
   _editors[a] = found;
 
   focusEditor(found);
+  }
+
+AssetEditorInterface *MainWindow::createAssetEditor(const QUuid &a, QWidget *w, QWidget **out)
+  {
+  auto c = new DynamicAssetEditor(a, this, this, this, w);
+  *out = c;
+  return c;
   }
 
 const Eks::UnorderedMap<AssetType *, AssetEditor *> &MainWindow::openEditors()

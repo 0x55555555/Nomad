@@ -129,6 +129,8 @@ Asset *ObjMeshType::processSource(const QByteArray &source, CreateInterface *c)
     return 0;
     }
 
+  mesh->setLayoutDescription(layout);
+
   return mesh;
   }
 

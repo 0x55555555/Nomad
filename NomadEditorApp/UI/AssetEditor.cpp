@@ -14,7 +14,11 @@ namespace Nomad
 namespace Editor
 {
 
-AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui)
+AssetEditor::AssetEditor(
+    AssetType *t,
+    ProjectInterface *ifc,
+    AssetType::CreateInterface *c,
+    UIInterface *ui)
     : _asset(t),
       _messages(nullptr)
   {
@@ -62,7 +66,11 @@ AssetEditor::AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateI
     }
   }
 
-AssetEditor *AssetEditor::build(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui)
+AssetEditor *AssetEditor::build(
+    AssetType *t,
+    ProjectInterface *ifc,
+    AssetType::CreateInterface *c,
+    UIInterface *ui)
   {
   return new AssetEditor(t, ifc, c, ui);
   }
@@ -118,6 +126,45 @@ QWidget *AssetEditor::getTopLevel()
     }
 
   return this;
+  }
+
+DynamicAssetEditor::DynamicAssetEditor(
+    const QUuid &t,
+    ProjectInterface *ifc,
+    AssetType::CreateInterface *c,
+    UIInterface *ui,
+    QWidget *w)
+    : QWidget(w),
+      _contents(nullptr),
+      _ifc(ifc),
+      _cre(c),
+      _ui(ui)
+  {
+  xAssert(_ifc);
+  xAssert(_cre);
+  xAssert(_ui);
+
+  auto l = new QVBoxLayout();
+  l->setContentsMargins(0, 0, 0, 0);
+  setLayout(l);
+
+  setAsset(t);
+  }
+
+void DynamicAssetEditor::setAsset(const QUuid &t)
+  {
+  delete _contents;
+  _contents = nullptr;
+
+  auto handle = _ifc->getAssetHandle(t);
+  if (!handle)
+    {
+    return;
+    }
+
+  _contents = AssetEditor::build(handle, _ifc, _cre, _ui);
+  _contents->setParent(this);
+  layout()->addWidget(_contents);
   }
 }
 

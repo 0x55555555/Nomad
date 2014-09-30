@@ -35,10 +35,12 @@ public:
   Nomad::Project *getCurrentProject() X_OVERRIDE;
   AssetManager *getAssetManager() X_OVERRIDE;
   Shift::Set *getAssetHandleParent() X_OVERRIDE;
+  AssetType *getAssetHandle(const QUuid &h) X_OVERRIDE;
   Nomad::Editor::ProjectUserData *getCurrentProjectUserData() X_OVERRIDE;
   void addProjectChanged(QObject *obj, const char *slot) X_OVERRIDE;
   void addProjectAboutToChange(QObject *obj, const char *slot) X_OVERRIDE;
   void openAssetEditor(AssetType *a) X_OVERRIDE;
+  AssetEditorInterface *createAssetEditor(const QUuid &a, QWidget *w, QWidget **out) X_OVERRIDE;
   const Eks::UnorderedMap<AssetType *, AssetEditor *>& openEditors() X_OVERRIDE;
   void reloadLibraries() X_OVERRIDE;
 

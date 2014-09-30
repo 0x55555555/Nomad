@@ -42,6 +42,7 @@ protected:
   Eks::Transform spinTransform(float t);
 
   void setShaderModes(const QStringList &l);
+  void setCurrentShaderMode(const QString &m);
   const QStringList &shaderModes() const { return _shaders; }
 
 private:

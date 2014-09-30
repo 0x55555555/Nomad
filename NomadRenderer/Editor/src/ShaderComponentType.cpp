@@ -35,7 +35,7 @@ QByteArray ShaderComponentType::defaultSource() const
   return
 "precision mediump float;"
 "\n"
-"out vec4 outColor;\n"
+"out vec4 outColour;\n"
 "\n"
 "void main()\n"
 "{\n"
@@ -47,7 +47,7 @@ Asset *ShaderComponentType::processSource(const QByteArray &source, CreateInterf
   {
   auto comp = assetParent()->add<ShaderComponent>();
 
-  struct Test : public Eks::ParseErrorInterface
+  struct Error : public Eks::ParseErrorInterface
     {
     void error(const Eks::ParseError &e) X_OVERRIDE
       {

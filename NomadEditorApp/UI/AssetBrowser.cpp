@@ -35,6 +35,7 @@ public:
     const QString &location);
   void saveAsset(Editor::AssetType *a);
   Editor::AssetType *findHandle(const QString &file);
+  Editor::AssetType *findHandle(const QUuid &file);
   void clear();
 
   AssetManager manager;
@@ -163,6 +164,11 @@ Editor::AssetType *AssetBrowserData::findHandle(const QString &file)
   return _paths[f.canonicalFilePath()];
   }
 
+Editor::AssetType *AssetBrowserData::findHandle(const QUuid &file)
+  {
+  return findHandle(_uuids[file]);
+  }
+
 void AssetBrowserData::clear()
   {
   Shift::Block b(database());
@@ -217,11 +223,16 @@ Shift::Set *AssetBrowser::getHandleParent()
   return &_browser->assetHandles;
   }
 
+AssetType *AssetBrowser::getAssetHandle(const QUuid &u)
+  {
+  return _browser->findHandle(u);
+  }
+
 void AssetBrowser::tearDownProject(bool *abort)
   {
   auto currentUser = _project->getCurrentProjectUserData();
   currentUser->openFiles.clear();
-  xForeach(AssetType *a, _project->openEditors().keys())
+  xForeach(AssetType *a, _browser->assetHandles.walker<AssetType>())
     {
     auto prop = currentUser->openFiles.add<Shift::StringProperty>();
     prop->assign(a->path());
