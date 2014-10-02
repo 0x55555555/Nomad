@@ -161,7 +161,7 @@ void AssetBrowserData::saveAsset(AssetType *a)
 Editor::AssetType *AssetBrowserData::findHandle(const QString &file)
   {
   QFileInfo f(file);
-  return _paths[f.canonicalFilePath()];
+  return _paths.value(f.canonicalFilePath());
   }
 
 Editor::AssetType *AssetBrowserData::findHandle(const QUuid &file)
@@ -174,6 +174,8 @@ void AssetBrowserData::clear()
   Shift::Block b(database());
   assetHandles.clear();
   manager.clear();
+  _uuids.clear();
+  _paths.clear();
   }
 
 void AssetBrowserData::addHandle(const QString &file, AssetType *t)
@@ -234,13 +236,21 @@ void AssetBrowser::tearDownProject(bool *abort)
   currentUser->openFiles.clear();
   xForeach(AssetType *a, _browser->assetHandles.walker<AssetType>())
     {
-    auto prop = currentUser->openFiles.add<Shift::StringProperty>();
-    prop->assign(a->path());
-
     if (a->offerToSave() != Application::Success)
       {
       *abort = true;
       }
+    }
+
+  xForeach(auto &a, _project->openEditors())
+    {
+    if (!a.second->isVisible())
+      {
+      continue;
+      }
+
+    auto prop = currentUser->openFiles.add<Shift::StringProperty>();
+    prop->assign(a.first->path());
     }
 
   _browser->clear();

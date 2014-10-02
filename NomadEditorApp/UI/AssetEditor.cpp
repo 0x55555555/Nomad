@@ -66,6 +66,10 @@ AssetEditor::AssetEditor(
     }
   }
 
+AssetEditor::~AssetEditor()
+  {
+  }
+
 AssetEditor *AssetEditor::build(
     AssetType *t,
     ProjectInterface *ifc,
@@ -73,6 +77,23 @@ AssetEditor *AssetEditor::build(
     UIInterface *ui)
   {
   return new AssetEditor(t, ifc, c, ui);
+  }
+
+void AssetEditor::destroy(AssetEditor *e)
+  {
+  if (!e)
+    {
+    return;
+    }
+
+  if (auto o = qobject_cast<QDockWidget *>(e->parent()))
+    {
+    o->setWidget(nullptr);
+    e->setParent(nullptr);
+    delete o;
+    }
+
+  delete e;
   }
 
 void AssetEditor::updateMessages()
@@ -153,7 +174,7 @@ DynamicAssetEditor::DynamicAssetEditor(
 
 void DynamicAssetEditor::setAsset(const QUuid &t)
   {
-  delete _contents;
+  AssetEditor::destroy(_contents);
   _contents = nullptr;
 
   auto handle = _ifc->getAssetHandle(t);

@@ -178,7 +178,7 @@ bool MainWindow::closeProject()
 
   xForeach(auto e, _editors.values())
     {
-    delete e;
+    AssetEditor::destroy(e);
     }
 
   _editors.clear();
@@ -278,6 +278,20 @@ const Eks::UnorderedMap<AssetType *, AssetEditor *> &MainWindow::openEditors()
   }
 
 void MainWindow::reloadLibraries()
+  {
+  auto project = getCurrentProject();
+  if (!project)
+    {
+    return;
+    }
+
+  auto path = project->path();
+
+  closeProject();
+  openProject(path.data());
+  }
+
+void MainWindow::reloadLibrariesInternal()
   {
   qDebug() << "Reloading libraries";
   _libraries.clear();
@@ -431,7 +445,7 @@ bool MainWindow::openProject(const QString &path)
 
   addRecent(toLoad);
   _db->project.setPointed(file->uncheckedCastTo<Project>());
-  reloadLibraries();
+  reloadLibrariesInternal();
   emit projectChanged();
 
   auto currentUser = _db->projectUserData();

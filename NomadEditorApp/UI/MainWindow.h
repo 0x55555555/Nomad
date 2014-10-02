@@ -65,6 +65,7 @@ public slots:
   void updateFileMenu();
 
 private:
+  void reloadLibrariesInternal();
   void addRecent(const QString &recent);
   QStringList getRecents() const;
   void focusEditor(AssetEditor *editor);

@@ -27,6 +27,7 @@ public:
       ProjectInterface *ifc,
       AssetType::CreateInterface *c,
       UIInterface *ui);
+  static void destroy(AssetEditor *e);
 
   void makeDockable(QMainWindow *mw);
   void showEditor();
@@ -37,6 +38,7 @@ protected slots:
 
 protected:
   AssetEditor(AssetType *t, ProjectInterface *ifc, AssetType::CreateInterface *c, UIInterface *ui);
+  ~AssetEditor();
 
   QWidget *getTopLevel();
 

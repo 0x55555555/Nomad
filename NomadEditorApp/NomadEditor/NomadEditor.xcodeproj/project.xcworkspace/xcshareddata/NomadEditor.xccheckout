@@ -10,33 +10,57 @@
 	<string>NomadEditor</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>B7CB9CDB-5928-4642-9AE0-4163F1865CC2</key>
+		<key>0DB4D184534A15F7E36BB0813C4C39053212C827</key>
+		<string>github.com:jorj1988/eks-concept.git</string>
+		<key>1773298C66AB0DB2691D225CC0F29128DDE9F829</key>
 		<string>https://github.com/jorj1988/Eks.git</string>
-		<key>E000E4EB-3C14-4404-BD5D-0821EC3A0611</key>
+		<key>432B738309AD5B875E07E85520DBC3DFE7EF61BA</key>
+		<string>https://github.com/jorj1988/eks-core.git</string>
+		<key>59646176BA2DC5E70D89EC9BF06E921121785A25</key>
+		<string>https://github.com/jorj1988/eks-3d.git</string>
+		<key>6C58D18BDFA9C8C1BEC349DE670D3E50CCC6F19A</key>
+		<string>github.com:jorj1988/eks-gui.git</string>
+		<key>AA5117B088AEF0A1285886D269681C13E8C32777</key>
 		<string>ssh://github.com/jorj1988/Nomad.git</string>
+		<key>EDE58975C3EF3A9B6650CFDB5FE5FF641F7E0E53</key>
+		<string>https://github.com/jorj1988/eks-build.git</string>
+		<key>F9E258777C478BC51A6F54E32383FF9A8DED75A1</key>
+		<string>https://github.com/jorj1988/Shift.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>NomadEditor/NomadEditor/NomadEditor.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>B7CB9CDB-5928-4642-9AE0-4163F1865CC2</key>
+		<key>0DB4D184534A15F7E36BB0813C4C39053212C827</key>
+		<string>../../../../Eks/EksConcept/</string>
+		<key>1773298C66AB0DB2691D225CC0F29128DDE9F829</key>
 		<string>../../../../Eks</string>
-		<key>E000E4EB-3C14-4404-BD5D-0821EC3A0611</key>
+		<key>432B738309AD5B875E07E85520DBC3DFE7EF61BA</key>
+		<string>../../../../Eks/EksCore/</string>
+		<key>59646176BA2DC5E70D89EC9BF06E921121785A25</key>
+		<string>../../../../Eks/Eks3D/</string>
+		<key>6C58D18BDFA9C8C1BEC349DE670D3E50CCC6F19A</key>
+		<string>../../../../Eks/EksGui/</string>
+		<key>AA5117B088AEF0A1285886D269681C13E8C32777</key>
 		<string>../../../..</string>
+		<key>EDE58975C3EF3A9B6650CFDB5FE5FF641F7E0E53</key>
+		<string>../../../../Eks/EksBuild/</string>
+		<key>F9E258777C478BC51A6F54E32383FF9A8DED75A1</key>
+		<string>../../../../Shift/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>ssh://github.com/jorj1988/Nomad.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>E000E4EB-3C14-4404-BD5D-0821EC3A0611</string>
+	<string>AA5117B088AEF0A1285886D269681C13E8C32777</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>B7CB9CDB-5928-4642-9AE0-4163F1865CC2</string>
+			<string>1773298C66AB0DB2691D225CC0F29128DDE9F829</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Eks</string>
 		</dict>
@@ -44,9 +68,57 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>E000E4EB-3C14-4404-BD5D-0821EC3A0611</string>
+			<string>59646176BA2DC5E70D89EC9BF06E921121785A25</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Eks3D</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>EDE58975C3EF3A9B6650CFDB5FE5FF641F7E0E53</string>
+			<key>IDESourceControlWCCName</key>
+			<string>EksBuild</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0DB4D184534A15F7E36BB0813C4C39053212C827</string>
+			<key>IDESourceControlWCCName</key>
+			<string>EksConcept</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>432B738309AD5B875E07E85520DBC3DFE7EF61BA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>EksCore</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>6C58D18BDFA9C8C1BEC349DE670D3E50CCC6F19A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>EksGui</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>AA5117B088AEF0A1285886D269681C13E8C32777</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Nomad</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F9E258777C478BC51A6F54E32383FF9A8DED75A1</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Shift</string>
 		</dict>
 	</array>
 </dict>

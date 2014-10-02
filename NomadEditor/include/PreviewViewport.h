@@ -27,6 +27,7 @@ class NOMAD_EDITOR_EXPORT PreviewViewport
 
 public:
   PreviewViewport(UIInterface *r);
+  ~PreviewViewport();
 
 protected slots:
   void initialise3D(Eks::Renderer *r);

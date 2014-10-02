@@ -137,6 +137,10 @@ PreviewViewport::PreviewViewport(UIInterface *r)
   _view = spinTransform(0.0f);
   }
 
+PreviewViewport::~PreviewViewport()
+  {
+  }
+
 void PreviewViewport::initialise3D(Eks::Renderer *r)
   {
   Eks::DepthStencilState::delayedCreate(
