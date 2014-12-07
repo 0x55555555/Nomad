@@ -1,14 +1,14 @@
 #pragma once
-#include "sexternalpointer.h"
+#include "NFile.h"
 #include "NGlobal.h"
 
 namespace Nomad
 {
 class AssetManager;
 
-class NOMAD_EXPORT Asset : public Shift::UuidEntity
+class NOMAD_EXPORT Asset : public File
   {
-  S_ENTITY(Asset, UuidEntity)
+  S_ENTITY(Asset, File)
 
 XProperties:
   XROProperty(AssetManager *, manager);

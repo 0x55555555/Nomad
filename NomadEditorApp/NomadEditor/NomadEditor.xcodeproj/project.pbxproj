@@ -4719,6 +4719,8 @@
 		08CF1A3F19B8E3AF007C0295 /* ExternalSourceAsset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExternalSourceAsset.h; sourceTree = "<group>"; };
 		08D7A2DE19CE2FD000848F61 /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
 		08D7A2E119CE2FD600848F61 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		08F3B0B91A30FA0D00FD8694 /* ObjectType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectType.cpp; sourceTree = "<group>"; };
+		08F3B0BC1A30FA1200FD8694 /* ObjectType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectType.h; sourceTree = "<group>"; };
 		08FB1B9119D42C0900A68030 /* XParseException.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XParseException.cpp; sourceTree = "<group>"; };
 		08FB1B9419D42C1000A68030 /* XParseException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XParseException.h; path = Utilities/XParseException.h; sourceTree = "<group>"; };
 		08FB1B9519D46D7200A68030 /* MessageList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageList.h; sourceTree = "<group>"; };
@@ -4731,6 +4733,13 @@
 		08FB1B9C19D7351D00A68030 /* ShaderVertexComponentType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderVertexComponentType.h; sourceTree = "<group>"; };
 		08FB1B9D19D7352400A68030 /* ShaderComponentType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderComponentType.cpp; sourceTree = "<group>"; };
 		08FB1B9E19D7352400A68030 /* ShaderVertexComponentType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderVertexComponentType.cpp; sourceTree = "<group>"; };
+		08FE4FAF1A2B66B300C1ADCC /* NewInterface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NewInterface.cpp; sourceTree = "<group>"; };
+		08FE4FB01A2B66B300C1ADCC /* NewInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewInterface.h; sourceTree = "<group>"; };
+		08FE4FB11A2B66B300C1ADCC /* NewInterface.ui */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = NewInterface.ui; sourceTree = "<group>"; };
+		08FE4FB41A2B66DC00C1ADCC /* Renderable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderable.h; sourceTree = "<group>"; };
+		08FE4FB61A2B66EC00C1ADCC /* Renderable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderable.cpp; sourceTree = "<group>"; };
+		08FE4FB81A2B815C00C1ADCC /* NObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NObject.cpp; sourceTree = "<group>"; };
+		08FE4FB91A2B816600C1ADCC /* NObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NObject.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -6029,6 +6038,7 @@
 		086562C119AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08FE4FB91A2B816600C1ADCC /* NObject.h */,
 				086562C219AA1CC0009A9023 /* NAsset.h */,
 				086562C319AA1CC0009A9023 /* NAssetHelpers.h */,
 				086562C419AA1CC0009A9023 /* NAssetManager.h */,
@@ -6043,6 +6053,7 @@
 		086562CA19AA1CC0009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08FE4FB81A2B815C00C1ADCC /* NObject.cpp */,
 				086562CB19AA1CC0009A9023 /* NAsset.cpp */,
 				086562CC19AA1CC0009A9023 /* NAssetManager.cpp */,
 				086562CD19AA1CC0009A9023 /* NFile.cpp */,
@@ -6085,6 +6096,7 @@
 		086562D519AA1CC0009A9023 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				08F3B0BC1A30FA1200FD8694 /* ObjectType.h */,
 				08CF1A3F19B8E3AF007C0295 /* ExternalSourceAsset.h */,
 				086562D619AA1CC0009A9023 /* AssetType.h */,
 				086562D719AA1CC0009A9023 /* ExternalAssetType.h */,
@@ -6111,6 +6123,7 @@
 		086562DF19AA1CC0009A9023 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				08F3B0B91A30FA0D00FD8694 /* ObjectType.cpp */,
 				08CF1A3E19B8E3A8007C0295 /* ExternalSourceAsset.cpp */,
 				086562E019AA1CC0009A9023 /* AssetType.cpp */,
 				086562E119AA1CC0009A9023 /* ExternalAssetType.cpp */,
@@ -6146,6 +6159,9 @@
 		086562EA19AA1CC0009A9023 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				08FE4FAF1A2B66B300C1ADCC /* NewInterface.cpp */,
+				08FE4FB01A2B66B300C1ADCC /* NewInterface.h */,
+				08FE4FB11A2B66B300C1ADCC /* NewInterface.ui */,
 				086562EB19AA1CC0009A9023 /* AssetBrowser.cpp */,
 				086562EC19AA1CC0009A9023 /* AssetBrowser.h */,
 				086562ED19AA1CC0009A9023 /* AssetBrowser.ui */,
@@ -6217,6 +6233,7 @@
 		0865630219AA1CC0009A9023 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				08FE4FB41A2B66DC00C1ADCC /* Renderable.h */,
 				08FB1B9719D7350C00A68030 /* ShaderComponent.h */,
 				08FB1B9819D7350C00A68030 /* ShaderVertexComponent.h */,
 				08D7A2DE19CE2FD000848F61 /* Mesh.h */,
@@ -6230,6 +6247,7 @@
 		0865630519AA1CC0009A9023 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				08FE4FB61A2B66EC00C1ADCC /* Renderable.cpp */,
 				08FB1B9919D7351500A68030 /* ShaderComponent.cpp */,
 				08FB1B9A19D7351500A68030 /* ShaderVertexComponent.cpp */,
 				08D7A2E119CE2FD600848F61 /* Mesh.cpp */,

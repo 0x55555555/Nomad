@@ -28,7 +28,7 @@ void AssetType::createTypeInformation(
   {
   auto childBlock = info->createChildrenBlock(data);
 
-  childBlock.add(&AssetType::_uuid, "uuid");
+  childBlock.add(&AssetType::_assetUuid, "assetUuid");
 
   auto parent = childBlock.add(&AssetType::_assetParent, "_assetParent");
   parent->setNeverSave(true);
@@ -173,12 +173,12 @@ void AssetType::markDependantsForReload()
         }
       else if(auto t = owner->castTo<AssetType>())
         {
-        id = t->uuid();
+        id = t->assetUuid();
         }
 
       if(!id.isNull())
         {
-        if (id != uuid())
+        if (id != assetUuid())
           {
           project()->getAssetManager()->markForReload(id);
           }

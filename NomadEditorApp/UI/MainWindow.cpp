@@ -8,10 +8,12 @@
 #include "ProjectEditor.h"
 #include "Assets/AssetType.h"
 #include "UI/AssetEditor.h"
+#include "UI/NewInterface.h"
 #include "UI/ProjectUserData.h"
 #include "QSettings"
 #include "QLibrary"
 #include "NFile.h"
+#include "NObject.h"
 #include "XGLRenderer.h"
 #include "X3DCanvas.h"
 #include "Utilities/XOptional.h"
@@ -83,6 +85,10 @@ MainWindow::MainWindow(
   _ui->centralwidget->hide();
 
   connect(_ui->menuFile, SIGNAL(aboutToShow()), this, SLOT(updateFileMenu()));
+
+  QMenu *filesMenu = new QMenu();
+  _ui->actionSave_Files->setMenu(filesMenu);
+  connect(filesMenu, SIGNAL(aboutToShow()), this, SLOT(updateFilesMenu()));
 
   if(!_primaryContext.isValid())
   {
@@ -289,6 +295,18 @@ void MainWindow::reloadLibraries()
 
   closeProject();
   openProject(path.data());
+  }
+
+void MainWindow::addInterface(Object *obj)
+  {
+  auto f = new NewInterface(this);
+
+  if (f->show() != QDialog::Accepted)
+    {
+    return;
+    }
+
+  obj->addInterface(f->type());
   }
 
 void MainWindow::reloadLibrariesInternal()
@@ -533,6 +551,47 @@ void MainWindow::updateFileMenu()
   auto asset = activeEditor->asset();
   xAssert(asset);
   save->setText(tr("Save %1").arg(asset->relativePath()));
+  }
+
+void MainWindow::updateFilesMenu()
+  {
+  QMenu *m = _ui->actionSave_Files->menu();
+  xAssert(m);
+
+  m->clear();
+
+  m->addAction("All", this, SLOT(saveAll()));
+  m->addSeparator();
+
+  xForeach(auto ed, openEditors().keys())
+    {
+    QString text = ed->relativePath();
+
+    if (ed->needsSave())
+      {
+      text.prepend("* ");
+      }
+
+    QAction *a = m->addAction(text, this, SLOT(saveOtherFile()));
+    a->setData((qulonglong)ed);
+    }
+  }
+
+void MainWindow::saveAll()
+  {
+  xForeach(auto ed, openEditors().keys())
+    {
+    ed->save();
+    }
+  }
+
+void MainWindow::saveOtherFile()
+  {
+  QAction *a = qobject_cast<QAction*>(sender());
+  xAssert(a);
+
+  auto t = (AssetType*)a->data().toULongLong();
+  t->save();
   }
 
 #define RECENTS_KEY "editor/recentProjects"

@@ -5,6 +5,7 @@
 #include "QJsonDocument"
 #include "QJsonArray"
 #include "QJsonObject"
+#include "QDebug"
 
 namespace Nomad
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include "shift/sentity.h"
+#include "sexternalpointer.h"
 #include "shift/Properties/sarray.h"
 #include "shift/Properties/sbaseproperties.h"
 #include "shift/Changes/shandler.h"
@@ -8,9 +8,9 @@
 namespace Nomad
 {
 
-class NOMAD_EXPORT File : public Shift::Entity, public Shift::Handler
+class NOMAD_EXPORT File : public Shift::UuidEntity, public Shift::Handler
   {
-  S_ENTITY(File, Entity)
+  S_ENTITY(File, UuidEntity)
 
 XProperties:
   XByRefProperty(Eks::String, path, setPath)

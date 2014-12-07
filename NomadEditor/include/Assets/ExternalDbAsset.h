@@ -17,6 +17,9 @@ public:
   QByteArray unprocess() X_OVERRIDE;
   QWidget *createEditor(ProjectInterface *ifc, CreateInterface *c) X_OVERRIDE;
 
+  bool save() X_OVERRIDE;
+  bool needsSave() X_OVERRIDE;
+
 protected:
   QByteArray source() const;
   };

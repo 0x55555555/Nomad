@@ -46,7 +46,7 @@ Asset *ExternalSourceAsset::process(const QByteArray &source, CreateInterface *c
   auto s = processSource(source, c);
   if (s)
     {
-    s->setUuid(uuid());
+    s->setUuid(assetUuid());
     }
   return s;
   }

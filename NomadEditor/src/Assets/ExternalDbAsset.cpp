@@ -1,4 +1,4 @@
-#include "Assets/ExternalDbAsset.h"
+	#include "Assets/ExternalDbAsset.h"
 #include "shift/TypeInformation/spropertyinformationhelpers.h"
 #include "NAsset.h"
 #include "Application.h"
@@ -84,6 +84,44 @@ QByteArray ExternalDbAsset::source() const
     }
 
   return Application::toSource(ass);
+  }
+
+bool ExternalDbAsset::save()
+  {
+  auto ass = cachedAsset();
+  if (ass)
+    {
+    auto obj = ass->castTo<File>();
+    if (obj)
+      {
+      obj->setSaved();
+      }
+    }
+
+  return ExternalAssetType::save();
+  }
+
+bool ExternalDbAsset::needsSave()
+  {
+  if (AssetType::needsSave())
+    {
+    return true;
+    }
+
+  auto ass = cachedAsset();
+  if (!ass)
+    {
+    return false;
+    }
+
+  auto obj = ass->castTo<File>();
+  if (!obj)
+    {
+    xAssertFail();
+    return false;
+    }
+
+  return obj->hasChangedFromFile();
   }
 }
 

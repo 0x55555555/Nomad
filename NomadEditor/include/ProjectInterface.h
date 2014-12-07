@@ -12,6 +12,7 @@ namespace Nomad
 {
 class Project;
 class AssetManager;
+class Object;
 
 namespace Editor
 {
@@ -35,6 +36,8 @@ public:
   virtual AssetManager *getAssetManager() = 0;
   virtual Shift::Set *getAssetHandleParent() = 0;
   virtual AssetType *getAssetHandle(const QUuid &h) = 0;
+
+  virtual void addInterface(Object *t) = 0;
 
   virtual const Eks::UnorderedMap<AssetType *, AssetEditor *>& openEditors() = 0;
 

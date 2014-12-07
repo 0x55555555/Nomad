@@ -101,9 +101,19 @@ Asset *AssetBrowserData::load(Shift::Set *parent, const QUuid &name)
     }
 
   AssetType* type = loadHandle(it->second);
+  if (!type)
+    {
+    return nullptr;
+    }
 
   xAssert(manager.assetParent() == parent);
-  return type->asset(createContext);
+  auto asset = type->asset(createContext);
+  if (asset)
+    {
+    xAssert(asset->uuid() == type->assetUuid());
+    }
+
+  return asset;
   }
 
 bool AssetBrowserData::requiresReload(const QUuid &name)
@@ -153,7 +163,7 @@ AssetType *AssetBrowserData::createAsset(
 
 void AssetBrowserData::saveAsset(AssetType *a)
   {
-  xAssert(_uuids.contains(a->uuid()), a->uuid().toByteArray().data());
+  xAssert(_uuids.contains(a->assetUuid()), a->assetUuid().toByteArray().data());
 
   a->save();
   }
@@ -180,10 +190,12 @@ void AssetBrowserData::clear()
 
 void AssetBrowserData::addHandle(const QString &file, AssetType *t)
   {
+  xAssert(!t->assetUuid().isNull());
+
   QFileInfo f(file);
   QString path = f.canonicalFilePath();
   _paths[path] = t;
-  _uuids[t->uuid()] = path;
+  _uuids[t->assetUuid()] = path;
   t->setPath(path, interface);
   }
 
@@ -197,6 +209,10 @@ AssetBrowser::AssetBrowser(ProjectInterface *ifc, AssetType::CreateInterface *ct
   _ui->add->setIcon(QIcon::fromTheme("list-add"));
   _ui->remove->setIcon(QIcon::fromTheme("list-remove"));
 
+  connect(_ui->treeView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(openAsset(const QModelIndex &)));
+  connect(_ui->add, SIGNAL(clicked()), this, SLOT(addAsset()));
+  connect(_ui->remove, SIGNAL(clicked()), this, SLOT(removeAsset()));
+
   _project->addProjectChanged(this, SLOT(setupProject()));
   _project->addProjectAboutToChange(this, SLOT(tearDownProject(bool*)));
 
@@ -206,6 +222,7 @@ AssetBrowser::AssetBrowser(ProjectInterface *ifc, AssetType::CreateInterface *ct
   _browser->createContext = ctx;
 
   _model = new QFileSystemModel;
+  connect(_model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(fileAdded(QModelIndex,int,int)));
 
   setupProject();
   }
@@ -273,17 +290,12 @@ void AssetBrowser::setupProject()
   auto root = project.dir().absolutePath();
   _model->setRootPath(root);
   _model->setNameFilters(QStringList() << ASSET_FILTER);
-  connect(_model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(fileAdded(QModelIndex,int,int)));
 
   _ui->treeView->setModel(_model);
   _ui->treeView->setRootIndex(_model->index(root));
 
   loadAllAssets(root);
   rebuildUI();
-
-  connect(_ui->treeView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(openAsset(const QModelIndex &)));
-  connect(_ui->add, SIGNAL(clicked()), this, SLOT(addAsset()));
-  connect(_ui->remove, SIGNAL(clicked()), this, SLOT(removeAsset()));
 
   auto currentUser = _project->getCurrentProjectUserData();
   xForeach(auto file, currentUser->openFiles.walker<Shift::StringProperty>())

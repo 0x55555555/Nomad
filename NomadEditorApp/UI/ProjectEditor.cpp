@@ -4,6 +4,7 @@
 #include "QListWidget"
 #include "QLabel"
 #include "QToolButton"
+#include "QTimer"
 #include "UI/spropertydefaultui.h"
 #include "UI/sentityui.h"
 #include "NProject.h"
@@ -149,7 +150,15 @@ void ProjectEditor::removeLibraries()
 void ProjectEditor::actOnChanges()
   {
   updateLibraries();
-  _project->reloadLibraries();
+
+  QTimer *t = new QTimer(this);
+  connect(t, &QTimer::timeout, [this, t]()
+  {
+    _project->reloadLibraries();
+    t->deleteLater();
+  });
+
+  t->start(10);
   }
 
 void ProjectEditor::onTreeChange(const Shift::Change *, bool)

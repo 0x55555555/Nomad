@@ -49,7 +49,7 @@ public:
     virtual Eks::Renderer *renderer() = 0;
     };
 
-  const QUuid &uuid() const { return _uuid(); }
+  const QUuid &assetUuid() const { return _assetUuid(); }
   QString relativePath() const;
 
   void setPath(const Eks::String &s, ProjectInterface *ifc);
@@ -111,7 +111,7 @@ protected:
   void addError(const Eks::ParseError &s);
   void addWarning(const Eks::ParseError &s);
 
-  Shift::Data<QUuid> _uuid;
+  Shift::Data<QUuid> _assetUuid;
   Shift::TypedPointer<Shift::Set> _assetParent;
 
 private:

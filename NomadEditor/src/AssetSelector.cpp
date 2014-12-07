@@ -48,7 +48,9 @@ void AssetSelector::updateCombo()
       {
       addItem(type->relativePath(), QVariant::fromValue((qulonglong)type));
 
-      if (type->asset(_createInterface) == propertyValue()->pointed())
+      auto other = type->asset(_createInterface);
+
+      if (other && other == propertyValue()->pointed())
         {
         item = i;
         }

@@ -107,7 +107,7 @@ Asset *ObjMeshType::processSource(const QByteArray &source, CreateInterface *c)
       return 0;
       }
 
-    //loader.computeUnusedElements(elements.data(), itemCount, &triangles);
+    loader.computeUnusedElements(elements.data(), elements.size(), &triangles);
 
     Eks::Vector<xuint8> dataOut(&alloc);
     bool result = loader.bake(triangles, elements.data(), itemCount, &dataOut);

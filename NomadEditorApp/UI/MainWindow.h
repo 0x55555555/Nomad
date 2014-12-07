@@ -43,6 +43,7 @@ public:
   AssetEditorInterface *createAssetEditor(const QUuid &a, QWidget *w, QWidget **out) X_OVERRIDE;
   const Eks::UnorderedMap<AssetType *, AssetEditor *>& openEditors() X_OVERRIDE;
   void reloadLibraries() X_OVERRIDE;
+  void addInterface(Object *t) X_OVERRIDE;
 
   Eks::Renderer *renderer() X_OVERRIDE;
 
@@ -63,6 +64,9 @@ public slots:
   void saveProject();
   void saveFile();
   void updateFileMenu();
+  void updateFilesMenu();
+  void saveAll();
+  void saveOtherFile();
 
 private:
   void reloadLibrariesInternal();

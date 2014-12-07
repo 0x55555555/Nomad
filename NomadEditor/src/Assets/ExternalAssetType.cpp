@@ -36,7 +36,7 @@ void ExternalAssetType::createNewAsset(CreateInterface *c)
   _failedLoad = a == nullptr;
   if (a)
     {
-    _uuid = a->uuid();
+    _assetUuid = a->uuid();
     _asset = a;
     }
 
@@ -70,7 +70,7 @@ Asset *ExternalAssetType::initialiseFromSource(const QByteArray &src, CreateInte
     }
 
   _failedLoad = false;
-  _uuid = a->uuid();
+  _assetUuid = a->uuid();
   _asset = a;
   _needsSave = false;
   setSaved();
@@ -92,13 +92,16 @@ Asset *ExternalAssetType::asset(CreateInterface *c)
     return p;
     }
 
-  if (c)
+  if (!c)
     {
-    QByteArray src = source();
-    return initialiseFromSource(src, c);
+    return nullptr;
     }
 
-  return nullptr;
+  QByteArray src = source();
+  auto asset = initialiseFromSource(src, c);
+  xAssert(!asset || asset->uuid() == assetUuid());
+
+  return asset;
   }
 
 QByteArray ExternalAssetType::getDiskSource() const

@@ -8,25 +8,25 @@ class PropertyInformation;
 }
 
 namespace Ui {
-class NewAsset;
+class NewInterface;
 }
 
-class NewAsset : public QDialog
+class NewInterface : public QDialog
   {
   Q_OBJECT
 
 public:
-  explicit NewAsset(QWidget *parent = 0);
-  ~NewAsset();
+  explicit NewInterface(QWidget *parent = 0);
+  ~NewInterface();
 
-  int show(const QString &location);
+  int show();
 
   const QString &location() const { return _location; }
 
   const Shift::PropertyInformation *type();
 
 private:
-  Ui::NewAsset *_ui;
+  Ui::NewInterface *_ui;
   Eks::TemporaryAllocator _alloc;
   QString _location;
   };
