@@ -2,9 +2,20 @@
 #include "NObject.h"
 #include "Mesh.h"
 #include "Shader.h"
+#include "RCRenderable.h"
 
 namespace Nomad
 {
+
+class RenderableInstance : public RCRenderable
+  {
+  S_ENTITY(RenderableInstance, RCRenderable)
+
+public:
+  TransformProperty transform;
+
+  void render(Eks::Renderer *r, const RenderState &state) const X_OVERRIDE;
+  };
 
 class Renderable : public Interface
   {
@@ -16,10 +27,10 @@ public:
     StaticChildMode = Shift::Container::StaticChildMode | Shift::NamedChildren
     };
 
-  Renderable();
-
   Shift::ExternalUuidPointer mesh;
   Shift::ExternalUuidPointer shader;
+
+  void onInstance(ObjectInstance *) X_OVERRIDE;
   };
 
 }

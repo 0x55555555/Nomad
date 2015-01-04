@@ -6,9 +6,14 @@
 namespace Nomad
 {
 
+class ObjectInstance;
+
 class NOMAD_EXPORT Interface : public Shift::Container
   {
   S_ABSTRACT_PROPERTY(Interface, Container)
+
+public:
+  virtual void onInstance(ObjectInstance *) { }
   };
 
 class NOMAD_EXPORT Object : public Asset
@@ -27,6 +32,12 @@ public:
     }
 
   Interface *addInterface(const Shift::PropertyInformation *info);
+
+  /// Add a new object instance as a child of this object. To be duplicated on any instances of this object.
+  ObjectInstance *addInstance(Object *obj);
+
+  /// Instance this object under a new object
+  ObjectInstance *instance(Shift::Set *parent);
   };
 
 }

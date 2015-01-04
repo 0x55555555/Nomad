@@ -1,5 +1,6 @@
 #include "NObject.h"
 #include "shift/TypeInformation/spropertyinformationhelpers.h"
+#include "NObjectInstance.h"
 
 namespace Nomad
 {
@@ -26,5 +27,24 @@ Interface *Object::addInterface(const Shift::PropertyInformation *info)
   {
   auto i = addAttribute(info);
   return i->castTo<Interface>();
+  }
+
+ObjectInstance *Object::addInstance(Object *obj)
+  {
+  return obj->instance(&children);
+  }
+
+ObjectInstance *Object::instance(Shift::Set *parent)
+  {
+  auto inst = parent->add<ObjectInstance>();
+
+  inst->type.setPointed(this);
+
+  xForeach(auto ifc, interfaces())
+    {
+    ifc->onInstance(inst);
+    }
+
+  return inst;
   }
 }

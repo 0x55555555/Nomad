@@ -19,6 +19,7 @@ public:
 
   QWidget *createEditor(ProjectInterface *ifc, CreateInterface *c) X_OVERRIDE;
   QWidget *createPreview(UIInterface *ifc, CreateInterface *c) X_OVERRIDE;
+
 private:
   Shift::ExternalUuidPointer _frag;
   Shift::ExternalUuidPointer _vert;

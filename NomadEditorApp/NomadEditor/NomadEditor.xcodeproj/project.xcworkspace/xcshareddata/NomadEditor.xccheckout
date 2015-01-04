@@ -24,6 +24,8 @@
 		<string>github.com:jorj1988/Nomad.git</string>
 		<key>EDE58975C3EF3A9B6650CFDB5FE5FF641F7E0E53</key>
 		<string>https://github.com/jorj1988/eks-build.git</string>
+		<key>F7883B1844D222CC5BCBC76C23F4A89275F3CA95</key>
+		<string>github.com:jorj1988/BriX.git</string>
 		<key>F9E258777C478BC51A6F54E32383FF9A8DED75A1</key>
 		<string>https://github.com/jorj1988/Shift.git</string>
 	</dict>
@@ -45,6 +47,8 @@
 		<string>../../../..</string>
 		<key>EDE58975C3EF3A9B6650CFDB5FE5FF641F7E0E53</key>
 		<string>../../../..Eks/EksBuild</string>
+		<key>F7883B1844D222CC5BCBC76C23F4A89275F3CA95</key>
+		<string>../../../../..</string>
 		<key>F9E258777C478BC51A6F54E32383FF9A8DED75A1</key>
 		<string>../../../..Shift</string>
 	</dict>
@@ -56,6 +60,14 @@
 	<string>AA5117B088AEF0A1285886D269681C13E8C32777</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F7883B1844D222CC5BCBC76C23F4A89275F3CA95</string>
+			<key>IDESourceControlWCCName</key>
+			<string></string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

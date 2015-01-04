@@ -31,7 +31,7 @@ public:
 
 protected slots:
   void initialise3D(Eks::Renderer *r);
-  void resize3D(Eks::Renderer *r, xuint32 w, xuint32 h);
+  virtual void resize3D(Eks::Renderer *r, xuint32 w, xuint32 h);
   void paint3D(Eks::Renderer *r, Eks::FrameBuffer *buffer);
   void tick();
 

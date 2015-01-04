@@ -4721,6 +4721,10 @@
 		08D7A2E119CE2FD600848F61 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
 		08F3B0B91A30FA0D00FD8694 /* ObjectType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectType.cpp; sourceTree = "<group>"; };
 		08F3B0BC1A30FA1200FD8694 /* ObjectType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectType.h; sourceTree = "<group>"; };
+		08F3B0CB1A38F4DC00FD8694 /* Game.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = ../../../Game/Game.cpp; sourceTree = "<group>"; };
+		08F3B0CC1A38F4DC00FD8694 /* Game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Game.h; path = ../../../Game/Game.h; sourceTree = "<group>"; };
+		08F3B0CD1A38F4DC00FD8694 /* Level.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Level.cpp; path = ../../../Game/Level.cpp; sourceTree = "<group>"; };
+		08F3B0CE1A38F4DC00FD8694 /* Level.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Level.h; path = ../../../Game/Level.h; sourceTree = "<group>"; };
 		08FB1B9119D42C0900A68030 /* XParseException.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XParseException.cpp; sourceTree = "<group>"; };
 		08FB1B9419D42C1000A68030 /* XParseException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XParseException.h; path = Utilities/XParseException.h; sourceTree = "<group>"; };
 		08FB1B9519D46D7200A68030 /* MessageList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageList.h; sourceTree = "<group>"; };
@@ -12513,6 +12517,10 @@
 		089261611998050F00764E29 = {
 			isa = PBXGroup;
 			children = (
+				08F3B0CB1A38F4DC00FD8694 /* Game.cpp */,
+				08F3B0CC1A38F4DC00FD8694 /* Game.h */,
+				08F3B0CD1A38F4DC00FD8694 /* Level.cpp */,
+				08F3B0CE1A38F4DC00FD8694 /* Level.h */,
 				0865603019AA1CBF009A9023 /* Eks */,
 				086562C019AA1CC0009A9023 /* NomadCore */,
 				086562D119AA1CC0009A9023 /* NomadEditor */,
