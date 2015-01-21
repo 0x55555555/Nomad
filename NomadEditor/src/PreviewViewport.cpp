@@ -287,6 +287,7 @@ void PreviewViewport::paint3D(Eks::Renderer *r, Eks::FrameBuffer *buffer)
 
   if (_grid)
     {
+    r->setTransform(Eks::Transform::Identity());
     renderGrid(r);
     }
 
